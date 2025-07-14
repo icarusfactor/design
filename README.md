@@ -1,5 +1,7 @@
 # Roundcube Design
 
+![RoundCube Design View ](/images/RCdesign.png "In design mode.")
+
 ### Install 
 
 1. Copy design directory to plugins directory: /path/to/roundcube/plugins/
