@@ -1,5 +1,4 @@
 # Roundcube Design
-
 ### Install 
 
 1. Copy design directory to plugins directory: /path/to/roundcube/plugins/
@@ -29,21 +28,21 @@ to update them in Design.
 
 
 ### Key Elements: 
-Quick Start to Go Setup
-No Special Configurations
-Email Sending Is Left to Compose
-Uses Mbox Folders For Templates and Holding
-Works With all Major Browsers
-Make and Use Your Own Templates
+* Quick Start to Go Setup
+* No Special Configurations
+* Email Sending Is Left to Compose
+* Uses Mbox Folders For Templates and Holding
+* Works With all Major Browsers
+* Make and Use Your Own Templates
 
 ### Status:
  This is an early Beta version , but is usable and does work for its intended purpose,but will have glitches and loss of active data may occur. So be sure to select HTML CODE mode and cut and paste the text of your customizations of the templates frequently and new versions can wildly change with each revsion at this time, until it reaches a stable version. For example if you make a template , future versions may not support it and may not be complatible or if you switch off of the design your changes are not saved. So use it as is.
 
 
 ### Benifits: 
-Make eye catching email with little effort.
-Be able to save templates to use again.
-Dont have to worry about confusing or overwhelming apllications to do this.
+* Make eye catching email with little effort.
+* Be able to save templates to use again.
+* Dont have to worry about confusing or overwhelming apllications to do this.
 
 ### Next Steps: 
  I plan to create more templates to pull from, add more fonts to use and add a way to select theme color or background element color changes. This needs to be done manually currently in source mode. Need to add session saving in Design view, currently if you go away from Design mode, it will be gone and will have to start new. Would like to add S3 image storage configuration to keep the email small and not have to retype remote locations when adding image URLs. Lots of bug fixes and better design flow.
@@ -55,3 +54,5 @@ factor@userspace.org
 
 ### License: 
 GPL-3.0-or-later
+
+
