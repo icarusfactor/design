@@ -1,15 +1,16 @@
 # Roundcube Design
+
 ### Install 
 
 1. Copy design directory to plugins directory: /path/to/roundcube/plugins/
 
-2. Enable Plugin in the main RoundCube config file. config/config.inc.php
+2. Enable plugin in the main RoundCube config file. config/config.inc.php
 
-3. In Above file look for $config['plugins'] section and add design to the list.
+3. In above file look for $config['plugins'] section and add design to the list.
 
 4. Should like like $config['plugins'] = array('plugin1', 'plugin2', 'design');
 
-5. Log into Roundcube webmail and navigate to Settings to follow next steps.
+5. Log into Roundcube webmail and click Design and navigate to Settings to follow next steps.
 
 ### Setup: 
 1. Under Settings click "Create / Check" to create the template mailbox.
