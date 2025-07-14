@@ -1,0 +1,19 @@
+<?php
+
+// Design content iframe source
+// %l will be replaced by the language code resolved using the 'design_language_map' option
+// If you are serving roundcube via https, then change this URL to https also.
+
+// Map to translate Roundcube language codes into help document languages
+// The '*' entry will be used as default
+$config['write_language_map'] = ['*' => 'en_US'];
+
+// Enter an absolute URL to a page displaying information about this webmail
+// Alternatively, create a HTML file under <this-plugin-dir>/content/about.html
+$config['design_about_url'] = null;
+
+// Determine whether to open the help in a new window
+$config['design_open_extwin'] = false;
+
+// URL to additional information about CSRF protection
+$config['design_csrf_info'] = null;

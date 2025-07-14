@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    <title>DESIGN SETTINGS</title>
+    <style>
+    FIELDSET {
+    margin: 8px;
+    border: 2px solid grey;
+    padding: 8px;    
+    border-radius: 4px;
+    background: #EFEFEF;
+    max-width: 550px;
+    }
+    LEGEND{
+    padding: 2px;    
+    width: 250px;
+    background: lightgrey;
+    border: 1px solid black;
+    text-align: left;
+    margin-right: auto;
+    }
+
+   body.action-designsettings{
+    background: grey;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc4JyBoZWlnaHQ9JzgnPgogIDxyZWN0IHdpZHRoPSc4JyBoZWlnaHQ9JzgnIGZpbGw9JyNmZmYnLz4KICA8cGF0aCBkPSdNMCAwTDggOFpNOCAwTDAgOFonIHN0cm9rZS13aWR0aD0nMC41JyBzdHJva2U9JyNhYWEnLz4KPC9zdmc+Cg==");
+    background-repeat: repeat;
+    min-height: 100%;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.4);
+    }
+    </style>
+
+    <script>
+    //Disable non-usable buttons.
+    const tsize = window.parent.document.querySelector('.btn-tsize');
+    const savedraft = window.parent.document.querySelector('.btn-savedraft');	     
+    tsize.disabled= true;
+    savedraft.disabled= true;
+    </script>
+
+</head>
+<body>
+
+    <div class="container">
+	    <legend><b><h1>&nbsp;SETTINGS</h1></b></legend>
+<fieldset>
+<legend>&nbsp;Template Mailbox</legend>
+
+        <button class="btn btn-primary" onclick="window.parent.createCheckTemplateMbox()" >CREATE / CHECK</button>
+        <button class="btn btn-primary" onclick="window.parent.updateTmpl()" >SYNC</button>
+	<button class="btn btn-primary" onclick="window.parent.InsertTemplatesMbox()" >INSTALL TEMPLATES</button> </BR>
+        &nbsp;This mailbox is used to pull base HTML email pages to work off from and save them as drafts before final edit of them in Composer.
+	You can move emails to this mailbox to create a new template and flag them to be recognized, no more than 10 templates can be 
+	recognized,if you have more than ten, then these will be ignored until you unflag other templates. If servers templates gets out 
+	of sync with browser editor it can be updated from here.Default templates to work with can be imported from here. 
+</fieldset>
+
+<fieldset>
+<legend>&nbsp;Draft Mailbox</legend>
+
+<button class="btn btn-primary" onclick="window.parent.CheckDraftMbox()" >CHECK</button></BR>
+	This mailbox is used to save custom or modified templates to.You can from
+	this directory select Edit to open it in the Composer to send out from. 
+</fieldset>
+
+
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery, Popper.js, and Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-pjszLocalized/JnZ4ktSOCTVBlR3JJyXwYPlnLpZswuIpQWoxs9+azEvGzpeQEPVHIkKZaEjwg" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<roundcube:include file="includes/layout.html" />
+<roundcube:include file="includes/menu.html" />
+
+<!-- <h1 class="voice"><roundcube:label name="design.design" /></h1>   -->
+<div id="layout-content" class="selected" role="main">
+	<div class="header">
+		<a class="button icon task-menu-button" href="#menu"><span class="inner"><roundcube:label name="menu" /></span></a>
+
+		<!-- <h1 ><roundcube:label name="design.design" /></h1>   -->
+  <nav>
+	  <button class="btn-design">   <b>Design</b>   </button>&nbsp;&nbsp; 
+	  <b>&#124;&#124;&#124;&#124;</b>
+	  <button id="btn-tsize" class="btn-tsize" disabled> <b>Toggle Size</b> </button>&nbsp;&nbsp; 
+          <button id="btn-savedraft" class="btn-savedraft" disabled ><b>Save Draft</b></button>&nbsp;&nbsp;
+	  <b>&#124;&#124;&#124;&#124;</b>
+	  <button class="btn-designsettings"> <b>Settings</b> </button>&nbsp;&nbsp; 
+          <button class="btn-about">    <b>About</b>    </button>&nbsp;&nbsp; 
+  </nav>
+
+
+	</div>
+	<div class="iframe-wrapper">
+		<roundcube:object name="contentframe" id="designcontentframe" src="env:blankpage" title="design.arialabeldesigncontent" />
+	</div>
+</div>
+<roundcube:include file="includes/footer.html" />
