@@ -1,5 +1,5 @@
 {
-    "name": "roundcube/desgin",
+    "name": "icarusfactor/desgin",
     "type": "roundcube-plugin",
     "description": "Plugin adds (Design) in taskbar. Used to make HTML emails from templates. ",
     "license": "GPL-3.0-or-later",
