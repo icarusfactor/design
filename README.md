@@ -1,6 +1,6 @@
 # Roundcube Design v0.5
 
-![RoundCube Design View ](/images/RCdesign.png "In design mode.")
+![RoundCube Design View ](/images/RCdesign068.png "In design mode.")
 
 ### Install 
 
@@ -26,6 +26,14 @@ templates to work off of.
 3.  When changes to template mailbox are made, be sure to click "SYNC"
 to update them in Design.
 
+
+### Special Keys:
+ For now to make the usibility of the visual edtior more userfriendly becasue multiple popups for items may occur. Below are the keys to raise specific control above another if this action takes place. Once the key is released the behaviour goes back to normal.
+
+* ALT Raises table controls.
+* CTRL Raises link controls.
+* ALT + CTRL Raises image controls.
+
 ### Objectives: 
  I created the Design plugin to make custom HTML emails quick & easy. Anyone should be able to build their own template or use one from the installed examples with little effort for one off events or for medium sized family , friends or business lists that do not adhear to periodic release times. Wanted to keep it all simple and work within the Roundcube environment, so that no custom setup or duplication is needed. I wanted everyone wanting to try it to just install the plugin and run the setting setups and start to work on a email design right away and send it off when done.
 
@@ -39,8 +47,7 @@ to update them in Design.
 * Make and Use Your Own Templates
 
 ### Status:
- This is an early Beta version , but is usable and does work for its intended purpose,but will have glitches and loss of active data may occur. So be sure to select HTML CODE mode and cut and paste the text of your customizations of the templates frequently and new versions can wildly change with each revsion at this time, until it reaches a stable version. For example if you make a template , future versions may not support it and may not be complatible or if you switch off of the design your changes are not saved. So use it as is.
-
+ This is a useful Beta version , previous release was usable but not functional ,this version fixed that and works for its intended purpose,but will have glitches and loss of active data may occur. So be sure to select HTML CODE mode and cut and paste the text of your customizations of the templates frequently and new versions can wildly change with each revsion at this time, until it reaches a stable version. For example if you make a template , future versions may not support it and may not be complatible or if you switch off of the design your changes are not saved. So use it as is.
 
 ### Benifits: 
 * Make eye catching email with little effort.
@@ -48,8 +55,7 @@ to update them in Design.
 * Dont have to worry about confusing or overwhelming apllications to do this.
 
 ### Next Steps: 
- I plan to create more templates to pull from, add more fonts to use and add a way to select theme color or background element color changes. This needs to be done manually currently in source mode. Need to add session saving in Design view, currently if you go away from Design mode, it will be gone and will have to start new. Would like to add S3 image storage configuration to keep the email small and not have to retype remote locations when adding image URLs. Lots of bug fixes and better design flow.
-
+ I plan to create more templates to pull from, the current ones are good and can be used and will add more fonts as well. Source mode will still need to be used for big changes and copy blocks or sections. Need to add session saving in Design view, currently if you go away from Design mode, it will be gone and will have to start new. Would like to add S3 image storage configuration to keep the email small and not have to retype remote locations when adding image URLs. I will not work on image adding to email itself , this can be done manually using css, but not on my To do list. Still lots of bug fixes and better design flowto work on fixing while using the opensource SummerNote editor.
 
 ### Contact:   
 Daniel Yount

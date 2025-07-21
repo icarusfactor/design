@@ -12,6 +12,185 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/summernote-bs4.min.js"></script>
    
 
+  <style>
+@font-face {
+    font-family: "summernoteexttable";
+    font-style: normal;
+    font-weight: 400;
+    font-display: auto;
+    src: url(font/summernote-ext-table.eot);
+    src: url(font/summernote-ext-table.eot?#iefix) format("embedded-opentype"), url(font/summernote-ext-table.woff2) format("woff2"), url(font/summernote-ext-table.woff) format("woff"), url(font/summernote-ext-table.ttf) format("truetype")
+}
+
+.note-icon-table-merge:before {
+    font-family: summernoteexttable;
+    content: "\ea91"
+}
+
+.note-icon-table-cell-split:before {
+    font-family: summernoteexttable;
+    content: "\ea94"
+}
+
+.note-icon-table-margin:before {
+    font-family: summernoteexttable;
+    content: "\ea95"
+}
+
+.note-icon-table-width-height-reset:before {
+    content: "\ea28"
+}
+
+.jtable-cell-split-dropdown-toggle {
+    width: 20px;
+    padding-left: 5px;
+}
+
+.jtable-cell-split-dropdown {
+    width: 36px;
+    min-width: auto !important;
+}
+
+.jtable-cell-split-button-group {
+    margin: 0px !important;
+}
+
+.jtable-add-del-row-col-dropdown {
+    width: 145px;
+    min-width: auto !important;
+}
+
+.jtable-add-row-col-button-group {
+    margin: 0px !important;
+}
+
+.jtable-del-row-col-button-group {
+    margin: 3px 0px 0px 0px !important;
+}
+
+.jtable-align-dropdown {
+    width: 142px;
+    min-width: auto !important;
+}
+
+.jtable-horizontal-align-button-group {
+    margin: 0px !important;
+}
+
+.jtable-vertical-align-button-group {
+    margin: 3px 0px 0px 0px !important;
+}
+
+.jtable-vertical-align-btn-top {
+    padding-top: 1px;
+    padding-bottom: 9px;
+}
+
+.jtable-vertical-align-btn-middle {
+}
+
+.jtable-vertical-align-btn-bottom {
+    padding-top: 9px;
+    padding-bottom: 1px;
+}
+
+.jtable-vertical-align-btn-baseline {
+    padding-top: 1px;
+    padding-bottom: 9px;
+}
+
+.jtable-merge-label {
+    float: left;
+    padding-left: 0px;
+    width: 60px;
+}
+
+.jtable-merge-input {
+    width: 100px;
+    display: inline-block;
+}
+
+.jtable-merge-hint-span {
+    font-size: 13px;
+    padding-left: 5px;
+}
+
+.jtable-merge-row-info-div {
+    padding-top: 10px;
+}
+
+.jtable-merge-btn {
+    /*background: #5a5a5a;*/
+}
+
+.vl {
+    display: none;
+    position: absolute;
+    border-left: 3px dashed #bcbcbc;
+    cursor: col-resize;
+    z-index: 1;
+}
+
+.hl {
+    display: none;
+    position: absolute;
+    border-top: 3px dashed #bcbcbc;
+    cursor: row-resize;
+    z-index: 1;
+}
+
+.jtable-block {
+    display: none;
+    position: absolute;
+    border: 1px dashed #bcbcbc;
+    background-color: rgba(167, 163, 255, 0.5);
+    z-index: 1;
+    pointer-events: none;
+}
+
+
+
+.form-group-jtable-table-info-margin {
+    border: 1px dashed #888;
+    padding: 15px 0px;
+}
+
+.jtable-table-info-margin-top-bottom {
+    text-align: center;
+}
+
+.jtable-table-info-margin-input {
+    width: 40px;
+    margin-right: 3px;
+}
+
+.jtable-table-info-margin-middle {
+    display: flex;
+    text-align: center;
+    height: 109px;
+    margin: 15px 0 15px 0;
+}
+
+.jtable-table-info-margin-left {
+    width: 20%;
+    padding-top: 45px;
+}
+
+.jtable-table-info-margin-center {
+    width: 60%;
+    text-align: center;
+    padding-top: 30px;
+    border: 2px solid #000000;
+}
+
+.jtable-table-info-margin-right {
+    width: 20%;
+    padding-top: 45px;
+}
+
+  </style>
+
+
     <style>
 
     .small-size {
@@ -72,8 +251,9 @@
             var ui = $.summernote.ui;
             var options = context.options.template;
             var defaultOptions = {
-                label: 'Template',
-                tooltip: 'Insert Template',
+                // label: 'Template',
+		icon: '<i class="note-icon" ><svg xmlns="http://www.w3.org/2000/svg" height=18 width=18 viewBox="0 0 576 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M48 115.8C38.2 107 32 94.2 32 80c0-26.5 21.5-48 48-48c14.2 0 27 6.2 35.8 16l344.4 0c8.8-9.8 21.6-16 35.8-16c26.5 0 48 21.5 48 48c0 14.2-6.2 27-16 35.8l0 280.4c9.8 8.8 16 21.6 16 35.8c0 26.5-21.5 48-48 48c-14.2 0-27-6.2-35.8-16l-344.4 0c-8.8 9.8-21.6 16-35.8 16c-26.5 0-48-21.5-48-48c0-14.2 6.2-27 16-35.8l0-280.4zM125.3 96c-4.8 13.6-15.6 24.4-29.3 29.3l0 261.5c13.6 4.8 24.4 15.6 29.3 29.3l325.5 0c4.8-13.6 15.6-24.4 29.3-29.3l0-261.5c-13.6-4.8-24.4-15.6-29.3-29.3L125.3 96zm2.7 64c0-17.7 14.3-32 32-32l128 0c17.7 0 32 14.3 32 32l0 96c0 17.7-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32l0-96zM256 320l32 0c35.3 0 64-28.7 64-64l0-32 64 0c17.7 0 32 14.3 32 32l0 96c0 17.7-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32l0-32z"/></svg></i><span class="caret"></span>',
+		tooltip: 'Insert Template',
                 list: {
                  template0: '', 
 		}
@@ -144,7 +324,8 @@
                 var button = ui.buttonGroup([
                     ui.button({
                         className: 'dropdown-toggle',
-                        contents: '<span class="template"/> ' + options.label + ' <span class="caret"></span>',
+                        //contents: '<span class="template"/> ' + options.label + ' <span class="caret"></span>',
+                        contents: '<span class="template"/> ' + options.icon + ' <span class="caret"></span>',
                         tooltip: options.tooltip,
                         data: {
                             toggle: 'dropdown'
@@ -245,7 +426,10 @@ function generateLoremText (count, type, html) {
     case LOREM_TEXT_TYPE.PARAGRAPH:
       var paragraphsArray = new Array();
       for (var i = 0; i < count; i++) {
-        paragraphsArray.push((html ? '<p>' : '') + generateLoremText(Math.floor((Math.random() * 10) + 10), LOREM_TEXT_TYPE.SENTENCE) + (html ? '</p>' : ''));
+	//The below line did not work with the template system. Now paragraph is just many sentences.	
+        //paragraphsArray.push((html ? '<p>' : '') + generateLoremText(Math.floor((Math.random() * 10) + 10), LOREM_TEXT_TYPE.SENTENCE) + (html ? '</p>' : ''));
+
+        paragraphsArray.push((html ? ' ' : '') + generateLoremText(Math.floor((Math.random() * 10) + 10), LOREM_TEXT_TYPE.SENTENCE) + (html ? ' ' : ''));
       }
       return paragraphsArray.join('\n');
     break;
@@ -325,11 +509,145 @@ function generateLoremText (count, type, html) {
     <div id="summernote"></div>
     <script>
 
-//      $('#summernote').summernote({
-//        placeholder: '',
-//        tabsize: 1,
-//        height: 400,
-//      });
+//// Replace current IMG element src value with a dialog for url.
+//var ReplaceIMG = function (context) {
+//    var ui = $.summernote.ui;
+//    var button = ui.button({
+//        contents: '<i class="fa fa-child"/> Replace', // Button appearance
+//        tooltip: 'replace', // Tooltip on hover
+//        click: function () {
+//            context.invoke('editor.insertText', 'hello'); // Action on click
+//        }
+//    });
+//    return button.render();
+//};
+
+
+// Replace current IMG element src value with a dialog for url.
+var ReplaceIMG = function (context) {
+    var ui = $.summernote.ui;
+    var button = ui.button({
+        contents: '<i class="fa fa-child"/> Replace', // Button appearance
+        tooltip: 'replace', // Tooltip on hover
+        click: function () {
+
+            	     $('#myCustomModal').modal('show');
+
+            //context.invoke('editor.insertText', 'hello'); // Action on click
+            //var editor = $('#summernote');			   
+            //let $node = $(editor.summernote('restoreTarget'));
+	    // if ($node.is('img')) { // Check if it's an image
+            //                       console.log("Selected image:", $node[0]); // Access the DOM element
+	//			  $node[0].src = 'https://placehold.co/1300x150'; //Need to pull up dialog to enter dymanic url.
+         //                         }
+		    }});		    
+
+    return button.render();
+};
+
+
+
+
+function isValidUrl(url_string) {
+  try {
+    new URL(url_string);
+    console.log("URL TRUE" );		      
+    return true;
+  } catch (error) {
+    console.log("URL FALSE" );		      
+    return false;
+  }
+}
+
+// Replace current Table element background style color by grabbing background color in toolbar in realtime.
+ function getBGcolor() {
+                  var bgcolor ="rgb(255,255,255);";
+	          $('.note-recent-color').each(function() {
+                  var style = $(this).attr("style");
+                  console.log("Style attribute:", style); 	
+                  const styleProperties = style.split(';'); 
+                  let foundColor = null;	      
+                  
+		  for (const prop of styleProperties) {
+                  const trimmedProp = prop.trim();
+                  if (trimmedProp.startsWith('background-color:')) {
+                  bgcolor = trimmedProp.substring('background-color:'.length).trim();
+                  console.log("background Color:", bgcolor); 	
+                  break; // Found the color, exit the loop
+                  }
+                  }
+	          });
+                  return bgcolor;
+				}
+
+var ChangeColorTable = function (context) {
+    var ui = $.summernote.ui;
+    var button = ui.button({
+        contents: '<i class=""/> Color TABLE', // Button appearance
+        tooltip: 'color', // Tooltip on hover
+        click: function () {
+            //context.invoke('editor.insertText', 'hello'); // Action on click
+            var selection = window.getSelection();
+	   if (selection.rangeCount > 0) {
+	    var selectedNode = selection.anchorNode; 
+    		// Find the closest parent table element
+		var tableElement = selectedNode.closest('table');
+
+   	   if (tableElement) {
+           // You now have the selected table element! 
+           // You can manipulate it, access its attributes, or perform other actions
+          console.log("Selected table element:", tableElement);
+          var bgcolor = getBGcolor();
+	  tableElement.style.backgroundColor = bgcolor; 
+    } else {
+        console.log("No table element found among parent nodes of the selection.");
+    } 
+
+		       }}
+    });
+    return button.render();
+};
+
+
+// Replace current Table TD element background style color with a dialog for url.
+var ChangeColorTd = function (context) {
+    var ui = $.summernote.ui;
+    var button = ui.button({
+        contents: '<i class="fa fa-child"/> Color TD', // Button appearance
+        tooltip: 'color', // Tooltip on hover
+        click: function () {
+            //context.invoke('editor.insertText', 'hello'); // Action on click
+            var selection = window.getSelection();
+	   //if (selectionNode.rangeCount > 0) {
+	    var selectedNode = selection.anchorNode; 
+    		// Find the closest parent table element make sure its the core td element.
+                let element = selectedNode.nodeType === Node.ELEMENT_NODE ? selectedNode : selectedNode.parentElement;
+		var tableElement = element.closest('td');
+
+
+            //var selection = window.getSelection() ;
+	   //if (selection.rangeCount > 0) {
+	   // var selectedNode = selection.anchorNode; 
+    		// Find the closest parent table element
+	//	var tableElement = selectedNode.closest('td');
+
+   	   if (tableElement) {
+           // You now have the selected table element! 
+           // You can manipulate it, access its attributes, or perform other actions
+          console.log("Selected table element:", tableElement);
+          var bgcolor = getBGcolor();
+	  tableElement.style.backgroundColor = bgcolor; 
+          			       
+    } else {
+        console.log("No table element found among parent nodes of the selection.");
+    } 
+
+		       }//}
+    });
+    return button.render();
+};
+
+
 
       $('#summernote').summernote({
           focus: false,
@@ -341,6 +659,32 @@ function generateLoremText (count, type, html) {
           dialogsInBody: true,
           dialogsFade: true,
           disableDragAndDrop: false,			  
+  popover: {
+            image: [
+		['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+                ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                ['remove', ['removeMedia']],
+                ['custom', ['ReplaceIMG']], // Replace Current IMG src element.
+            ],
+            link: [
+                ['link', ['linkDialogShow', 'unlink']],
+            ],
+            table: [
+                ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
+                ['delete', ['deleteRow', 'deleteCol', 'deleteTable']],
+                ['custom2', ['ChangeColorTable']], // Replace Current table style color element.
+                ['custom3', ['ChangeColorTd']], // Replace Current table style color element.
+            ]
+        },
+  buttons: {
+            ReplaceIMG: ReplaceIMG, // Define your button function
+            ChangeColorTable: ChangeColorTable,  // Define your button function
+            ChangeColorTd: ChangeColorTd,  // Define your button function
+        },			  
+  callbacks: {
+		      //no callbacks
+
+				  },
   toolbar: [
 //    // [groupName, [list of button]]
     ['style', ['style','bold', 'italic', 'underline','clear']],
@@ -351,15 +695,126 @@ function generateLoremText (count, type, html) {
     ['para', ['ul', 'ol', 'paragraph']],
     ['height', ['height']],
     ['table', ['table']],
-    ['insert', ['link','hr','picture', 'video','template','lorem']],
+    ['insert', ['link','hr','picture', 'video']],
+    ['insert', ['template','lorem']],
     ['view', ['codeview']],		      
     ['misc', ['undo', 'redo']]		      
   ]
 });	
+
+
+$('body').append(
+        '<div id="myCustomModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+            '<div class="modal-dialog">' +
+                '<div class="modal-content">' +
+                    '<div class="">' +
+                    '</div>' +
+                    '<div class="modal-body">' +
+		    '<p>For blank templates use i.e. https://placehold.co/700x140 </br>' +
+		    'The numbers in above URL are variable to match need.</br>' +
+                        'Otherwise just replace image with a valid URL.</p>' +
+
+                        '<label for="myInput">Enter URL:</label>' +
+                        '<input type="text" id="myInput" class="form-control needs-validation" />' +
+                    '</div>' +
+                    '<div class="modal-footer">' +
+                        '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>' +
+                        '<button type="button" class="btn btn-primary" onclick="handleCustomAction()">Replace IMG</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>'
+);
+
 // Set Defaults	    
 $('#summernote').summernote('fullscreen.toggle');
 $('#summernote').summernote('fontName', 'Arial');
 $('#summernote').summernote('lineHeight', 0.2);
+$('#summernote').summernote('dialogsInBody',true);
+//$(".note-table-popover").css('visibility', 'hidden');
+
+
+
+// brings table popup above Image if they both popup. 
+document.addEventListener('keydown', function(event) {
+
+  if (event.altKey) {
+    console.log('Alt key was pressed down!');
+    // Perform actions when Alt key is pressed
+    $(".note-table-popover").css('z-index', '9999');
+    $(".note-image-popover").css('z-index', '1');
+    $(".note-link-popover").css('z-index', '1');
+  }
+
+  if (event.ctrlKey) {
+    console.log('Alt key was pressed down!');
+    // Perform actions when ctrl key is pressed
+    $(".note-link-popover").css('z-index', '9999');
+    $(".note-image-popover").css('z-index', '1');
+    $(".note-table-popover").css('z-index', '1');
+
+  }
+
+  if (event.ctrlKey && event.altKey) {
+    console.log('Alt key was pressed down!');
+    // Perform actions when ctrl key is pressed
+    $(".note-image-popover").css('z-index', '9999');
+    $(".note-link-popover").css('z-index', '1');
+    $(".note-table-popover").css('z-index', '1');
+   }
+
+  // Experimental
+//  if (event.altKey && event.key === 'H' || event.altKey && event.key === 'h' ) {
+//    event.preventDefault(); 	 	      
+//    console.log("Alt + h key was pressed down!");
+//    // Perform actions when alt+h key is pressed
+//    addBorderToEmptyDiv();
+//   }
+
+
+});
+
+
+
+//Experimental
+//function addBorderToEmptyDiv() {
+//
+//	// Get the current HTML content from Summernote
+//        var editorContent = $("#summernote").summernote("code");
+//	var $tempElement = $("<div>").html(editorContent);
+//	    $tempElement.find("div").each(function() {
+//          	var $this = $(this);
+//
+//          	// Check if the div is empty (no text content and no child elements)
+//         	if ($this.is(":empty")) {
+//            	$this.css("border", "1px solid red"); // Add a red border to empty divs
+//            	$this.css("min-height", "20px"); // Add a red border to empty divs
+//            	$this.css("min-width", "20px"); // Add a red border to empty divs
+//	        $this.innerHTML = '<p>Text Box.</p>'; 
+//		console.log("FOUND EMPTY DIV" );	
+//          	} else {
+//            $this.css("border", "none"); // Remove border if no longer empty
+//                       }
+//        });
+//         //replace HTML with borders of empty divs.
+//	 $('#summernote').summernote('code', $tempElement.html());			    
+//}
+
+
+function handleCustomAction() {
+    var text = $('#myInput').val();
+    if(isValidUrl(text) ) { //check if URL is valid. 
+    var editor = $('#summernote');			   
+    let $node = $(editor.summernote('restoreTarget'));
+    if ($node.is('img')) { // Check if it's an image
+    console.log("Selected image:", $node[0]); // Access the DOM element
+    $node[0].src = text; 
+
+		}}
+
+    console.log("HIDE"); // Access the DOM element
+    $('#myCustomModal').modal('hide');
+}
 
 
 function getCookie(name) {
