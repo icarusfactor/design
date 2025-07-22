@@ -1,4 +1,4 @@
-# Roundcube Design v0.6.8
+# Roundcube Design v0.5
 
 ![RoundCube Design View ](/images/RCdesign068.png "In design mode.")
 
@@ -44,6 +44,7 @@ to update them in Design.
 * Email Sending Is Left to Compose
 * Uses Mbox Folders For Templates and Holding
 * Works With all Major Browsers
+* Editor Fonts Work With All Major Email Clients
 * Make and Use Your Own Templates
 
 ### Status:
@@ -55,7 +56,7 @@ to update them in Design.
 * Dont have to worry about confusing or overwhelming apllications to do this.
 
 ### Next Steps: 
- I plan to create more templates to pull from, the current ones are good and can be used and will add more fonts as well. Source mode will still need to be used for big changes and copy blocks or sections. Need to add session saving in Design view, currently if you go away from Design mode, it will be gone and will have to start new. Would like to add S3 image storage configuration to keep the email small and not have to retype remote locations when adding image URLs. I will not work on image adding to email itself , this can be done manually using css, but not on my To do list. Still lots of bug fixes and better design flowto work on fixing while using the opensource SummerNote editor.
+ I plan to create more templates to pull from, the current ones are good and can be used.I have added all of the supported fonts for email clients and will add option for custom fonts by converting section to image,but that will be in some future revision. Source mode will still need to be used for big changes and copy blocks or sections. Need to add session saving in Design view, currently if you go away from Design mode, it will be gone and will have to start new. Would like to add S3 image storage configuration to keep the email small and not have to retype remote locations when adding image URLs. I will not work on image adding to email itself , this can be done manually using css, but not on my To do list. Still lots of bug fixes and better design flow to work on fixing while using the opensource SummerNote editor.
 
 ### Contact:   
 Daniel Yount

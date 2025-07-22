@@ -14,3 +14,10 @@
  - This version is not only workable, but first useful and userfriendly version. 
  - Added icon for template toolbar.
  - Made bundled templates work good with the visual editors controls. 
+
+### v0.6.9
+ - Added scrolling for long dropdown menus.
+ - Limited fonts to ones that are web safe for all major email clients. 
+ - Template dropdown now matches theme of toolbar.
+ - Added larger font sizes. 
+ - Fixed Paragraph dropdown setting by setting Z-index above everything else for dropdowns.

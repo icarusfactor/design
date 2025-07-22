@@ -123,20 +123,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
        }
 
-     // Set Local Storage
-     //function setEditorBG( bgcolor) { 
-     //   sess_user = getCookie("sess_user") || "";
-     //   localStorage.setItem('design_'+sess_user+'_backgroundColor' , encodeURIComponent( bgcolor ) );
-     //}
-
-     // Get Local Storage
-     //function getEditorBG() {
-     //var bgcolor = "rgb(255,255,255)";
-     //sess_user = getCookie("sess_user") || "";
-     //bgcolor = decodeURIComponent( localStorage.getItem('design_'+sess_user+'_backgroundColor')).replace(/\+/g, " ");
-     //return bgcolor;	      
-     //}
-
 
      //All of the needed data is in localstorage.	 
      function importTemplate( num ) {

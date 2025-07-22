@@ -10,9 +10,9 @@
 
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/summernote-bs4.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.1/dist/summernote-bs4.min.js"></script>
-   
 
   <style>
+
 @font-face {
     font-family: "summernoteexttable";
     font-style: normal;
@@ -315,9 +315,11 @@
                 // initialize list
                 var htmlDropdownList = '';
                 for (var htmlTemplate in options.list) {
+                    if ( htmlTemplate != "template0" ) {
                     if (options.list.hasOwnProperty(htmlTemplate)) {
-                        htmlDropdownList += '<li><a href="#" data-value="' + htmlTemplate + '">' + options.list[htmlTemplate] + '</a></li>';
+                        htmlDropdownList += '<li><a class="dropdown-item" href="#" data-value="' + htmlTemplate + '">' + options.list[htmlTemplate] + '</a></li>';
                     }
+		    }
                 }
 
                 // create button
@@ -502,26 +504,19 @@ function generateLoremText (count, type, html) {
 .note-editor.note-frame .note-editing-area .note-editable {
   padding-top: 1rem;
 }
+
+.note-dropdown-menu {
+                     max-height: 300px; 
+                     overflow-y: auto !important;
+		     z-index: 9999;
+                    }
+
     </style>
 
   </head>
   <body>
     <div id="summernote"></div>
     <script>
-
-//// Replace current IMG element src value with a dialog for url.
-//var ReplaceIMG = function (context) {
-//    var ui = $.summernote.ui;
-//    var button = ui.button({
-//        contents: '<i class="fa fa-child"/> Replace', // Button appearance
-//        tooltip: 'replace', // Tooltip on hover
-//        click: function () {
-//            context.invoke('editor.insertText', 'hello'); // Action on click
-//        }
-//    });
-//    return button.render();
-//};
-
 
 // Replace current IMG element src value with a dialog for url.
 var ReplaceIMG = function (context) {
@@ -530,16 +525,7 @@ var ReplaceIMG = function (context) {
         contents: '<i class="fa fa-child"/> Replace', // Button appearance
         tooltip: 'replace', // Tooltip on hover
         click: function () {
-
             	     $('#myCustomModal').modal('show');
-
-            //context.invoke('editor.insertText', 'hello'); // Action on click
-            //var editor = $('#summernote');			   
-            //let $node = $(editor.summernote('restoreTarget'));
-	    // if ($node.is('img')) { // Check if it's an image
-            //                       console.log("Selected image:", $node[0]); // Access the DOM element
-	//			  $node[0].src = 'https://placehold.co/1300x150'; //Need to pull up dialog to enter dymanic url.
-         //                         }
 		    }});		    
 
     return button.render();
@@ -647,7 +633,9 @@ var ChangeColorTd = function (context) {
     return button.render();
 };
 
-
+// WebSafe Fonts for Email Clients 2025 
+const customFonts = ["Arial", "Courier New", "Georgia", "Helvetica", "Tahoma", "Times New Roman", "Trebuchet MS", "Verdana"]
+const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48','64','72','96','112','128']   
 
       $('#summernote').summernote({
           focus: false,
@@ -658,7 +646,11 @@ var ChangeColorTd = function (context) {
 	  lineHeights: ['0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
           dialogsInBody: true,
           dialogsFade: true,
-          disableDragAndDrop: false,			  
+          disableDragAndDrop: false,			
+	  fontNames: customFonts ,
+	  fontNamesIgnoreCheck: customFonts, 
+          addDefaultFonts: false,
+	  fontSizes: customFontSizes,	  
   popover: {
             image: [
 		['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
@@ -727,10 +719,12 @@ $('body').append(
 );
 
 // Set Defaults	    
+
 $('#summernote').summernote('fullscreen.toggle');
 $('#summernote').summernote('fontName', 'Arial');
 $('#summernote').summernote('lineHeight', 0.2);
 $('#summernote').summernote('dialogsInBody',true);
+
 //$(".note-table-popover").css('visibility', 'hidden');
 
 
@@ -747,7 +741,7 @@ document.addEventListener('keydown', function(event) {
   }
 
   if (event.ctrlKey) {
-    console.log('Alt key was pressed down!');
+    console.log('Ctrl key was pressed down!');
     // Perform actions when ctrl key is pressed
     $(".note-link-popover").css('z-index', '9999');
     $(".note-image-popover").css('z-index', '1');
@@ -756,49 +750,14 @@ document.addEventListener('keydown', function(event) {
   }
 
   if (event.ctrlKey && event.altKey) {
-    console.log('Alt key was pressed down!');
+    console.log('Alt + Ctrl key was pressed down!');
     // Perform actions when ctrl key is pressed
     $(".note-image-popover").css('z-index', '9999');
     $(".note-link-popover").css('z-index', '1');
     $(".note-table-popover").css('z-index', '1');
    }
 
-  // Experimental
-//  if (event.altKey && event.key === 'H' || event.altKey && event.key === 'h' ) {
-//    event.preventDefault(); 	 	      
-//    console.log("Alt + h key was pressed down!");
-//    // Perform actions when alt+h key is pressed
-//    addBorderToEmptyDiv();
-//   }
-
-
 });
-
-
-
-//Experimental
-//function addBorderToEmptyDiv() {
-//
-//	// Get the current HTML content from Summernote
-//        var editorContent = $("#summernote").summernote("code");
-//	var $tempElement = $("<div>").html(editorContent);
-//	    $tempElement.find("div").each(function() {
-//          	var $this = $(this);
-//
-//          	// Check if the div is empty (no text content and no child elements)
-//         	if ($this.is(":empty")) {
-//            	$this.css("border", "1px solid red"); // Add a red border to empty divs
-//            	$this.css("min-height", "20px"); // Add a red border to empty divs
-//            	$this.css("min-width", "20px"); // Add a red border to empty divs
-//	        $this.innerHTML = '<p>Text Box.</p>'; 
-//		console.log("FOUND EMPTY DIV" );	
-//          	} else {
-//            $this.css("border", "none"); // Remove border if no longer empty
-//                       }
-//        });
-//         //replace HTML with borders of empty divs.
-//	 $('#summernote').summernote('code', $tempElement.html());			    
-//}
 
 
 function handleCustomAction() {
