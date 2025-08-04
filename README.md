@@ -1,4 +1,4 @@
-# Roundcube Design v0.5
+# Roundcube Design v0.7.0
 
 ![RoundCube Design View ](/images/RCdesign70.png "In design mode.")
 
