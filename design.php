@@ -36,6 +36,8 @@ class design extends rcube_plugin
 
 	$this->register_action('senddraft', [$this, 'action']); 
 
+	$this->register_action('editnotice', [$this, 'action']); 
+
 	$this->register_action('cctemplate', [$this, 'action']); 
 	$this->register_action('checkdraft', [$this, 'action']); 
 	$this->register_action('intemplates', [$this, 'action']); 
@@ -91,6 +93,39 @@ class design extends rcube_plugin
 	$this->include_stylesheet($this->local_skin_path() . '/design.css');
     }
 
+
+    //Editor Notices will end up here.
+    function editnotice() {
+    
+	    $rcmail = rcmail::get_instance();
+
+	    $right_click = rcube_utils::get_input_string('_button', rcube_utils::INPUT_POST); 
+
+
+             switch($right_click) {
+		case "moveenabled":
+		// code block
+                $response = "DIV Move Enabled";
+                break;
+                case "movedisabled":
+		// code block
+                $response = "DIV Move Disabled";
+		break;
+                case "copydiv":
+		// code block
+                $response = "DIV Copied";
+		break;
+                case "pastediv":
+		// code block
+                $response = "DIV Pasted";
+		break;
+
+                default:
+                break;
+             }
+
+	    $rcmail->output->command('display_message', $response, 'confirmation');
+    }
 
     function cctemplate() {
             $store_folder = false;
@@ -311,7 +346,10 @@ class design extends rcube_plugin
 		$rcmail->output->set_pagetitle($this->gettext('design'));
 		$this->savetodraft();
             }
-	
+        else if ($rcmail->action == 'editnotice') {
+		$rcmail->output->set_pagetitle($this->gettext('design'));
+		$this->editnotice();
+	}
         else if ($rcmail->action == 'cctemplate') {
 		$rcmail->output->set_pagetitle($this->gettext('design'));
 		$this->cctemplate();

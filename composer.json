@@ -1,8 +1,11 @@
 {
-    "name": "roundcube/desgin",
+    "name": "icarusfactor/desgin",
     "type": "roundcube-plugin",
     "description": "Plugin adds (Design) in taskbar. Used to make HTML emails from templates. ",
+    "keywords": ["email","plugin","template","editor","html","presentation","roundcube"],
     "license": "GPL-3.0-or-later",
+    "homepage": "https://github.com/icarusfactor/design",
+    "version": "0.7.0",
     "authors": [
         {
             "name": "Daniel Yount",

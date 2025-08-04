@@ -21,3 +21,14 @@
  - Template dropdown now matches theme of toolbar.
  - Added larger font sizes. 
  - Fixed Paragraph dropdown setting by setting Z-index above everything else for dropdowns.
+
+### v0.7.0
+ - Template controls for template id rcd_div
+ - Added right click popup with limited options according to template. FIXED or DYNANMIC.
+ - Added Drag and Drop ability of DIV tags with template div id "rcd_div"
+ - Add right click popup logic for copy/paste for tagged div sections (experimental)
+ - Added template ids and controls to all basic templates.
+ - Updated About for specifications of template controls so anyone can make their own.
+ - Added Advanced Settings to enable or disable experimental options.
+ - Added version for Roundcube About. 
+

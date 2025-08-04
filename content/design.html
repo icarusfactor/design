@@ -187,8 +187,16 @@
     width: 20%;
     padding-top: 45px;
 }
-
   </style>
+
+<!-- CSS to stop drag and drop from breaking main div points. -->
+<style>
+.drag-part {
+  * {
+    pointer-events: none;
+    }
+  }
+</style>
 
 
     <style>
@@ -218,8 +226,10 @@
     //Enable sub-usable buttons.
     const tsize = window.parent.document.querySelector('.btn-tsize');
     const savedraft = window.parent.document.querySelector('.btn-savedraft');        
+    const moveit = window.parent.document.querySelector('.btn-move');        
     tsize.disabled= false;
     savedraft.disabled= false;
+    moveit.disabled= false;
     </script>
 
     <script >
@@ -515,8 +525,14 @@ function generateLoremText (count, type, html) {
 
   </head>
   <body>
+
+
     <div id="summernote"></div>
     <script>
+
+
+
+
 
 // Replace current IMG element src value with a dialog for url.
 var ReplaceIMG = function (context) {
@@ -532,6 +548,51 @@ var ReplaceIMG = function (context) {
 };
 
 
+let selectedMove = null
+let selectedMoveEnabled = true;
+
+function dragOver(e) {
+  if( selectedMoveEnabled ) { 
+   console.log("DRAG OVER ");
+
+  if (isBefore(selectedMove, e.target)) {
+    e.target.parentNode.insertBefore(selectedMove, e.target)
+  } else {
+    e.target.parentNode.insertBefore(selectedMove, e.target.nextSibling)
+  }
+ } // If Enable
+}
+
+function dragEnd() {
+  if( selectedMoveEnabled ) { 
+
+                          console.log("DRAG END ");
+			  selectedMove = null
+	                    }
+}
+
+function dragStart(e) {
+	  if( selectedMoveEnabled ) { 
+                          console.log("DRAG START ");
+
+			  e.dataTransfer.effectAllowed = 'move';
+			  e.dataTransfer.setData('text/plain', null);
+			  selectedMove = e.target;
+	                    }
+		}
+
+function isBefore(el1, el2) {
+
+if( selectedMoveEnabled ) { 
+  let cur
+  if (el2.parentNode === el1.parentNode) {
+    for (cur = el1.previousSibling; cur; cur = cur.previousSibling) {
+      if (cur === el2) return true
+    }
+  }
+  return false;
+  }		    
+}
 
 
 function isValidUrl(url_string) {
@@ -594,6 +655,203 @@ var ChangeColorTable = function (context) {
     return button.render();
 };
 
+         //Add drag js attribs to div with rcd_div id. 
+function EnableMoveDIVs() {
+         const customPopup = document.getElementById('customPopup');
+	 customPopup.style.display = 'none'; // hide the popup
+
+        //Get all of the editor HTML. Scan for id with rcd_div. Add needed js to enable drag.
+        var editorContent = document.querySelector('.note-editable');
+        if (editorContent) {
+        var divsToModify = editorContent.querySelectorAll('div#rcd_div');
+
+        divsToModify.forEach(function(div) {
+        div.setAttribute('draggable', 'true');
+        div.setAttribute('ondragend', 'dragEnd()');
+        div.setAttribute('ondragover', 'dragOver(event)');
+        div.setAttribute('ondragstart', 'dragStart(event)');
+
+	//Using class on children of main div to stop it from breaking apart key divs. 		    
+        if( div ) { 
+                    const children = div.children;  
+	            // 3. Iterate and add the class
+	            for (let i = 0; i < children.length; i++) {
+                    children[i].classList.add("drag-part");
+    		    }		
+		  }
+
+        });
+
+        }
+
+         console.log("Enable MOVE on all tagged DIVs");
+         //Give notice that tagged DIV are now movable.
+         window.parent.noticeMoveEnabled();
+	    }
+
+
+         //Remove js attributes from div with rcd_div id. 
+function DisableMoveDIVs() {
+         const customPopup = document.getElementById('customPopup');
+	 customPopup.style.display = 'none'; // hide the popup
+
+         //Get all of the edtor HTML. Scan for id with rcd_div. Remove all of the drag and drop options.
+        var editorContent = document.querySelector('.note-editable');
+        if (editorContent) {
+        var divsToModify = editorContent.querySelectorAll('div#rcd_div');
+
+        divsToModify.forEach(function(div) {
+        div.removeAttribute('draggable');
+        div.removeAttribute('ondragend');
+        div.removeAttribute('ondragover');
+        div.removeAttribute('ondragstart');
+
+	//Using class on children of main div to stop it from breaking apart key divs. 		    
+        if( div ) { 
+                    const children = div.children;  
+	            // 3. Iterate and add the class
+	            for (let i = 0; i < children.length; i++) {
+                    children[i].classList.remove("drag-part");
+    		    }		
+		  }
+
+        });
+
+         console.log("Disable MOVE on all tagged DIVs");
+         window.parent.noticeMoveDisabled();
+		    }
+	    }
+
+	 //Copy closest DIV to mouse click.     
+function CopyDIV() {
+         const customPopup = document.getElementById('customPopup');
+         customPopup.style.display = 'none'; // hide the popup 
+
+         // Get summernote closest match div and copy everything between the tags. 
+	 var divHTML ="";		    
+         var selection = window.getSelection();
+           if (selection.rangeCount > 0) {
+            var selectedNode = selection.anchorNode;
+                // Find the closest parent table element
+                var closestDiv = selectedNode.closest('div');
+                divHtml = closestDiv.outerHTML;
+                console.log(divHtml); // This will output the full HTML of the closest div
+
+
+           } else {
+              console.log("No div element found among parent nodes of the selection.");
+           }
+          
+	    // Put Div Block into LocalStorage. So it wont conflict with Paste Text. 	    
+            if (divHtml) {
+	    const encodedString = encodeURI(divHtml);			
+            localStorage.setItem('copiedDIV', encodedString);  
+            console.log("Copy DIV");
+	    //Give Notice that DIV was copied.			
+            window.parent.noticeCopyDIV();
+			}
+	    }
+	   
+
+// Help Support Experiment PasteDIV 
+function AllstringOccurrences(mainString, subString) {
+  const indices = [];
+  let startIndex = 0;
+  let foundIndex;
+
+  while ((foundIndex = mainString.indexOf(subString, startIndex)) !== -1) {
+    indices.push(foundIndex);
+    startIndex = foundIndex + subString.length; // Start search after the found substring
+  }
+  return indices;
+}
+	    
+
+	 //Paste DIV cloest to mouse click. TODO (paste at mouse div end or begin.)   
+	    //To get past the wonky logic I will use keyboard keys < > to paste segment  beforebegin or  afterend    
+function PasteDIV( keypos ) {
+         const customPopup = document.getElementById('customPopup');
+         customPopup.style.display = 'none'; // Hide the popup 
+
+         var divHtml = decodeURIComponent(localStorage.getItem('copiedDIV'));
+
+	 // Detect if localStorage had value or not.	    
+         if (keypos === null || keypos === undefined) {
+         keypos  = '<';  //If direction not used default to beforeend
+         }	    
+
+	 // Paste divHtml before closest <div> or after cloeset </div>		    
+         var selection = window.getSelection();
+
+		    if(selection.rangeCount > 0) {
+         var selectedNode = selection.anchorNode;
+         let element = selectedNode.nodeType === Node.ELEMENT_NODE ? selectedNode : selectedNode.parentElement;
+         var closediv = element.closest("div");
+         //var closediv = selectedNode.closest("div");
+
+             if (closediv && keypos == ">") { 
+             //closediv.before( divHtml );
+             closediv.insertAdjacentHTML('afterend', divHtml);
+	     //Give Notice Paste After Made
+             window.parent.noticPasteeDIV();
+             } else if (closediv && keypos == "<" )  {
+             closediv.insertAdjacentHTML('beforeend', divHtml);
+	     //Give Notice Paste Before Made			 
+             window.parent.noticPasteeDIV();
+	      } else {			  
+               console.log("No div element found among parent nodes of the selection.");
+               }
+				}
+
+
+ 	 //$("#summernote").summernote("editor.pasteHTML", clipboardText );		     
+         console.log("Paste DIV");
+	    }
+
+
+
+
+	 //Copy selected text.     
+function CopyText() {
+         const customPopup = document.getElementById('customPopup');
+         customPopup.style.display = 'none'; // Show the popup 
+
+	 const selectedText = window.getSelection().toString(); 
+	 if (selectedText) {
+            navigator.clipboard.writeText(selectedText)
+                .then(() => {
+                    console.log(selectedText+" : Text copied to clipboard!");
+                })
+                .catch(err => {
+                    console.error('Failed to copy text: ', err);
+                });
+          } else {
+            console.log('No text selected.');
+         }
+
+         console.log("Copy Text");
+	    }
+	    
+	 //Paste selected text.     
+ async function PasteText() {
+         const customPopup = document.getElementById("customPopup");
+         customPopup.style.display = "none"; // hide the popup 
+
+	  var clipboardText ="";	    
+         try {
+              clipboardText = await navigator.clipboard.readText();
+              console.log("Clipboard content:", clipboardText);
+             } catch (err) {
+              console.error("Failed to read clipboard contents:", err);
+              }
+
+
+         $("#summernote").summernote("editor.pasteHTML", clipboardText );
+
+         console.log("Paste Text");
+	    }
+
+
 
 // Replace current Table TD element background style color with a dialog for url.
 var ChangeColorTd = function (context) {
@@ -651,6 +909,7 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
 	  fontNamesIgnoreCheck: customFonts, 
           addDefaultFonts: false,
 	  fontSizes: customFontSizes,	  
+	  disableDragAndDrop: true,		  
   popover: {
             image: [
 		['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
@@ -674,7 +933,92 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
             ChangeColorTd: ChangeColorTd,  // Define your button function
         },			  
   callbacks: {
-		      //no callbacks
+		      //callbacks
+		      onInit: function() {
+                      $('.note-editable').on('contextmenu', function(e) {
+                        e.preventDefault(); // Prevent default browser context menu
+			console.log('Right-clicked inside Summernote!');
+
+                                           const customPopup = document.getElementById('customPopup');
+					   // Position the custom popup at the mouse coordinates
+                                           customPopup.style.left = event.clientX + 'px';
+                                           customPopup.style.top = event.clientY + 'px';
+                                           customPopup.style.display = 'block'; // Show the popup
+                                           customPopup.style.visibility = 'visible'; // Show the popup
+
+
+                                           var fullContent = $('#summernote').summernote('code');              
+                                           var firstComment = fullContent.match(/<\!\-\-(.*?)\-\->/);
+				           if (firstComment === undefined || firstComment === null) {		  
+							       
+					   console.log("DYNAMIC TEMPLATE NOT FOUND" );
+					   console.log("REMOVE DYNAMIC/EXPERIMENT OPTIONS");
+                                           
+                                           const dynamicElements = document.querySelectorAll('.dynamic');
+                                           dynamicElements.forEach(element => {
+					     element.style.display = 'none';
+                                             element.style.visibility = 'hidden'; // Show the popup
+                                           }); 
+
+                                           const ExperimentElements = document.querySelectorAll('.experiment');
+                                           ExperimentElements.forEach(element => {
+					     element.style.display = 'none';
+                                             element.style.visibility = 'hidden'; // Show the popup
+                                           }); 
+
+                                           } else {
+					   var comment = firstComment.toString(firstComment);
+					   console.log("1ST COMMENT IS: "+comment );
+					   var found = comment.indexOf(" DYNAMIC ");
+					   //Remove dynamic template options if not found.
+					   console.log("IS DYNAMIC: "+found );
+					   if(found == -1) { 
+					                        console.log("REMOVE DYNAMIC/EXPERIMENT OPTIONS");
+                                           			const dynamicElements = document.querySelectorAll('.dynamic');
+                                           			dynamicElements.forEach(element => {
+					     			element.style.display = 'none';
+                                                                element.style.visibility = 'hidden'; 
+                                                                }); 
+                                           			const ExperimentElements = document.querySelectorAll('.experiment');
+								ExperimentElements.forEach(element => {
+					     			element.style.display = 'none';
+                                             			element.style.visibility = 'hidden'; 
+                                           			}); 
+
+						           }	else {
+                                           			const dynamicElements = document.querySelectorAll('.dynamic');
+                                           			dynamicElements.forEach(element => {
+					     			element.style.display = 'block';
+                                                                element.style.visibility = 'visible'; 
+                                                                }); 
+                                                                //check local storage for experiment.
+								let exp_mode = localStorage.getItem("rcd_exp"); 
+								if (exp_mode === null) {exp_mode = "DISABLED";}	
+								if (exp_mode ==="ENABLED") { 				    
+                                           			const ExperimentElements = document.querySelectorAll('.experiment');
+                                           			ExperimentElements.forEach(element => {
+					     			element.style.display = 'block';
+                                                                element.style.visibility = 'visible'; 
+								});
+								} 
+								   }
+
+
+                                           }
+
+					  });
+
+	               $(".note-editable").on('click', function(e) {
+                       // Your custom function to execute on left-click
+                       console.log("Left-clicked inside Summernote!");
+                       // You can access the clicked element using 'e.target'
+                       const customPopup = document.getElementById('customPopup');
+                       customPopup.style.display = 'none'; // Show the popup
+                       });			   
+
+
+
+				         }
 
 				  },
   toolbar: [
@@ -775,6 +1119,12 @@ function handleCustomAction() {
     $('#myCustomModal').modal('hide');
 }
 
+// Experimental Drag and Drop Template Element.
+function makemoveable() {
+		    console.log("WILL USE NATIVE JS DRAG");
+	                    }
+
+
 
 function getCookie(name) {
   const nameEQ = name + "="; // Construct the name to search for
@@ -794,6 +1144,46 @@ function getCookie(name) {
 
 
     </script>
+
+    <div id="customPopup" style="z-index:9999;display: none; position: absolute;min-width:50px;min-height:100px;border: 1px solid black; padding: 10px; background-color: white;">
+
+    <a class="dropdown-item dynamic" href="#" onclick="EnableMoveDIVs()"  >Move DIVs</a>
+    <a class="dropdown-item dynamic" href="#" onclick="DisableMoveDIVs()" >Lock DIVs</a>
+    
+    <!-- Experimental Options Begin -->
+
+    <a class="dropdown-item experiment" href="#" onclick="CopyDIV()" >Copy DIV</a>
+    <a class="dropdown-item experiment" href="#" onclick="PasteDIV('<')" >Paste DIV ↑)</a>
+    <a class="dropdown-item experiment" href="#" onclick="PasteDIV('>')" >Paste DIV ↓)</a>
+
+    <script>
+    // If experiment mode enabled then remove experiment class.
+    let exp_mode = localStorage.getItem("rcd_exp");	    
+    if (exp_mode === null) {exp_mode = "DISABLED";}
+    if (exp_mode ==="ENABLED") {       	    
+    const experimentElements = document.querySelectorAll('.experiment'); 
+    experimentElements.forEach(element => {
+    element.style.display = 'block';
+    element.style.visibility = 'visible';
+    });
+    } else {
+    const experimentElements = document.querySelectorAll('.experiment'); 
+    experimentElements.forEach(element => {
+    element.style.display = 'none';
+    element.style.visibility = 'hidden';
+    });
+    }
+    </script> 
+
+    <!-- Experimental Options End -->
+
+
+    <a class="dropdown-item" href="#" onclick="CopyText()" >Copy Text</a>
+    <a class="dropdown-item" href="#" onclick="PasteText()" >Paste Text</a>
+    </div>
+
+    <div id="summernote"></div>
+
 
   </body>
 </html>

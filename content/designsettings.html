@@ -38,8 +38,17 @@
     //Disable non-usable buttons.
     const tsize = window.parent.document.querySelector('.btn-tsize');
     const savedraft = window.parent.document.querySelector('.btn-savedraft');	     
+    let exp_mode = localStorage.getItem("rcd_exp");
+
     tsize.disabled= true;
     savedraft.disabled= true;
+
+    //If mode does not exist set it to disabled.	      
+    if (exp_mode === null) {
+ 	 console.log("Experimental Mode does not exist in localStorage or its value is null.");
+	 exp_mode = "DISABLED" 		
+		}
+
     </script>
 
 </head>
@@ -67,6 +76,14 @@
 	this directory select Edit to open it in the Composer to send out from. 
 </fieldset>
 
+<fieldset>
+<legend>&nbsp;Advanced Settings</legend>
+
+<button class="btn btn-primary" onclick="window.parent.ToggleExp()" >Experimental Mode</button>IS&nbsp;<b><span id="rcd_expmode"></span></b>&nbsp;</BR>
+        This mode enables parts I've been developing and are working, but not working as expected.
+	This would be the Paste of DIV elements. Move,lock and copy DIV are working fine.
+</fieldset>
+<script>document.getElementById("rcd_expmode").innerHTML = exp_mode;</script>
 
     </div>
 

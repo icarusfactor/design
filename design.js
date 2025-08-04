@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
      const btn_designsettings = document.querySelector('.btn-designsettings'); 
      const btn_tsize = document.querySelector('.btn-tsize' );
      const btn_about = document.querySelector('.btn-about');
+     const btn_move = document.querySelector('.btn-move');
 
   if (btn_design) {
      btn_design.addEventListener('click', () => { 
@@ -49,6 +50,12 @@ document.addEventListener("DOMContentLoaded", function() {
   if (btn_tsize) {
      btn_tsize.addEventListener('click', () => { 
      toggleDivSize();	     
+            });
+                  }
+
+  if (btn_move) {
+     btn_move.addEventListener('click', () => { 
+	  console.log("MOVE CLICKED" );   
             });
                   }
 
@@ -76,6 +83,29 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //Start	after menu stuff here.
 
+    function ToggleExp() {
+    let newState;	     
+
+    let isState = localStorage.getItem('rcd_exp');
+    if (isState === null) {
+         console.log("Experimental Mode does not exist in localStorage or its value is null.");
+         isState = "DISABLED"          
+                }   
+
+    if (isState === 'DISABLED') {
+        newState = 'ENABLED';
+        console.log("Experimental Mode Enabled.");
+    } else {
+        newState = 'DISABLED';
+        console.log("Experimental Mode Disabled.");
+        }
+    localStorage.setItem('rcd_exp', newState);
+
+    chgSpan = document.querySelector("iframe").contentWindow.document.getElementById("rcd_expmode");	    
+    chgSpan.textContent = newState;
+    }
+
+
     function toggleDivSize() {
     var tDiv = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");	
     tDiv.forEach ( function (comment){
@@ -91,6 +121,34 @@ document.addEventListener("DOMContentLoaded", function() {
  	        rcmail.http_post('senddraft', { _message: encodedString} , false );
 	     }); 
                        }
+
+
+//Editor Function Notices. Will need editnotice function. 
+
+     function noticeMoveEnabled() {
+	     const Bpress = "moveenabled";
+ 	     rcmail.http_post('editnotice', { _button: Bpress} , false );
+     }
+
+
+     function noticeMoveDisabled() {
+	     const Bpress = "movedisabled";
+ 	     rcmail.http_post('editnotice', { _button: Bpress} , false );
+     }
+
+     function noticeCopyDIV() {
+	     const Bpress = "copydiv";
+ 	     rcmail.http_post('editnotice', { _button: Bpress} , false );
+     }
+
+     function noticePasteDIV() {
+	     const Bpress = "pastediv";
+ 	     rcmail.http_post('editnotice', { _button: Bpress} , false );
+     }
+
+
+
+
 
 //Settings page functions.
      function createCheckTemplateMbox() {
