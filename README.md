@@ -63,7 +63,7 @@ to update them in Design.
  When making a template some rules need to be followed when making one from scratch or modifying a current one that the editor will recognizes and parse accordingly.
 
 ### DYNAMIC TEMPLATE SPECIFICATION VERSION 1.0
-* The first line of a visual editable template has to be **&lt;-- DYNAMIC V1 --&gt;** otherwise options will be disabled.
+* The first line of a visual editable template has to be **&lt;!-- DYNAMIC V1 --&gt;** otherwise options will be disabled.
 * The **div** tag can not be used for any content and is for control,it will only hold sections of html that can have content.
 * The **table** tag is the main content element. Summernote editor popups for changing attrbutes and color are limited to this.
 * The **img** tag can only be used from remote store locations like S3 or direct website links via URL.
