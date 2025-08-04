@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", function() {
      const btn_designsettings = document.querySelector('.btn-designsettings'); 
      const btn_tsize = document.querySelector('.btn-tsize' );
      const btn_about = document.querySelector('.btn-about');
-     const btn_move = document.querySelector('.btn-move');
 
   if (btn_design) {
      btn_design.addEventListener('click', () => { 
@@ -53,11 +52,6 @@ document.addEventListener("DOMContentLoaded", function() {
             });
                   }
 
-  if (btn_move) {
-     btn_move.addEventListener('click', () => { 
-	  console.log("MOVE CLICKED" );   
-            });
-                  }
 
 //Disable Toggle Size and Save Draft
   if (btn_designsettings) {

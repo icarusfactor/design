@@ -29,7 +29,6 @@ class design extends rcube_plugin
         // register actions
         $this->register_action('index', [$this, 'action']);
 	$this->register_action('design', [$this, 'action']);
-        //$this->register_action('savedraft', [$this, 'action']);
         $this->register_action('designsettings', [$this, 'action']);
         $this->register_action('about', [$this, 'action']);
 	$this->register_action('license', [$this, 'action']);

@@ -32,3 +32,8 @@
  - Added Advanced Settings to enable or disable experimental options.
  - Added version for Roundcube About. 
 
+### v0.7.1
+ - Forgot to remove the Move button from the top menu , it did nothing as I moved all of this to the right-click edit window menu.  
+
+
+
