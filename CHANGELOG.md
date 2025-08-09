@@ -35,5 +35,9 @@
 ### v0.7.1
  - Forgot to remove the Move button from the top menu , it did nothing as I moved all of this to the right-click edit window menu.  
 
+### v0.7.4
+ - Added Toggle Zoom button ; Easier to move DIV blocks with smaller view. 
+ - Added Save/Load Session buttons.
+ 
 
 

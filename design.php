@@ -35,6 +35,7 @@ class design extends rcube_plugin
 
 	$this->register_action('senddraft', [$this, 'action']); 
 
+	$this->register_action('sessnotice', [$this, 'action']); 
 	$this->register_action('editnotice', [$this, 'action']); 
 
 	$this->register_action('cctemplate', [$this, 'action']); 
@@ -90,6 +91,23 @@ class design extends rcube_plugin
 
         // add style for taskbar button (must be here) and Design UI
 	$this->include_stylesheet($this->local_skin_path() . '/design.css');
+    }
+
+    //Session Notices will end up here.
+    function sessnotice() {
+	    $rcmail = rcmail::get_instance();
+	    $session_click = rcube_utils::get_input_string('_button', rcube_utils::INPUT_POST); 
+            switch($session_click) {
+		case "sesssave":
+                $response = "SESSION SAVED";
+                break;
+		case "sessload":
+                $response = "SESSION LOADED";
+                break;
+                default:
+                break;
+             }
+	    $rcmail->output->command('display_message', $response, 'confirmation');
     }
 
 
@@ -345,6 +363,10 @@ class design extends rcube_plugin
 		$rcmail->output->set_pagetitle($this->gettext('design'));
 		$this->savetodraft();
             }
+        else if ($rcmail->action == 'sessnotice') {
+		$rcmail->output->set_pagetitle($this->gettext('design'));
+		$this->sessnotice();
+	}
         else if ($rcmail->action == 'editnotice') {
 		$rcmail->output->set_pagetitle($this->gettext('design'));
 		$this->editnotice();

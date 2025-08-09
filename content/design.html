@@ -205,6 +205,17 @@
     width: 450px !important;
     }
 
+    .zoom-out {
+      top: 0px;
+      left: 0px;
+      height: 97%;
+      position: relative;
+      transform-origin: 1% 1%;
+      transform: scale(0.5);
+     /* Need to have javascript set the height in pixles to get scollbar to work. */
+    }
+
+
     .note-editable {
     background: white;
     width: 800px;
@@ -223,13 +234,40 @@
 
    <script>
 
+   $(document).ready(function() {
+   //Reload edit window if needed. Needed after unzoom from class settings cauing issues.  
+   //When loading last session this is used to make sure any dynamic class activity is reset.		      
+   let doReload = localStorage.getItem('rcd_reload');
+   if (doReload === null || doReload === "false") {
+      console.log("No Reload.");
+   } else if( doReload === "zoom" ) {
+      console.log("Reload Edit Window");
+      window.parent.restoreZoom(); 
+      localStorage.setItem('rcd_reload', "false");
+   } else if( doReload === "session" ) {
+      console.log("Restore Session");
+      window.parent.restoreSession(); 
+      localStorage.setItem('rcd_reload', "false");
+      window.parent.noticeSessLoad();
+   }		      
+
+    });
+
+
     //Enable sub-usable buttons.
     const tsize = window.parent.document.querySelector('.btn-tsize');
     const savedraft = window.parent.document.querySelector('.btn-savedraft');        
-    const moveit = window.parent.document.querySelector('.btn-move');        
+    const tzoom = window.parent.document.querySelector('.btn-tzoom');        
+    const savesess = window.parent.document.querySelector('.btn-savesess');        
+    const loadsess = window.parent.document.querySelector('.btn-loadsess');        
+
+
     tsize.disabled= false;
     savedraft.disabled= false;
-    moveit.disabled= false;
+    tzoom.disabled= false;
+    savesess.disabled= false;
+    loadsess.disabled= false;
+
     </script>
 
     <script >
@@ -438,9 +476,6 @@ function generateLoremText (count, type, html) {
     case LOREM_TEXT_TYPE.PARAGRAPH:
       var paragraphsArray = new Array();
       for (var i = 0; i < count; i++) {
-	//The below line did not work with the template system. Now paragraph is just many sentences.	
-        //paragraphsArray.push((html ? '<p>' : '') + generateLoremText(Math.floor((Math.random() * 10) + 10), LOREM_TEXT_TYPE.SENTENCE) + (html ? '</p>' : ''));
-
         paragraphsArray.push((html ? ' ' : '') + generateLoremText(Math.floor((Math.random() * 10) + 10), LOREM_TEXT_TYPE.SENTENCE) + (html ? ' ' : ''));
       }
       return paragraphsArray.join('\n');
@@ -860,20 +895,12 @@ var ChangeColorTd = function (context) {
         contents: '<i class="fa fa-child"/> Color TD', // Button appearance
         tooltip: 'color', // Tooltip on hover
         click: function () {
-            //context.invoke('editor.insertText', 'hello'); // Action on click
             var selection = window.getSelection();
-	   //if (selectionNode.rangeCount > 0) {
 	    var selectedNode = selection.anchorNode; 
     		// Find the closest parent table element make sure its the core td element.
                 let element = selectedNode.nodeType === Node.ELEMENT_NODE ? selectedNode : selectedNode.parentElement;
 		var tableElement = element.closest('td');
 
-
-            //var selection = window.getSelection() ;
-	   //if (selection.rangeCount > 0) {
-	   // var selectedNode = selection.anchorNode; 
-    		// Find the closest parent table element
-	//	var tableElement = selectedNode.closest('td');
 
    	   if (tableElement) {
            // You now have the selected table element! 

@@ -25,10 +25,16 @@ if (window.rcmail) {
 
 document.addEventListener("DOMContentLoaded", function() { 	
 
+
      const btn_design = document.querySelector('.btn-design'); 
      const btn_savedraft = document.querySelector('.btn-savedraft'); 
      const btn_designsettings = document.querySelector('.btn-designsettings'); 
      const btn_tsize = document.querySelector('.btn-tsize' );
+     const btn_tzoom = document.querySelector('.btn-tzoom' );
+
+     const btn_savesess = document.querySelector('.btn-savesess' );
+     const btn_loadsess = document.querySelector('.btn-loadsess' );
+     
      const btn_about = document.querySelector('.btn-about');
 
   if (btn_design) {
@@ -52,8 +58,23 @@ document.addEventListener("DOMContentLoaded", function() {
             });
                   }
 
+  if (btn_tzoom) {
+     btn_tzoom.addEventListener('click', () => { 
+     toggleDivZoom();	     
+            });
+                  }
 
-//Disable Toggle Size and Save Draft
+  if (btn_savesess) {
+     btn_savesess.addEventListener('click', () => { 
+     saveSession();	     
+            });
+                  }
+  if (btn_loadsess) {
+     btn_loadsess.addEventListener('click', () => { 
+     restoreSession();	     
+            });
+                  }
+
   if (btn_designsettings) {
      btn_designsettings.addEventListener('click', () => { 
   const url = new URL(window.location.href);
@@ -63,7 +84,6 @@ document.addEventListener("DOMContentLoaded", function() {
 });
                      }
 
-//Disable Toggle Size and Save Draft
   if (btn_about) {
      btn_about.addEventListener('click', () => {  
   const url = new URL(window.location.href);
@@ -107,6 +127,36 @@ document.addEventListener("DOMContentLoaded", function() {
     }); 
     }
 
+    function toggleDivZoom() {
+    var tDiv = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");	
+    tDiv.forEach ( function (comment){
+    comment.classList.toggle('zoom-out');
+ 
+    var scaleY = comment.getBoundingClientRect().height / comment.offsetHeight;  
+    var scaleX = comment.getBoundingClientRect().width / comment.offsetWidth;  
+    var htmlContent = comment.innerHTML;
+
+    console.log( "ScaleY:" + scaleY );	    
+    console.log( "ScaleX:" + scaleX );	    
+
+    if ( scaleX === 0.5) {
+    var dub = comment.offsetHeight * 1.9;
+    comment.style.height = String(dub) +"px";    
+    console.log("shrink");	    
+    } 
+    if (scaleX  === 1 ) {
+
+    //Use local storage to save current edit window HTML and reset from screwy CSS.
+    const encodedString = encodeURI(htmlContent);
+    localStorage.setItem('rcd_EditWindow', encodedString);
+    localStorage.setItem('rcd_reload', "zoom");
+
+    console.log("No Zoom");	    
+    document.querySelector("iframe").contentWindow.location.reload(true);
+	   
+    }  });  }
+
+
     
     function draftit() {
 	     var txtNote = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
@@ -116,6 +166,19 @@ document.addEventListener("DOMContentLoaded", function() {
 	     }); 
                        }
 
+
+
+     function noticeSessSave() {
+	     const Bpress = "sesssave";
+	     console.log("Save Session");
+ 	     rcmail.http_post('sessnotice', { _button: Bpress} , false );
+     }
+
+     function noticeSessLoad() {
+	     const Bpress = "sessload";
+	     console.log("Load Session");
+ 	     rcmail.http_post('sessnotice', { _button: Bpress} , false );
+     }
 
 //Editor Function Notices. Will need editnotice function. 
 
@@ -189,6 +252,45 @@ document.addEventListener("DOMContentLoaded", function() {
 	     });
      }
 
+function restoreZoom() {
+             var txtNote = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
+             const tmplBody =  decodeURIComponent( localStorage.getItem("rcd_EditWindow")); 
+	     //Place tmplBody in edit area.
+	     txtNote.forEach ( function (comment){
+		comment.innerHTML = tmplBody;     
+	     });
+	     
+   }
+
+// Restore last Session Save. Button top menu Session Save / Session Load
+function restoreSession() {
+             var txtNote = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
+             const tmplBody =  decodeURIComponent( localStorage.getItem("rcd_SessionSave")); 
+	     //Place tmplBody in edit area.
+	     txtNote.forEach ( function (comment){
+		comment.innerHTML = tmplBody;     
+                noticeSessLoad();
+	         });
+	     
+    }
+
+
+function saveSession() {
+
+             var txtNote = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
+    
+	     //Place tmplBody in edit area.
+	     txtNote.forEach ( function (comment){
+    
+             var htmlContent = comment.innerHTML;
+             const encodedString = encodeURI(htmlContent);
+             localStorage.setItem('rcd_SessionSave', encodedString);
+             localStorage.setItem('rcd_reload', "session");	
+             noticeSessSave();
+	     });	
+	
+}
+
 
     rcmail.addEventListener('beforeswitch-task', function(prop) {
         // Catch clicks to design task button
@@ -219,6 +321,8 @@ document.addEventListener("DOMContentLoaded", function() {
         tmplsubj[i]  = localStorage.getItem('design_'+sess_user+'_tmpl_subject'+i ) || "";
         i++;
 	}
+
+
 
         if (rcmail.env.contentframe && rcmail.task == 'design') {
             $('#' + rcmail.env.contentframe).on('load error', function(e) {
