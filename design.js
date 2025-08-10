@@ -97,29 +97,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //Start	after menu stuff here.
 
-    function ToggleExp() {
-    let newState;	     
-
-    let isState = localStorage.getItem('rcd_exp');
-    if (isState === null) {
-         console.log("Experimental Mode does not exist in localStorage or its value is null.");
-         isState = "DISABLED"          
-                }   
-
-    if (isState === 'DISABLED') {
-        newState = 'ENABLED';
-        console.log("Experimental Mode Enabled.");
-    } else {
-        newState = 'DISABLED';
-        console.log("Experimental Mode Disabled.");
-        }
-    localStorage.setItem('rcd_exp', newState);
-
-    chgSpan = document.querySelector("iframe").contentWindow.document.getElementById("rcd_expmode");	    
-    chgSpan.textContent = newState;
-    }
-
-
     function toggleDivSize() {
     var tDiv = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");	
     tDiv.forEach ( function (comment){
@@ -193,17 +170,10 @@ document.addEventListener("DOMContentLoaded", function() {
  	     rcmail.http_post('editnotice', { _button: Bpress} , false );
      }
 
-     function noticeCopyDIV() {
-	     const Bpress = "copydiv";
+     function noticeDupDIV() {
+	     const Bpress = "dupdiv";
  	     rcmail.http_post('editnotice', { _button: Bpress} , false );
      }
-
-     function noticePasteDIV() {
-	     const Bpress = "pastediv";
- 	     rcmail.http_post('editnotice', { _button: Bpress} , false );
-     }
-
-
 
 
 

@@ -40,4 +40,10 @@
  - Added Save/Load Session buttons.
  
 
+### v0.7.5
+ - Changed CopyDiv to Duplicate DIV. Removing Copy Paste DIV and Experimental mode. 
+
+
+
+
 

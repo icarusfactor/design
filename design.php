@@ -128,15 +128,10 @@ class design extends rcube_plugin
 		// code block
                 $response = "DIV Move Disabled";
 		break;
-                case "copydiv":
+                case "dupdiv":
 		// code block
                 $response = "DIV Copied";
 		break;
-                case "pastediv":
-		// code block
-                $response = "DIV Pasted";
-		break;
-
                 default:
                 break;
              }
