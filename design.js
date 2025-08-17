@@ -220,6 +220,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	     txtNote.forEach ( function (comment){
 		comment.innerHTML = tmplBody;     
 	     });
+	     document.querySelector("iframe").contentWindow.highlightDIV(); //check and enable highlighting.
      }
 
 function restoreZoom() {

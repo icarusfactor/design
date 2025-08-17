@@ -214,8 +214,7 @@
       transform: scale(0.5);
      /* Need to have javascript set the height in pixles to get scollbar to work. */
     }
-
-
+ 
     .note-editable {
     background: white;
     width: 800px;
@@ -242,11 +241,13 @@
       console.log("No Reload.");
    } else if( doReload === "zoom" ) {
       console.log("Reload Edit Window");
-      window.parent.restoreZoom(); 
+      window.parent.restoreZoom();
+      highlightDIV(); //Check if to highlight.		      
       localStorage.setItem('rcd_reload', "false");
    } else if( doReload === "session" ) {
       console.log("Restore Session");
       window.parent.restoreSession(); 
+      highlightDIV(); //Check if to highlight.		      
       localStorage.setItem('rcd_reload', "false");
       window.parent.noticeSessLoad();
    }		      
@@ -718,7 +719,7 @@ function EnableMoveDIVs() {
         });
 
         }
-
+         highlightDIV();
          console.log("Enable MOVE on all tagged DIVs");
          //Give notice that tagged DIV are now movable.
          window.parent.noticeMoveEnabled();
@@ -751,7 +752,7 @@ function DisableMoveDIVs() {
 		  }
 
         });
-
+         highlightDIV();
          console.log("Disable MOVE on all tagged DIVs");
          window.parent.noticeMoveDisabled();
 		    }
@@ -984,6 +985,8 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
                        // You can access the clicked element using 'e.target'
                        const customPopup = document.getElementById('customPopup');
                        customPopup.style.display = 'none'; // Show the popup
+                       //testhis();
+
                        });			   
 
 
@@ -1042,7 +1045,6 @@ $('#summernote').summernote('dialogsInBody',true);
 //$(".note-table-popover").css('visibility', 'hidden');
 
 
-
 // brings table popup above Image if they both popup. 
 document.addEventListener('keydown', function(event) {
 
@@ -1072,6 +1074,54 @@ document.addEventListener('keydown', function(event) {
    }
 
 });
+
+// Experiment to highlight rcd_div elements. WORKED.
+// Need to make border highlight when move is enabled , removed when locked or in FIXED mode.		    
+// Will need to be bigger and semitransparent and maybe pulsating. 		    
+// Currently tied to Left Click event. 		    
+
+// This function only needs to be updated when template is install or code edited.
+// Only run if move div enabled.		    
+// For now is ran each time left click is made.		    
+
+function highlightDIV() {
+        // Select all divs with id="rcd_div" within the Summernote editable area
+        $(".note-editable #rcd_div").each(function() {
+     
+        //console.log("Highlight Check" ); 
+
+        const isDraggable = $(this).attr('draggable') === 'true';
+
+        if( isDraggable ) {
+	//Enter and set dynamic border.		     
+        $(this).mouseenter( () => {
+        //console.log("Mouse entered rcd_div!"); 
+        border = $(this).css("border-style")
+        borderCol = $(this).css("border-color")
+        borderWidth = $(this).css("border-width")
+        $(this).css("border", "6px dashed red");
+        //$(this).css("box-shadow", "0 0 20px red");
+			    
+        });
+
+        } else {  $(this).off("mouseenter"); }
+
+        if( isDraggable ) {
+        // After leave return styles.
+        $(this).mouseleave( () => {
+        //console.log("Mouse left the rcd_div!"); 
+        $(this).css("border-style", border);
+        $(this).css("border-color", borderCol);
+        $(this).css("border-width", borderWidth);
+        });
+
+        } else { $(this).off("mouseleave");   }
+
+        });
+		    
+}
+
+
 
 
 function handleCustomAction() {

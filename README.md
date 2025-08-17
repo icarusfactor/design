@@ -1,6 +1,6 @@
-# Roundcube Design v0.7.5
+# Roundcube Design v0.7.8
 
-![RoundCube Design View ](/images/design075.png "In design mode.")
+![RoundCube Design View ](/images/design078.png "In design mode.")
 
 ### Install 
 
@@ -59,8 +59,7 @@ to update them in Design.
 I plan to create more templates, the current ones are good and can be used. I have added all of the supported fonts for email clients and will add option for custom fonts by converting section to image,but that will be in some future revision. Source mode will still need to be used for big changes and copy blocks or sections. Would like to add S3 image storage configuration to keep the email small and not have to retype remote locations when adding image URLs. I will not work on image adding to email itself , this can be done manually using css, but not on my todo list. Still lots of bug fixes and better design flow to work on fixing while using the opensource SummerNote editor.
 
 ### BUGS:
- While I have removed the Experimental Mode , bugs still exist, but on the "I can work around them level". After duplicating a section of the template, and then jumping to zoom, the zoom view will be too small. Just click toggle zoom a couple of times and will work again.
-
+Issue with after duplicating a section of the template, and then jumping to zoom, the zoom view will be too small. Just click toggle zoom a couple of times and will work again. Also need to reset dynamic values once load in new template.They currently will get out of sync. Highlighting dynamic parts mostly works. Mostly.
 
 ### Template Rules:
  When making a template some rules need to be followed when making one from scratch or modifying a current one that the editor will recognizes and parse accordingly.

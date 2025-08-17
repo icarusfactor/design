@@ -43,7 +43,8 @@
 ### v0.7.5
  - Changed CopyDiv to Duplicate DIV. Removing Copy Paste DIV and Experimental mode. 
 
-
+### v0.7.8 
+ - Added highlight for dynamic divs once move is enabled and removed if disabled. This makes it easy to dicern what is dynamic about the template and help understand what and where the dov is being moved to.
 
 
 
