@@ -150,8 +150,8 @@ class design extends rcube_plugin
              if ($storage->folder_exists($store_target, true)) {
                 $store_folder = true;
 	     }
-
-            if ($store_folder) {
+            //HOT FIX MISSED THE NOT
+            if (!$store_folder) {
 	    $store_folder = $storage->create_folder('template', true);
 	    $storage->subscribe($store_target);
 	    $rcmail->output->command('display_message', 'CREATED MAILBOX', 'confirmation');
