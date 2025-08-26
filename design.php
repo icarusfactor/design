@@ -39,8 +39,13 @@ class design extends rcube_plugin
 	$this->register_action('editnotice', [$this, 'action']); 
 
 	$this->register_action('cctemplate', [$this, 'action']); 
+
+	$this->register_action('createpartbox', [$this, 'action']); 
+
 	$this->register_action('checkdraft', [$this, 'action']); 
 	$this->register_action('intemplates', [$this, 'action']); 
+
+	$this->register_action('inparts', [$this, 'action']); 
 
 	$this->add_hook('startup', [$this, 'start_script']);
         $this->add_hook('startup', [$this, 'startup']);
@@ -62,10 +67,22 @@ class design extends rcube_plugin
         $_COOKIE['design_tmpl_sync'] = 'true';
         }
 	
-        $current_task = $rcmail->task;
+	if(!isset($_COOKIE['design_part_sync'])) {
+        setcookie('design_part_sync', 'true');
+        $_COOKIE['design_part_sync'] = 'true';
+        }
+       
+	$current_task = $rcmail->task;
+
         if( $current_task == "design" && $_COOKIE['design_tmpl_sync'] == 'true' ) {
 		$this->tmplsync();
 	}
+
+        if( $current_task == "design" && $_COOKIE['design_part_sync'] == 'true' ) {
+		$this->partsync();
+	}
+
+
     return $args;
     }
 
@@ -150,7 +167,7 @@ class design extends rcube_plugin
              if ($storage->folder_exists($store_target, true)) {
                 $store_folder = true;
 	     }
-            //HOT FIX MISSED THE NOT
+
             if (!$store_folder) {
 	    $store_folder = $storage->create_folder('template', true);
 	    $storage->subscribe($store_target);
@@ -189,6 +206,7 @@ class design extends rcube_plugin
 	  $template1 = file_get_contents( $this->home . '/template/basic_invoice.html');
 	  $template2 = file_get_contents( $this->home . '/template/basic_newsletter.html');
 	  $template3 = file_get_contents( $this->home . '/template/basic_template.html');
+	  $template4 = file_get_contents( $this->home . '/template/blank_template.html');
 
 	  $rcmail = rcmail::get_instance();
 	  $storage = $rcmail->get_storage();
@@ -205,6 +223,10 @@ class design extends rcube_plugin
 		  $mboxdata3 = "From: \r\n"."To: \r\n"."Subject: Basic Template \r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$template3; 
 		  $saved = $storage->save_message('template', $mboxdata3,'', null,['FLAGGED']  );
 
+		  $mboxdata4 = "From: \r\n"."To: \r\n"."Subject: Blank Template \r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$template4; 
+		  $saved = $storage->save_message('template', $mboxdata4,'', null,['FLAGGED']  );
+
+
 	  $rcmail->output->command('display_message', 'INSTALLED TEMPLATES', 'confirmation');
 	  }
 	  else {
@@ -212,6 +234,106 @@ class design extends rcube_plugin
 	  }
 
     }
+
+ //Plans for future to have more containers to hold multiple parts. When used need to remove it/them though.  
+ //For now just one item per mail until I get the bugs worked out.
+function stripDivById(string $html, string $id): string
+{
+    // Create a new DOMDocument instance
+    $dom = new DOMDocument();
+
+    // Suppress warnings for malformed HTML
+   libxml_use_internal_errors(true); 
+    
+    // Load the HTML string into the DOMDocument
+    $dom->loadHTML($html);
+
+    // Clear libxml errors
+    libxml_clear_errors();
+
+    // Get the element by its ID
+    $divToRemove = $dom->getElementById($id);
+
+    // If the element exists, remove it from its parent node
+    if ($divToRemove) {
+	    //$divToRemove->parentNode->removeChild($divToRemove);
+	    $fragment = $dom->createDocumentFragment();
+
+	    // Move all child nodes from the parent div to the fragment
+            while ($divToRemove->hasChildNodes()) {
+            $fragment->appendChild($divToRemove->firstChild);
+            }
+	    
+	    // Replace the parent div with the fragment (which now contains only the children)
+            $divToRemove->parentNode->replaceChild($fragment, $divToRemove);
+
+            // Save the modified HTML back to a string
+	    $parsedHtml = $dom->saveHTML();
+
+            // Remove DOCTYPE and html/body tags that DOMDocument adds. 
+            $parsedHtml = preg_replace('/<!DOCTYPE html[^>]*>/i', '', $parsedHtml);
+            $parsedHtml = preg_replace('/<html[^>]*>(.*?)<\/html>/is', '$1', $parsedHtml);
+            $parsedHtml = preg_replace('/<body[^>]*>(.*?)<\/body>/is', '$1', $parsedHtml);
+
+    } else {
+            $parsedHtml = "none"; 
+    }
+
+    return $parsedHtml;
+}
+
+
+    //Parts has a rcd_container Will need this to accept the part. Wont Read in rcd_container. 
+    //Need to convert to array and loop
+    function inparts() {
+	    $part = [];
+	    $partname = []; 
+
+	    $part[1] = file_get_contents( $this->home . '/part/basic_header.html');
+	    $partname[1] = "Header";
+	    $part[2] = file_get_contents( $this->home . '/part/basic_footer.html');
+	    $partname[2] = "Footer";
+	    $part[3] = file_get_contents( $this->home . '/part/basic_card.html');
+            $partname[3] = "Card";
+	    $part[4] = file_get_contents( $this->home . '/part/basic_image.html');
+            $partname[4] = "Image";  
+	    $part[5] = file_get_contents( $this->home . '/part/basic_paragraph.html');
+	    $partname[5] = "Paragraph";
+	    $part[6] = file_get_contents( $this->home . '/part/basic_actionbox.html');
+	    $partname[6] = "Actionbox";
+	    $part[7] = file_get_contents( $this->home . '/part/basic_social.html');
+	    $partname[7] = "Social";
+
+	  $rcmail = rcmail::get_instance();
+	  $storage = $rcmail->get_storage();
+	  if ($storage->folder_exists('part', true)) {
+		  $rcmail->output->command('display_message', 'PART FOLDER EXIST', 'confirmation');
+
+
+		  for ($num = 1; $num <= 7; $num++) {
+                         
+			  // function to strip rcd_container here. If it does not exist skip. 
+			  // Getting Ready for future plans to have multiple part items in one email. 
+		       $partHTML = $this->stripDivById( $part[$num], "rcd_container");
+		       //$partHTML = $part[$num];	  
+		       if($partHTML != "none" ) {  	  
+
+		       $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".$partname[$num]."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$partHTML; 
+		       $saved = $storage->save_message('part', $mboxdata,'', null,['FLAGGED']  );
+		       //$rcmail->output->command('display_message', 'PART'.str($num), 'confirmation');
+		       }
+		       $rcmail->output->command('display_message', 'PART PROCESS', 'confirmation');
+                                                   }
+
+		  $rcmail->output->command('display_message', 'INSTALLED PARTS', 'confirmation');
+
+	          }
+	          else {
+	          $rcmail->output->command('display_message', 'PART FOLDER MISSING', 'confirmation');
+	          }
+
+                       }
+
 
     // Need to load all of the body items (up to 10) in local storage. Other subject lines in cookkies for now.
     function tmplsync(){
@@ -246,6 +368,139 @@ class design extends rcube_plugin
                 //Set cookie to sync template data  
         	setcookie('design_tmpl_sync', 'false');
     }
+
+
+    //Create Parts Folder. 
+    function createpartbox() {
+            $store_folder = false;
+            $store_target = null;
+
+	    $rcmail = rcmail::get_instance();
+	    $storage = $rcmail->get_storage();
+
+	    $store_target = $rcmail->config->get('part_mbox');
+             if ($storage->folder_exists($store_target, true)) {
+                $store_folder = true;
+	     }
+
+            if (!$store_folder) {
+	    $store_folder = $storage->create_folder('part', true);
+	    $storage->subscribe($store_target);
+	    $rcmail->output->command('display_message', 'CREATED PARTBOX', 'confirmation');
+	    }
+	    else {
+	    $rcmail->output->command('display_message', 'PARTBOX EXIST', 'confirmation');
+	    }
+
+    }
+
+    // Need to load all of the body items (up to 10) in local storage. Other subject lines in cookies for now.
+    function partsync(){
+	    $rcmail = rcmail::get_instance();
+
+
+	    //cookie for php session username.   
+            $user = $rcmail->user;
+	    $sess_user = $user->get_username();
+	    setcookie("sess_user", $sess_user, time() + (86400 * 30), "/"); 
+
+            //Cookie for total count of template items in template folder
+	    $count = $this->count_parts(); 
+	    setcookie("total_count_part", $count, time() + (86400 * 30), "/"); 
+
+	  //Seprate cookie for template list . May make this into an array of subjects and only use one cookie. 
+	  //Will be limited to 10 anyway. 
+	    $flag_count = $this->get_part_subject($sess_user, $count);
+            $active_count_part = count( $flag_count );
+	    setcookie("active_count_part", $active_count_part, time() + (86400 * 30), "/"); 
+
+	  //Active Count should already be limited from the subject cutoff.  
+	  $i=1;
+	  while ($i <= $active_count_part ) {
+		  $body = urlencode($this->get_part_body($sess_user,$flag_count[$i-1]));
+		  $this->setLocalStoreFromServer( $sess_user , "part_body".$i , $body );
+	  	  $i++;
+          }
+	  
+ 		$rcmail->output->command('display_message', 'PARTS SYNCED', 'confirmation');
+    
+                //Set cookie to sync template data  
+        	setcookie('design_part_sync', 'false');
+    }
+
+
+
+    //Will make duplicates readf and write functions for parts for now. 
+    //Need to combined them once I get the logic worked out. 
+    function count_parts() {
+    //This will get the count of message in the template folder.
+    $total=0;
+    $rcmail = rcmail::get_instance();
+    $storage = $rcmail->get_storage();
+    $total = $storage->count('part', 'ALL');
+    return $total;
+    }
+
+
+    //function get_part_subject($num , $count ) {
+    function get_part_subject($sess_user, $count) {
+	    //This will get the subject line from specific message in part folder.
+	    $num=1;
+	    $numf=0;
+	    $numbers = array();
+    $rcmail = rcmail::get_instance();
+    $storage = $rcmail->get_storage();
+    $storage->set_folder('part'); 
+    $storage->set_options(['all_headers' => true ]);
+    $index = $storage->index('part');
+    $uids = $index->get(); 
+    $messages = $storage->fetch_headers( 'part', $uids);
+
+    foreach ($messages as $message) {
+            //Limit to 10 flagged subjects     
+	    if (!empty($message->flags['FLAGGED']) && $num <= 10 ) {
+	            $numf++;  //increment the flagged count.
+		    $subject = $message->get('subject');
+
+                    //Limit character of subject to 20
+                    $maxLength = 20;
+		   if (mb_strlen($subject) > $maxLength) {
+			   $subject = mb_substr($string, 0, $maxLength); 
+		   }
+		    $this->setLocalStoreFromServer( $sess_user , "part_subject".$numf , $subject );
+		    array_push($numbers, $num );
+ 		    //$rcmail->output->command('display_message', 'SUBJECT: FLAGGED:'.json_encode($numbers), 'confirmation');
+	    }
+            $num++;  //Increament overall count.
+            }
+            return $numbers; //Return count of only flagged messages.
+    }
+
+
+    //This finds one message from body uid and returns it.
+    function get_part_body($sess_user , $count ) {
+    //This will get the subject line from specific message in template folder.
+    $num=1;
+    $rcmail = rcmail::get_instance();
+    $storage = $rcmail->get_storage();
+    $storage->set_folder('part'); 
+    $storage->set_options(['all_headers' => true ]);
+    $index = $storage->index('part');
+    $uids = $index->get(); 
+    $messages = $storage->fetch_headers( 'part', $uids);
+    foreach ($uids as $uid) {
+	    if($num == $count ){
+		    $body = $storage->get_body($uid);
+                    //$rcmail->output->command('display_message', 'BODY: '.strval($body) , 'confirmation');
+    		    //$this->setLocalStoreFromServer( $sess_user , "tmpl_body".$num , $body );
+                               break;
+	   		      } 
+                             $num++;
+                              } 
+                         return $body;
+    }
+
+
 
     //I would like ot add other functions to only count Subject lines
     //that start with tmpl: and a way to enalbe this and disable this pretext.
@@ -294,7 +549,7 @@ class design extends rcube_plugin
     }
 
 
-    //This find one message bosy from uid and returns it.
+    //This find one message from body uid and returns it.
     function get_tmpl_body($sess_user , $count ) {
     //This will get the subject line from specific message in template folder.
     $num=1;
@@ -377,6 +632,14 @@ class design extends rcube_plugin
         else if ($rcmail->action == 'intemplates') {
 		$rcmail->output->set_pagetitle($this->gettext('design'));
 		$this->intemplates();
+	}  
+	else if ($rcmail->action == 'createpartbox') {
+		$rcmail->output->set_pagetitle($this->gettext('design'));
+                $this->createpartbox();
+	} 
+        else if ($rcmail->action == 'inparts') {
+		$rcmail->output->set_pagetitle($this->gettext('design'));
+		$this->inparts();
 	}
         else {
 		$rcmail->output->set_pagetitle($this->gettext('design'));

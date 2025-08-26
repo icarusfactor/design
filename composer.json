@@ -5,7 +5,7 @@
     "keywords": ["email","plugin","template","editor","html","presentation","roundcube"],
     "license": "GPL-3.0-or-later",
     "homepage": "https://github.com/icarusfactor/design",
-    "version": "0.7.9",
+    "version": "0.8.0",
     "authors": [
         {
             "name": "Daniel Yount",

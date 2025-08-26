@@ -1,6 +1,6 @@
-# Roundcube Design v0.7.9
+# Roundcube Design v0.8.0
 
-![RoundCube Design View ](/images/RCdesign078.png "In design mode.")
+![RoundCube Design View ](/images/design080.png "In design mode.")
 
 ### Install 
 
@@ -15,16 +15,20 @@
 5. Log into Roundcube webmail and click Design and navigate to Settings to follow next steps.
 
 ### Setup: 
-1. Under Settings click "Create / Check" to create the template mailbox.
+1.  Under Settings click "Create / Check" on both template and part mailbox
+to create them. These folders will be used to store templates and one for parts
+and if flagged will be recognized by template and part dropdown in Design. No
+more than 10 templates or parts are recognized.
 
-This will be used to store templates and if flagged will be recognized by
-template dropdwon in Design. No more than 10 templates are recognized.
+2.  Click "Install Templates" and "Install Parts" to get started quick with some
+default templates and parts to work off of.
 
-2. Click "Install Templates" to get started quick with some default
-templates to work off of.
-
-3.  When changes to template mailbox are made, be sure to click "SYNC"
+3.  When changes to template or part mailbox are made, be sure to click "SYNC"
 to update them in Design.
+
+4.  After these steps are done you can click top menu "Design" and should
+be able to see the demo templates in the Template dropdown and parts in the Part
+dropdown and be able to select and add them if Template is active.
 
 
 ### Special Keys:
@@ -56,26 +60,26 @@ to update them in Design.
 * Dont have to worry about confusing or overwhelming apllications to do this.
 
 ### Next Steps: 
-I plan to create more templates, the current ones are good and can be used. I have added all of the supported fonts for email clients and will add option for custom fonts by converting section to image,but that will be in some future revision. Source mode will still need to be used for big changes and copy blocks or sections. Would like to add S3 image storage configuration to keep the email small and not have to retype remote locations when adding image URLs. I will not work on image adding to email itself , this can be done manually using css, but not on my todo list. Still lots of bug fixes and better design flow to work on fixing while using the opensource SummerNote editor.
+ Now with the template system getting close to stable I plan to create more templates and parts, the current ones are good and can be used,but limited. I have added all of the supported fonts for email clients. Source mode will still need to be used for big changes and cut blocks or sections. Would like to add image connectors lke S3 and others. Still lots of bug fixes and better design flow to work on fixing while using the opensource SummerNote editor.
 
 ### BUGS:
-Issue with after duplicating a section of the template, and then jumping to zoom, the zoom view will be too small. Just click toggle zoom a couple of times and will work again. Also need to reset dynamic values once load in new template.They currently will get out of sync. Highlighting dynamic parts mostly works. Mostly.
+  Issue with after duplicating a section of the template, and then jumping to zoom, the zoom view will be too small. Just click toggle zoom a couple of times and will work again. Also need to reset dynamic values once load in new template.They currently will get out of sync. Highlighting dynamic parts mostly works. Mostly. When new versions are released as of now its best to delete part and template directory and recreate and sync until stable.
 
 ### Template Rules:
  When making a template some rules need to be followed when making one from scratch or modifying a current one that the editor will recognizes and parse accordingly.
 
-### DYNAMIC TEMPLATE SPECIFICATION VERSION 1.0
-* The first line of a visual editable template has to be **&lt;!-- DYNAMIC V1 --&gt;** otherwise options will be disabled.
-* The **div** tag can not be used for any content and is for control,it will only hold sections of html that can have content.
-* The **table** tag is the main content element. Summernote editor popups for changing attrbutes and color are limited to this.
+### DYNAMIC TEMPLATE SPECIFICATION VERSION 1.1
+*  The first line of a editable template is as follows **&lt;!-- DYNAMIC V1.1 --&gt;** otherwise options will be disabled and concidered as a FIXED template. 
+* The **div** tag can not be used for any content and is for control,it will only hold sections of html that can have content. Although can be made to have a border.
+* The **table** tag is the main content element. Summernote editor popups for changing attrbutes and color are limited to this. 
 * The **img** tag can only be used from remote store locations like S3 or direct website links via URL.
 * To tag a div that its id will hold specific content, Options as folows.
 
-* **rcd_content** : The main div that holds other designated divs except for footer.
-* **rcd_brandlogo** : Holds a logo image and space for other elements.
-* **rcd_brandtag** : This holds larger heading text used for branding.
+* **rcd_template** : First div and used by dom to detect document is a template
+* **rcd_document** : The main div that holds other designated divs.
+* **rcd_header** : This holds Logo and branding site data.
+* **rcd_content** : The div that holds other general divs.
 * **rcd_div** : General use section within the main content holder.
-* **rcd_social** : A social icons bar.
 * **rcd_footer** : Attached to bottom of content div for various contact & site links.
 
 ### Contact:   

@@ -46,21 +46,22 @@
 
     <div class="container">
 <fieldset>
-<h3>&nbsp;ABOUT DESIGN v0.7.8</h3>
+<h3>&nbsp;ABOUT DESIGN v0.8.0</h3>
 
 
 <b>Setup:</b></BR>
 <p>
-<b>[1]</b>&nbsp;Under Settings click "Create / Check" to create the template mailbox.</BR>
-This will be used to store templates and if flagged will be recognized by</BR>
-template dropdown in Design. No more than 10 templates are recognized.</BR>
-<b>[2]</b>&nbsp;Click "Install Templates" to get started quick with some default</BR>
-templates to work off of.</BR>
-<b>[3]</b>&nbsp; When changes to template mailbox are made, be sure to click "SYNC"</BR>
+<b>[1]</b>&nbsp;Under Settings click "Create / Check" on both template and part mailbox</BR>
+to create them. These folders will be used to store templates and one for parts</BR>
+and if flagged will be recognized by template and part dropdown in Design. No</BR>
+more than 10 templates or parts are recognized.</BR>
+<b>[2]</b>&nbsp;Click "Install Templates" and "Install Parts" to get started quick with some</BR>
+default templates and parts to work off of.</BR>
+<b>[3]</b>&nbsp; When changes to template or part mailbox are made, be sure to click "SYNC"</BR>
 to update them in Design.</BR>
 <b>[4]</b>&nbsp;After these steps are done you can click top menu "Design" and should</BR>
-be able to see the demo templates in the Template dropdown and be able to </BR>
-select them.
+be able to see the demo templates in the Template dropdown and parts in the Part</BR>
+dropdown and be able to select them.</BR>
 </p>
 </BR>
 <b>Special Keys:</b></BR>
@@ -103,33 +104,33 @@ select them.
 </BR>
 <b>Next Steps:</b></BR>
 <p>
-&nbsp;I plan to create more templates, the current ones are good and can be used. I have added all of the supported fonts for email clients and will add option for custom fonts by converting section to image,but that will be in some future revision. Source mode will still need to be used for big changes and copy blocks or sections. Would like to add S3 image storage configuration to keep the email small and not have to retype remote locations when adding image URLs. I will not work on image adding to email itself , this can be done manually using css, but not on my todo list. Still lots of bug fixes and better design flow to work on fixing while using the opensource SummerNote editor. 
+&nbsp;Now with the template system getting close to stable I plan to create more templates and parts, the current ones are good and can be used,but limited. I have added all of the supported fonts for email clients. Source mode will still need to be used for big changes and cut blocks or sections. Would like to add image connectors lke S3 and others. Still lots of bug fixes and better design flow to work on fixing while using the opensource SummerNote editor. 
 </p>
 </BR>
 <b>BUGS:</b></BR>
 <p>
-&nbsp; Issue with after duplicating a section of the template, and then jumping to zoom, the zoom view will be too small. Just click toggle zoom a couple of times and will work again. Also need to reset dynamic values once load in new template.They currently will get out of sync. Highlighting dynamic parts mostly works. Mostly.
+&nbsp; Issue with after duplicating a section of the template, and then jumping to zoom, the zoom view will be too small. Just click toggle zoom a couple of times and will work again. Also need to reset dynamic values once load in new template.They currently will get out of sync. Highlighting dynamic parts mostly works. Mostly. When new versions are released as of now its best to delete part and template directory and recreate and sync until stable.
 </p>
 <b>Template Rules:</b></BR>
 <p>
 &nbsp;When making a template some rules need to be followed when making one from scratch or modifying a current one that the editor will recognizes and parse accordingly.  
 </p>
-<h5>DYNAMIC TEMPLATE SPECIFICATION VERSION 1.0</h5>
+<h5>DYNAMIC TEMPLATE SPECIFICATION VERSION 1.1</h5>
 <ul>
 
-	<li>The first line of a visual editable template has to be <b>&lt;!-- DYNAMIC V1 --&gt;</b> otherwise options will be disabled. </li>	
-	<li>The <b>div</b> tag can not be used for any content and is for control,it will only hold sections of html that can have content.</li>	
+	<li>The first line of a editable template is as follows  <b>&lt;!-- DYNAMIC V1.1 --&gt;</b> otherwise options will be disabled and concidered as a FIXED template. </li>	
+	<li>The <b>div</b> tag can not be used for any content and is for control,it will only hold sections of html that can have content. Although can be made to have a border.</li>	
 	<li>The <b>table</b> tag is the main content element. Summernote editor popups for changing attrbutes and color are limited to this.</li>	
 	<li>The <b>img</b> tag can only be used from remote store locations like S3 or direct website links via URL.</li>	
 
 	<li>To tag a div that its <b>id</b> will hold specific content, Options as folows.</li>
 </ul>	
 <ol> 
-	<li><b>rcd_content</b> :  The main div that holds other designated divs except for footer.</li>
-	<li><b>rcd_brandlogo</b> : Holds a logo image and space for other elements.</li>
-	<li><b>rcd_brandtag</b> : This holds larger heading text used for branding.</li>
+	<li><b>rcd_template</b> : First div and used by dom to detect document is a template</li>
+	<li><b>rcd_document</b> :  The main div that holds other designated divs.</li>
+	<li><b>rcd_header</b> : This holds Logo and branding site data.</li>
+	<li><b>rcd_content</b> :  The div that holds other general divs.</li>
 	<li><b>rcd_div</b> : General use section within the main content holder.</li>
-	<li><b>rcd_social</b> : A social icons bar.</li>
 	<li><b>rcd_footer</b> : Attached to bottom of content div for various contact & site links.</li>
 </ol>
 </ul>	

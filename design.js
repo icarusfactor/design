@@ -21,7 +21,9 @@
 if (window.rcmail) {
         //Set client values for template button.
         var activecount = 0;
+        var activecountpart = 0;
 	var tmplsubj = new Array(10).fill(""); 
+	var partsubj = new Array(10).fill(""); 
 
 document.addEventListener("DOMContentLoaded", function() { 	
 
@@ -196,6 +198,18 @@ document.addEventListener("DOMContentLoaded", function() {
  	     rcmail.http_post('intemplates', { _button: Bpress} , false );
 
      }  
+     function createCheckPartMbox() {
+	     const Bpress = "createpartbox";
+ 	     rcmail.http_post('createpartbox', { _button: Bpress} , false );
+
+     }  
+     function InsertPartMbox() {
+	     //Will check templates folder before doing so.
+	     const Bpress = "inparts";
+ 	     rcmail.http_post('inparts', { _button: Bpress} , false );
+
+     }  
+
 
 
        //All this does is set the cookie to true from the SYNC button on settings and then reloads and run synctmpl function
@@ -207,6 +221,17 @@ document.addEventListener("DOMContentLoaded", function() {
               window.location.href = url.toString();
 
        }
+
+       //All this does is set the cookie to true from the SYNC button on settings and then reloads and run syncpart function
+       function updatePart() {
+	       setCookie('design_part_sync','true',2); 
+              const url = new URL(window.location.href);
+              const params = url.searchParams;
+              params.set('_action', 'designsettings');
+              window.location.href = url.toString();
+
+       }
+
 
 
      //All of the needed data is in localstorage.	 
@@ -222,6 +247,63 @@ document.addEventListener("DOMContentLoaded", function() {
 	     });
 	     document.querySelector("iframe").contentWindow.highlightDIV(); //check and enable highlighting.
      }
+
+	//IMPORT SPECIFIC IMPORT PARTS FROM MENU
+        function importPart( num ) {
+             console.log( "IMPORT NUM: "+num );
+             sess_user = getCookie("sess_user") || "";
+             const partBody =  decodeURIComponent( localStorage.getItem('design_'+sess_user+'_part_body'+num)).replace(/\+/g, " "); 
+	
+	     
+		
+	     //Get editor area
+             var txtNote = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
+	     txtNote.forEach ( function (doctmpl){
+               
+             //Scan first line of template for DYNAMIC otherwise no part can be inserted.
+              const HTMLlines = doctmpl.firstChild;
+	      const rex = new RegExp(" DYNAMIC ");      
+              if (rex.test( HTMLlines.textContent )) {
+
+	     //Scan for first DIV tag's ID.      
+	     const regex = /<div[^>]*id="([^"]*)"[^>]*>/i;  
+             const PartMatch = partBody.match(regex);
+		
+	     if (PartMatch && PartMatch[1]) {     
+                  console.log( PartMatch[1] );
+		  
+		  switch (PartMatch[1]) {
+  			case "rcd_header":	
+                                        // Function to Replace Header DIV tag
+                			var tmplChildHeader  =  doctmpl.querySelector("#rcd_header");
+                                        console.log( tmplChildHeader );
+                                        tmplChildHeader.outerHTML = partBody;  
+                                        break;
+  			case "rcd_div":	
+                                        // Function to Insert Content as child of rcd_content
+                			var tmplChildContent =  doctmpl.querySelector("#rcd_content");
+                                        console.log( tmplChildContent );
+
+                                        tmplChildContent.innerHTML += partBody;  
+			                break;
+  			case "rcd_footer":	
+                                        // Function to Replace Footer DIV tag
+                			var tmplChildFooter  = doctmpl.querySelector("#rcd_footer");
+                                        console.log( tmplChildFooter );
+                                        tmplChildFooter.outerHTML = partBody;  
+                                        break;
+                        default:
+                                        console.log( "none" );
+				        break;
+		                        }
+	        } else { return "none" }  //Not in part format.     
+
+	        } //End of find to skip or not skip part insert
+	     //document.querySelector("iframe").contentWindow.highlightDIV(); //check and enable highlighting.
+
+	     });
+	     }	
+
 
 function restoreZoom() {
              var txtNote = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
@@ -286,6 +368,8 @@ function saveSession() {
 
         //Set client values for template button.
         activecount = getCookie("active_count") || 0;
+
+        activecountpart = getCookie("active_count_part") || 0;
         sess_user = getCookie("sess_user") || "";
         i=1;
 	while (i <= activecount) {
@@ -293,6 +377,11 @@ function saveSession() {
         i++;
 	}
 
+        i=1;
+	while (i <= activecountpart) {
+        partsubj[i]  = localStorage.getItem('design_'+sess_user+'_part_subject'+i ) || "";
+        i++;
+	}
 
 
         if (rcmail.env.contentframe && rcmail.task == 'design') {

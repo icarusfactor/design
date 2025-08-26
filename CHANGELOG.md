@@ -49,3 +49,9 @@
 ### v0.7.9
  - Hot Fix for creating template folder. Messed it up somewhere along the way. 
 
+### v0.8.0
+ - Added part button on edit menu, this is for inserting part list items into DYNAMIC template sections.
+
+
+
+
