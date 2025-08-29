@@ -53,5 +53,10 @@
  - Added part button on edit menu, this is for inserting part list items into DYNAMIC template sections.
 
 
+### v0.8.2
+ - Fixed Save Draft where it copied the editors div and limited height. Now only the template is copied. 
+ - Added CutDIV to Dynamic menu items.
+ - Brought version of all DYNAMIC templates to version 1.1
+ - Added to documentation about Part container. Will be for part packs, but not used for that yet.  
 
 

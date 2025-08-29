@@ -929,7 +929,7 @@ function DuplicateDIV() {
             var editorEditableArea = $('.note-editable');
             if (editorEditableArea.length > 0) {
             var outerHTMLContent = editorEditableArea[0].outerHTML;
-            console.log(outerHTMLContent);
+            //console.log(outerHTMLContent);
             } 
 
 
@@ -940,6 +940,32 @@ function DuplicateDIV() {
             window.parent.noticeDupDIV();
 	    }
 	    } 
+
+         //Cut closest Div. 
+function CutDIV() {
+         const customPopup = document.getElementById('customPopup');
+         customPopup.style.display = 'none'; // hide the popup 
+
+         // Get summernote closest match div and cut the node.                             
+         var selection = window.getSelection();
+           if (selection.rangeCount > 0) {
+            var selectedNode = selection.anchorNode;
+                // Find the closest parent table element
+                var closestDiv = selectedNode.closest('div'); 
+
+           } else {
+              console.log("No div element found among parent nodes of the selection.");
+           }
+            //Need to Cut div from template
+            if (closestDiv) {
+            closestDiv.remove();            
+            console.log("DIV REMOVED");
+            }                              
+            //Give Notice that DIV was Cut.                  
+            window.parent.noticeiCutDIV();
+            }
+
+
 
 // Help Support Experiment PasteDIV. NOT USED NOW
 function AllstringOccurrences(mainString, subString) {
@@ -1089,7 +1115,7 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
 				           if (firstComment === undefined || firstComment === null) {		  
 							       
 					   console.log("DYNAMIC TEMPLATE NOT FOUND" );
-					   console.log("REMOVE DYNAMIC/EXPERIMENT OPTIONS");
+					   console.log("REMOVE DYNAMIC OPTIONS");
                                            
                                            const dynamicElements = document.querySelectorAll('.dynamic');
                                            dynamicElements.forEach(element => {
@@ -1309,6 +1335,7 @@ function getCookie(name) {
     <a class="dropdown-item dynamic" href="#" onclick="DisableMoveDIVs()" >Lock DIVs</a>
 
     <a class="dropdown-item dynamic" href="#" onclick="DuplicateDIV()" >Duplicate DIV</a>
+    <a class="dropdown-item dynamic" href="#" onclick="CutDIV()" >Cut DIV</a>
 
     <a class="dropdown-item" href="#" onclick="CopyText()" >Copy Text</a>
     <a class="dropdown-item" href="#" onclick="PasteText()" >Paste Text</a>

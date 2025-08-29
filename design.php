@@ -147,7 +147,7 @@ class design extends rcube_plugin
 		break;
                 case "dupdiv":
 		// code block
-                $response = "DIV Copied";
+                $response = "DIV Duplicated";
 		break;
                 default:
                 break;

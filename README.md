@@ -1,6 +1,6 @@
-# Roundcube Design v0.8.0
+# Roundcube Design v0.8.2
 
-![RoundCube Design View ](/images/design080.png "In design mode.")
+![RoundCube Design View ](/images/design082.png "In design mode.")
 
 ### Install 
 
@@ -81,6 +81,7 @@ dropdown and be able to select and add them if Template is active.
 * **rcd_content** : The div that holds other general divs.
 * **rcd_div** : General use section within the main content holder.
 * **rcd_footer** : Attached to bottom of content div for various contact & site links.
+* **rcd_container** : Only for part items, will be for packs, not used for that yet. 
 
 ### Contact:   
 Daniel Yount

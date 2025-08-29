@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function draftit() {
 	     var txtNote = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
 	     txtNote.forEach ( function (comment){
-		const encodedString = encodeURI(comment.outerHTML);     
+		const encodedString = encodeURI(comment.innerHTML);     
  	        rcmail.http_post('senddraft', { _message: encodedString} , false );
 	     }); 
                        }
