@@ -44,7 +44,7 @@
  - Changed CopyDiv to Duplicate DIV. Removing Copy Paste DIV and Experimental mode. 
 
 ### v0.7.8 
- - Added highlight for dynamic divs once move is enabled and removed if disabled. This makes it easy to dicern what is dynamic about the template and help understand what and where the dov is being moved to.
+ - Added highlight for dynamic divs once move is enabled and removed if disabled. This makes it easy to dicern what is dynamic about the template and help understand what and where the div is being moved to.
 
 ### v0.7.9
  - Hot Fix for creating template folder. Messed it up somewhere along the way. 
@@ -58,5 +58,11 @@
  - Added CutDIV to Dynamic menu items.
  - Brought version of all DYNAMIC templates to version 1.1
  - Added to documentation about Part container. Will be for part packs, but not used for that yet.  
+
+### v0.8.4
+ - Highlight and moving element created logic confusion leaving empty divs. Clean up empty divs left behind. 
+ - Make part immutable so you cant drag  drop them into each other breaking dynamic templates. 
+ - With better move functions had update Highlight off.
+ - Rewrote Drag & drop, now all items work. Was issue with insertBefore, instead of using insertAdjacent. 
 
 

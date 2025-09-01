@@ -718,10 +718,10 @@ function generateLoremText (count, type, html) {
 var ReplaceIMG = function (context) {
     var ui = $.summernote.ui;
     var button = ui.button({
-        contents: '<i class="fa fa-child"/> Replace', // Button appearance
-        tooltip: 'replace', // Tooltip on hover
+        contents: "<i class=\"fa fa-child\"/> Replace", // Button appearance
+        tooltip: "replace", // Tooltip on hover
         click: function () {
-            	     $('#myCustomModal').modal('show');
+            	     $("#myCustomModal").modal("show");
 		    }});		    
 
     return button.render();
@@ -731,49 +731,41 @@ var ReplaceIMG = function (context) {
 let selectedMove = null
 let selectedMoveEnabled = true;
 
-function dragOver(e) {
-  if( selectedMoveEnabled ) { 
-   console.log("DRAG OVER ");
 
-  if (isBefore(selectedMove, e.target)) {
-    e.target.parentNode.insertBefore(selectedMove, e.target)
-  } else {
-    e.target.parentNode.insertBefore(selectedMove, e.target.nextSibling)
-  }
- } // If Enable
+
+
+function dragOver(e) {
+  //bypass nested drag events, should not be case.Part system only has one event.	    
+  e.preventDefault();
+  //Only add as a drop target if id is an rcd_div 		    
+  // console.log("dragOver function for: NAME: "+e.target.tagName+"  ID:"+e.target.id+" Parent ID:"+e.target.parentElement.id+" Parent TAG:"+e.target.parentElement.tagName );
+
+  if( selectedMoveEnabled && e.target.parentElement.id == "rcd_div" && e.target.parentElement.tagName == "DIV" ) { 
+   //console.log("%cDRAG OVER SUCCESS WITH TAG:"+e.target.tagName+" ID:"+e.target.id , "color: green;" );
+    e.target.parentElement.insertAdjacentElement("beforebegin", selectedMove );		      
+
+	      }
 }
 
-function dragEnd() {
+function dragEnd(e) {
   if( selectedMoveEnabled ) { 
-
-                          console.log("DRAG END ");
+                          //console.log("DRAG END "+e.target.tagName+" ID:"+e.target.id );
 			  selectedMove = null
 	                    }
 }
 
 function dragStart(e) {
+	  //Bypass nested drag events, should not be case.Part system only has one event.	    
 	  if( selectedMoveEnabled ) { 
-                          console.log("DRAG START ");
+                          //console.log("DRAG START TAG:"+e.target.tagName+" ID:"+e.target.id );
 
+                          e.dataTransfer.setData("text/plain", e.target.id);
 			  e.dataTransfer.effectAllowed = 'move';
-			  e.dataTransfer.setData('text/plain', null);
+			  //e.dataTransfer.setData('text/plain', null);
 			  selectedMove = e.target;
-	                    }
+		      } 
+		      
 		}
-
-function isBefore(el1, el2) {
-
-if( selectedMoveEnabled ) { 
-  let cur
-  if (el2.parentNode === el1.parentNode) {
-    for (cur = el1.previousSibling; cur; cur = cur.previousSibling) {
-      if (cur === el2) return true
-    }
-  }
-  return false;
-  }		    
-}
-
 
 function isValidUrl(url_string) {
   try {
@@ -847,7 +839,7 @@ function EnableMoveDIVs() {
 
         divsToModify.forEach(function(div) {
         div.setAttribute('draggable', 'true');
-        div.setAttribute('ondragend', 'dragEnd()');
+        div.setAttribute('ondragend', 'dragEnd(event)');
         div.setAttribute('ondragover', 'dragOver(event)');
         div.setAttribute('ondragstart', 'dragStart(event)');
 
@@ -863,6 +855,7 @@ function EnableMoveDIVs() {
         });
 
         }
+
          highlightDIV();
          console.log("Enable MOVE on all tagged DIVs");
          //Give notice that tagged DIV are now movable.
@@ -872,11 +865,10 @@ function EnableMoveDIVs() {
 
          //Remove js attributes from div with rcd_div id. 
 function DisableMoveDIVs() {
-         const customPopup = document.getElementById('customPopup');
-	 customPopup.style.display = 'none'; // hide the popup
-
+         const customPopup = document.getElementById("customPopup");
+	 customPopup.style.display = "none"; // hide the popup
          //Get all of the edtor HTML. Scan for id with rcd_div. Remove all of the drag and drop options.
-        var editorContent = document.querySelector('.note-editable');
+        var editorContent = document.querySelector(".note-editable");
         if (editorContent) {
         var divsToModify = editorContent.querySelectorAll('div#rcd_div');
 
@@ -1100,7 +1092,7 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
 		      onInit: function() {
                       $('.note-editable').on('contextmenu', function(e) {
                         e.preventDefault(); // Prevent default browser context menu
-			console.log('Right-clicked inside Summernote!');
+			//console.log("Right-clicked inside Summernote!");
 
                                            const customPopup = document.getElementById('customPopup');
 					   // Position the custom popup at the mouse coordinates
@@ -1151,7 +1143,7 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
 
 	               $(".note-editable").on('click', function(e) {
                        // Your custom function to execute on left-click
-                       console.log("Left-clicked inside Summernote!");
+                       //console.log("Left-clicked inside Summernote!");
                        // You can access the clicked element using 'e.target'
                        const customPopup = document.getElementById('customPopup');
                        customPopup.style.display = 'none'; // Show the popup
@@ -1258,25 +1250,19 @@ function highlightDIV() {
 
         if( isDraggable ) {
 	//Enter and set dynamic border.		     
-        $(this).mouseenter( () => {
-        //console.log("Mouse entered rcd_div!"); 
-        border = $(this).css("border-style")
-        borderCol = $(this).css("border-color")
-        borderWidth = $(this).css("border-width")
-        $(this).css("border", "6px dashed red");
-        //$(this).css("box-shadow", "0 0 20px red");
-			    
+        $(this).mouseenter( (e) => {
+	  mouseIN( $(this) );		     
         });
 
         } else {  $(this).off("mouseenter"); }
 
         if( isDraggable ) {
         // After leave return styles.
-        $(this).mouseleave( () => {
-        //console.log("Mouse left the rcd_div!"); 
-        $(this).css("border-style", border);
-        $(this).css("border-color", borderCol);
-        $(this).css("border-width", borderWidth);
+        $(this).mouseleave( (e) => {
+	  mouseOUT( $(this) );		     
+        //Because items are draggable one will now be empty so clean it up before we finish. 
+        $(".note-editable #rcd_highlight").remove();
+
         });
 
         } else { $(this).off("mouseleave");   }
@@ -1285,7 +1271,36 @@ function highlightDIV() {
 		    
 }
 
+//Take jQuery object and add highlight.
+function mouseIN( thisobj ) {
 
+          //console.log("Mouse entered rcd_div!"); 
+          thisobj.wrap("<div id=\"rcd_highlight\" ></div>");		    
+	  ParentDiv = thisobj.parent();    
+          ParentDiv.css("border", "6px dashed red");
+
+	                    }
+
+//Take jQuery object and remove highlight.
+function mouseOUT( thisobj ) {
+
+	  const ParentDiv = thisobj.parent();
+
+          if (ParentDiv.length > 0) {
+	  const parentID = ParentDiv.attr("id");
+
+          if (typeof parentID !== 'undefined') {	      
+          //console.log("Mouse out rcd_div! "+parentID ); 
+	  	    if( parentID == "rcd_highlight" ) {	
+                                       
+
+	            			thisobj.unwrap();
+		    			console.log("DIV REMOVED "+parentID ); 
+		    		        }
+		      } else {  console.log("PARENT ID NOT FOUND"); }
+		      } else {  console.log("PARENT DIV NOT FOUND"); }
+
+	                     }
 
 
 function handleCustomAction() {
