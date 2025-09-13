@@ -65,4 +65,8 @@
  - With better move functions had update Highlight off.
  - Rewrote Drag & drop, now all items work. Was issue with insertBefore, instead of using insertAdjacent. 
 
+### v0.8.5
+ * Add 3 specific Part buttons to install | Headers | Footers | Content Pull from single Parts email folder.  
+ * Added two svg icons for new menu items one for header and one for footer.
+
 

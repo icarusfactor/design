@@ -45,7 +45,10 @@ class design extends rcube_plugin
 	$this->register_action('checkdraft', [$this, 'action']); 
 	$this->register_action('intemplates', [$this, 'action']); 
 
-	$this->register_action('inparts', [$this, 'action']); 
+	//$this->register_action('inparts', [$this, 'action']); 
+	$this->register_action('inpartheader', [$this, 'action']); 
+	$this->register_action('inpartcontent', [$this, 'action']); 
+	$this->register_action('inpartfooter', [$this, 'action']); 
 
 	$this->add_hook('startup', [$this, 'start_script']);
         $this->add_hook('startup', [$this, 'startup']);
@@ -285,54 +288,78 @@ function stripDivById(string $html, string $id): string
 
     //Parts has a rcd_container Will need this to accept the part. Wont Read in rcd_container. 
     //Need to convert to array and loop
-    function inparts() {
+    function inparts( string $type ) {
 	    $part = [];
 	    $partname = []; 
 
-	    $part[1] = file_get_contents( $this->home . '/part/basic_header.html');
-	    $partname[1] = "Header";
-	    $part[2] = file_get_contents( $this->home . '/part/basic_footer.html');
-	    $partname[2] = "Footer";
-	    $part[3] = file_get_contents( $this->home . '/part/basic_card.html');
-            $partname[3] = "Card";
-	    $part[4] = file_get_contents( $this->home . '/part/basic_image.html');
-            $partname[4] = "Image";  
-	    $part[5] = file_get_contents( $this->home . '/part/basic_paragraph.html');
-	    $partname[5] = "Paragraph";
-	    $part[6] = file_get_contents( $this->home . '/part/basic_actionbox.html');
-	    $partname[6] = "Actionbox";
-	    $part[7] = file_get_contents( $this->home . '/part/basic_social.html');
-	    $partname[7] = "Social";
+            //Will make 10 of each
 
-	  $rcmail = rcmail::get_instance();
-	  $storage = $rcmail->get_storage();
-	  if ($storage->folder_exists('part', true)) {
-		  $rcmail->output->command('display_message', 'PART FOLDER EXIST', 'confirmation');
+	    //Header
+            if( $type == "header" ){ 
+	    $part[1] = file_get_contents( $this->home . '/part/basic_header1.html');
+	    $partname[1] = "Header 1";
+
+	    $part[2] = file_get_contents( $this->home . '/part/basic_header2.html');
+	    $partname[2] = "Header 2";
+            $this->installParts($part,$partname,2); 
+	        }
+            //Footer
+            if( $type == "footer" ){ 
+	    $part[1] = file_get_contents( $this->home . '/part/basic_footer.html');
+	    $partname[1] = "Footer 1";
+            $this->installParts($part,$partname,1); 
+                }
+            //Content
+            if( $type == "content" ){ 
+	    $part[1] = file_get_contents( $this->home . '/part/basic_card.html');
+            $partname[1] = "Card 1";
+	    $part[2] = file_get_contents( $this->home . '/part/basic_image.html');
+            $partname[2] = "Image 1";  
+	    $part[3] = file_get_contents( $this->home . '/part/basic_paragraph.html');
+	    $partname[3] = "Paragraph 1";
+	    $part[4] = file_get_contents( $this->home . '/part/basic_actionbox.html');
+	    $partname[4] = "Actionbox 1";
+	    $part[5] = file_get_contents( $this->home . '/part/basic_social.html');
+	    $partname[5] = "Social 1";
+            $this->installParts($part,$partname,5); 
+	    }
 
 
-		  for ($num = 1; $num <= 7; $num++) {
-                         
-			  // function to strip rcd_container here. If it does not exist skip. 
-			  // Getting Ready for future plans to have multiple part items in one email. 
-		       $partHTML = $this->stripDivById( $part[$num], "rcd_container");
-		       //$partHTML = $part[$num];	  
-		       if($partHTML != "none" ) {  	  
+                       }
 
-		       $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".$partname[$num]."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$partHTML; 
-		       $saved = $storage->save_message('part', $mboxdata,'', null,['FLAGGED']  );
-		       //$rcmail->output->command('display_message', 'PART'.str($num), 'confirmation');
+
+
+    function installParts( $part = [], $partname = [], $maxval ) {
+
+	            $rcmail = rcmail::get_instance();
+	            $storage = $rcmail->get_storage();
+	            if ($storage->folder_exists('part', true)) {
+	            $rcmail->output->command('display_message', 'PART FOLDER EXIST', 'confirmation');
+
+                     for ($num = 1; $num <= $maxval; $num++) {
+
+                          // function to strip rcd_container here. If it does not exist skip. 
+                          // Getting Ready for future plans to have multiple part items in one email. 
+                       $partHTML = $this->stripDivById( $part[$num], "rcd_container");
+                       //$partHTML = $part[$num];         
+                       if($partHTML != "none" ) {
+
+                       $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".$partname[$num]."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$partHTML;
+                       $saved = $storage->save_message("part", $mboxdata,'', null,["FLAGGED"]  );
+                       //$rcmail->output->command('display_message', 'PART'.str($num), 'confirmation');
+		       } else {
+                       $rcmail->output->command('display_message', 'PART '.$num.' MISSING CONTAINER.' , 'confirmation');
 		       }
-		       $rcmail->output->command('display_message', 'PART PROCESS', 'confirmation');
+                       //$rcmail->output->command('display_message', 'PART PROCESS', 'confirmation');
                                                    }
-
+    
 		  $rcmail->output->command('display_message', 'INSTALLED PARTS', 'confirmation');
 
 	          }
 	          else {
 	          $rcmail->output->command('display_message', 'PART FOLDER MISSING', 'confirmation');
 	          }
-
-                       }
+                  }
 
 
     // Need to load all of the body items (up to 10) in local storage. Other subject lines in cookkies for now.
@@ -398,7 +425,6 @@ function stripDivById(string $html, string $id): string
     function partsync(){
 	    $rcmail = rcmail::get_instance();
 
-
 	    //cookie for php session username.   
             $user = $rcmail->user;
 	    $sess_user = $user->get_username();
@@ -408,17 +434,40 @@ function stripDivById(string $html, string $id): string
 	    $count = $this->count_parts(); 
 	    setcookie("total_count_part", $count, time() + (86400 * 30), "/"); 
 
+
 	  //Seprate cookie for template list . May make this into an array of subjects and only use one cookie. 
 	  //Will be limited to 10 anyway. 
+
+            //TODO NEED TO ADD PART TYPE.
 	    $flag_count = $this->get_part_subject($sess_user, $count);
             $active_count_part = count( $flag_count );
 	    setcookie("active_count_part", $active_count_part, time() + (86400 * 30), "/"); 
 
 	  //Active Count should already be limited from the subject cutoff.  
-	  $i=1;
-	  while ($i <= $active_count_part ) {
-		  $body = urlencode($this->get_part_body($sess_user,$flag_count[$i-1]));
-		  $this->setLocalStoreFromServer( $sess_user , "part_body".$i , $body );
+	  $i=1;$Nheader=0;$Ncontent=0;$Nfooter=0;
+	    while ($i <= $active_count_part ) {
+
+		  $raw_body = $this->get_part_body($sess_user,$flag_count[$i-1]);
+                  //Needs to be rcd_header=header rcd_content=content rcd_footer=footer
+		  $typeof =  $this->scan_part_type( $raw_body );
+		  if($typeof == "header")  {$Nheader++; $Ni  = $Nheader;
+		  setcookie("active_count_partheader", $Ni, time() + (86400 * 30), "/"); 
+		  // Set name for part subject here will use js to fill in Local Storage value. 
+		  $this->setLocalStoreFromServer( $sess_user , "part_subject".$i."_".$typeof.$Ni ,"");
+		  }
+		  if($typeof == "content") {$Ncontent++;$Ni  = $Ncontent;
+		  setcookie("active_count_partcontent", $Ni, time() + (86400 * 30), "/"); 
+		  // Set local storage name for part subject here using $i
+		  $this->setLocalStoreFromServer( $sess_user , "part_subject".$i."_".$typeof.$Ni ,"" );
+		  }
+		  if($typeof == "footer")  {$Nfooter++; $Ni  = $Nfooter;
+		  setcookie("active_count_partfooter", $Ni, time() + (86400 * 30), "/"); 
+		  // Set local storage name for part subject here using $i
+		  $this->setLocalStoreFromServer( $sess_user , "part_subject".$i."_".$typeof.$Ni ,"" );
+		  }
+		  $body = urlencode($raw_body);
+
+		  $this->setLocalStoreFromServer( $sess_user , "part_body".$typeof.$Ni , $body );
 	  	  $i++;
           }
 	  
@@ -428,6 +477,19 @@ function stripDivById(string $html, string $id): string
         	setcookie('design_part_sync', 'false');
     }
 
+
+
+ function scan_part_type( $part ) { 
+   $dom = new DOMDocument(); 
+   @$dom->loadHTML($part);
+   $elheader = $dom->getElementById('rcd_header');
+   if($elheader) { return "header"; }
+   $elcontent = $dom->getElementById('rcd_div');
+   if($elcontent) { return "content"; }
+   $elfooter = $dom->getElementById('rcd_footer');
+   if($elfooter) { return "footer"; }
+   return "none";
+   }
 
 
     //Will make duplicates readf and write functions for parts for now. 
@@ -441,9 +503,9 @@ function stripDivById(string $html, string $id): string
     return $total;
     }
 
-
+    //TODO NEED TO ADD PART TYPE.
     //function get_part_subject($num , $count ) {
-    function get_part_subject($sess_user, $count) {
+    function get_part_subject($sess_user, $count ) {
 	    //This will get the subject line from specific message in part folder.
 	    $num=1;
 	    $numf=0;
@@ -467,7 +529,7 @@ function stripDivById(string $html, string $id): string
 		   if (mb_strlen($subject) > $maxLength) {
 			   $subject = mb_substr($string, 0, $maxLength); 
 		   }
-		    $this->setLocalStoreFromServer( $sess_user , "part_subject".$numf , $subject );
+		    $this->setLocalStoreFromServer( $sess_user , "part_subject".$type.$numf , $subject );
 		    array_push($numbers, $num );
  		    //$rcmail->output->command('display_message', 'SUBJECT: FLAGGED:'.json_encode($numbers), 'confirmation');
 	    }
@@ -637,10 +699,20 @@ function stripDivById(string $html, string $id): string
 		$rcmail->output->set_pagetitle($this->gettext('design'));
                 $this->createpartbox();
 	} 
-        else if ($rcmail->action == 'inparts') {
+        else if ($rcmail->action == 'inpartheader') {
 		$rcmail->output->set_pagetitle($this->gettext('design'));
-		$this->inparts();
+		$this->inparts("header");
 	}
+        else if ($rcmail->action == 'inpartcontent') {
+		$rcmail->output->set_pagetitle($this->gettext('design'));
+		$this->inparts("content");
+	}
+        else if ($rcmail->action == 'inpartfooter') {
+		$rcmail->output->set_pagetitle($this->gettext('design'));
+		$this->inparts("footer");
+	}
+
+
         else {
 		$rcmail->output->set_pagetitle($this->gettext('design'));
         }

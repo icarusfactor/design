@@ -21,9 +21,13 @@
 if (window.rcmail) {
         //Set client values for template button.
         var activecount = 0;
-        var activecountpart = 0;
+        var activecountpartheader = 0;
+        var activecountpartcontent = 0;
+        var activecountpartfooter = 0;
 	var tmplsubj = new Array(10).fill(""); 
-	var partsubj = new Array(10).fill(""); 
+	var partheadersubj = new Array(10).fill(""); 
+	var partcontentsubj = new Array(10).fill(""); 
+	var partfootersubj = new Array(10).fill(""); 
 
 document.addEventListener("DOMContentLoaded", function() { 	
 
@@ -203,10 +207,31 @@ document.addEventListener("DOMContentLoaded", function() {
  	     rcmail.http_post('createpartbox', { _button: Bpress} , false );
 
      }  
-     function InsertPartMbox() {
+     function InsertPartMbox( type ) {
 	     //Will check templates folder before doing so.
-	     const Bpress = "inparts";
- 	     rcmail.http_post('inparts', { _button: Bpress} , false );
+	     var Bpress = "";
+
+            switch( type ) {
+                  case "header":
+	                Bpress = "inpartheader";
+ 	                rcmail.http_post('inpartheader', { _button: Bpress} , false );
+                        break;
+
+                  case "content":
+	                Bpress = "inpartcontent";
+ 	                rcmail.http_post('inpartcontent', { _button: Bpress} , false );
+                        break;
+
+                  case "footer":
+	                Bpress = "inpartfooter";
+ 	                rcmail.http_post('inpartfooter', { _button: Bpress} , false );
+                        break;
+                   default: 
+	                //const Bpress = "inparts";
+ 	                //rcmail.http_post('inparts', { _button: Bpress} , false );
+			break;    
+                           }
+
 
      }  
 
@@ -249,10 +274,10 @@ document.addEventListener("DOMContentLoaded", function() {
      }
 
 	//IMPORT SPECIFIC IMPORT PARTS FROM MENU
-        function importPart( num ) {
-             console.log( "IMPORT NUM: "+num );
+        function importPart( num , type ) {
+             console.log( "IMPORT "+type+" NUM: "+num );
              sess_user = getCookie("sess_user") || "";
-             const partBody =  decodeURIComponent( localStorage.getItem('design_'+sess_user+'_part_body'+num)).replace(/\+/g, " "); 
+             const partBody =  decodeURIComponent( localStorage.getItem('design_'+sess_user+'_part_body'+type+num)).replace(/\+/g, " "); 
 	
 	     
 		
@@ -369,19 +394,50 @@ function saveSession() {
         //Set client values for template button.
         activecount = getCookie("active_count") || 0;
 
+	//These are not working yet.    
+        activecountpartheader = getCookie("active_count_partheader") || 0;
+        activecountpartcontent = getCookie("active_count_partcontent") || 0;
+        activecountpartfooter = getCookie("active_count_partfooter") || 0;
+
         activecountpart = getCookie("active_count_part") || 0;
+
         sess_user = getCookie("sess_user") || "";
+
         i=1;
 	while (i <= activecount) {
         tmplsubj[i]  = localStorage.getItem('design_'+sess_user+'_tmpl_subject'+i ) || "";
         i++;
 	}
 
+	 //const allLocalStorageKeys = [];
+         //for (let i = 0; i < localStorage.length; i++) {
+         //const key = localStorage.key(i);
+         //allLocalStorageKeys.push(key);
+         //}
+         //console.log(allLocalStorageKeys);
+
         i=1;
-	while (i <= activecountpart) {
-        partsubj[i]  = localStorage.getItem('design_'+sess_user+'_part_subject'+i ) || "";
+	while (i <= activecountpart ) {
+              key_header = key_set( sess_user , "header", i );
+	      //console.log("header: "+key_header );	
+	      if( key_header !== "none" ) { partheadersubj[i] = key_header; console.log("header: "+key_header );}
+        
+	      key_content = key_set( sess_user , "content", i );
+	      //console.log("content: "+key_content );	
+	      if( key_content !== "none") {partcontentsubj[i] = key_content; console.log("content: "+key_content ); }
+              
+	      key_footer = key_set( sess_user , "footer", i ); 
+	      //console.log("footer: "+key_footer );	
+	      if( key_footer !== "none") { partfootersubj[i] =  key_footer;console.log("footer: "+key_footer ); } 
         i++;
 	}
+	 //post process and remove empty items add back inital empty.   
+         partheadersubj = partheadersubj.filter(item => item !== '');
+	 partheadersubj.unshift(undefined);    
+         partcontentsubj = partcontentsubj.filter(item => item !== '');
+	 partcontentsubj.unshift(undefined);    
+         partfootersubj = partfootersubj.filter(item => item !== '');
+	 partfootersubj.unshift(undefined);    
 
 
         if (rcmail.env.contentframe && rcmail.task == 'design') {
@@ -406,6 +462,31 @@ function saveSession() {
             catch (e) { /* ignore */ }
         }
     });
+}
+
+
+
+function key_set( user , type , currcnt) {
+
+         var allTheKeys = Object.keys(localStorage);
+         var PartKey;
+        
+
+         PartKey = String(allTheKeys.filter(key => key.startsWith('design_'+user+'_part_subject'+currcnt+'_'+type)) );
+         //console.log( "PartKey: " + PartKey );
+
+	if( PartKey != "" ){
+	//if( PartKey != null ){
+	
+	// var modifiedKey = PartKey.replace('_'+type, '');
+	// modifiedKey = modifiedKey.replace( /[\d\.]/g , '');
+        // console.log( "modifiedKey: " + modifiedKey );
+        var subjectKey = "design_"+user+"_part_subject"+currcnt;
+        //console.log( "subjectKey: " + subjectKey + " Subject Type:"+ type  );
+
+	 return localStorage.getItem(subjectKey);
+               }
+         return "none";
 }
 
 function show_design_content(action, event)

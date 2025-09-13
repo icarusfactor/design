@@ -67,8 +67,10 @@
 <legend>&nbsp;Part Mailbox</legend>
 
         <button class="btn btn-primary" onclick="window.parent.createCheckPartMbox()" >CREATE / CHECK</button>
-        <button class="btn btn-primary" onclick="window.parent.updatePart()" >SYNC</button>
-	<button class="btn btn-primary" onclick="window.parent.InsertPartMbox()" >INSTALL PARTS</button> </BR>
+	<button class="btn btn-primary" onclick="window.parent.updatePart()" >SYNC</button>&nbsp;|||&nbsp; 
+	<button class="btn btn-primary" onclick="window.parent.InsertPartMbox('header')" >HEADERS</button>&nbsp;
+	<button class="btn btn-primary" onclick="window.parent.InsertPartMbox('content')" >CONTENT</button>&nbsp; 
+	<button class="btn btn-primary" onclick="window.parent.InsertPartMbox('footer')" >FOOTERS</button>&nbsp;</BR> 
         &nbsp;This mailbox is used to pull HTML sections called Parts.	You can move emails to this mailbox to create a new parts and flag them to be recognized, no more than 10 templates can be recognized,if you have more than ten, then these will be ignored until you unflag other templates. If servers parts gets out of sync with browser editor it can be updated from here. Default Part box to work with can be imported from here. 
 </fieldset>
 
