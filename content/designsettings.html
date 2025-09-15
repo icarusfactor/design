@@ -49,7 +49,8 @@
 <body>
 
     <div class="container">
-	    <legend><b><h1>&nbsp;SETTINGS</h1></b></legend>
+	    <legend><b><h1>&nbsp;SETTINGS</h1></b>
+	    </legend>
 <fieldset>
 <legend>&nbsp;Template Mailbox</legend>
 
@@ -82,6 +83,13 @@
 <button class="btn btn-primary" onclick="window.parent.CheckDraftMbox()" >CHECK</button></BR>
 	This mailbox is used to save custom or modified templates to.You can from
 	this directory select Edit to open it in the Composer to send out from. 
+</fieldset>
+
+
+<fieldset>
+    <button class="btn btn-primary" onclick="window.parent.clearIt('cookies')" >CLEAR COOKIES</button>
+    <button class="btn btn-primary" onclick="window.parent.clearIt('localstorage' )" >CLEAR LOCAL STORAGE</button>
+    When lots of changes are made good to start from scratch.
 </fieldset>
 
     </div>

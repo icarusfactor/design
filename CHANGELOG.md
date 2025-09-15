@@ -69,4 +69,10 @@
  * Add 3 specific Part buttons to install | Headers | Footers | Content Pull from single Parts email folder.  
  * Added two svg icons for new menu items one for header and one for footer.
 
+### v0.8.6
+ * Added more default parts 
+ * Removed 10 part limit as split three catalogs for parts. Which needed more.
+ * Added to Summernote menu items arrays to show up to 20 for each part type Header  / Content / Footer
+ * Added two button in Settings to clear cookies and localstoage.When lots of changes are made or upgrade. Clear it all.
+
 

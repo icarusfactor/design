@@ -301,14 +301,44 @@ function stripDivById(string $html, string $id): string
 
 	    $part[2] = file_get_contents( $this->home . '/part/basic_header2.html');
 	    $partname[2] = "Header 2";
-            $this->installParts($part,$partname,2); 
+
+	    $part[3] = file_get_contents( $this->home . '/part/basic_header3.html');
+	    $partname[3] = "Header 3";
+
+	    $part[4] = file_get_contents( $this->home . '/part/basic_header4.html');
+	    $partname[4] = "Header 4";
+
+	    $part[5] = file_get_contents( $this->home . '/part/basic_header5.html');
+	    $partname[5] = "Header 5";
+
+	    $part[6] = file_get_contents( $this->home . '/part/basic_header6.html');
+	    $partname[6] = "Header 6";
+
+            $this->installParts($part,$partname,6); 
 	        }
             //Footer
             if( $type == "footer" ){ 
-	    $part[1] = file_get_contents( $this->home . '/part/basic_footer.html');
+	    $part[1] = file_get_contents( $this->home . '/part/basic_footer1.html');
 	    $partname[1] = "Footer 1";
-            $this->installParts($part,$partname,1); 
-                }
+	    
+	    $part[2] = file_get_contents( $this->home . '/part/basic_footer2.html');
+	    $partname[2] = "Footer 2";
+
+	    $part[3] = file_get_contents( $this->home . '/part/basic_footer3.html');
+	    $partname[3] = "Footer 3";
+
+	    $part[4] = file_get_contents( $this->home . '/part/basic_footer4.html');
+	    $partname[4] = "Footer 4";
+
+	    $part[5] = file_get_contents( $this->home . '/part/basic_footer5.html');
+	    $partname[5] = "Footer 5";
+
+	    $part[6] = file_get_contents( $this->home . '/part/basic_footer6.html');
+	    $partname[6] = "Footer 6";
+
+            $this->installParts($part,$partname,6); 
+	    }
+
             //Content
             if( $type == "content" ){ 
 	    $part[1] = file_get_contents( $this->home . '/part/basic_card.html');
@@ -321,7 +351,27 @@ function stripDivById(string $html, string $id): string
 	    $partname[4] = "Actionbox 1";
 	    $part[5] = file_get_contents( $this->home . '/part/basic_social.html');
 	    $partname[5] = "Social 1";
-            $this->installParts($part,$partname,5); 
+	    $part[6] = file_get_contents( $this->home . '/part/basic_2colBar.html');
+	    $partname[6] = "Itemized Section";
+	    $part[7] = file_get_contents( $this->home . '/part/basic_2colBline.html');
+	    $partname[7] = "Itemized Detail 1";
+	    $part[8] = file_get_contents( $this->home . '/part/basic_2col1line.html');
+	    $partname[8] = "Itemized Detail 2";
+	    $part[9] = file_get_contents( $this->home . '/part/basic_spacer.html');
+	    $partname[9] = "Single Line Spacer";
+	    $part[10] = file_get_contents( $this->home . '/part/basic_2col4lineLImg.html');
+	    $partname[10] = "2C 4L With L IMG";
+	    $part[11] = file_get_contents( $this->home . '/part/basic_2col4lineRImg.html');
+	    $partname[11] = "2C 4L With R IMG";
+	    $part[12] = file_get_contents( $this->home . '/part/basic_2colLBlank.html');
+	    $partname[12] = "2C With L Blank";
+	    $part[13] = file_get_contents( $this->home . '/part/basic_2colRBlank.html');
+	    $partname[13] = "2C With R Blank";
+	    $part[14] = file_get_contents( $this->home . '/part/basic_2col4line.html');
+	    $partname[14] = "2C 4 Lines";
+	    $part[15] = file_get_contents( $this->home . '/part/basic_3Ctitle.html');
+	    $partname[15] = "3C Title";
+            $this->installParts($part,$partname,15); 
 	    }
 
 
@@ -444,10 +494,16 @@ function stripDivById(string $html, string $id): string
 	    setcookie("active_count_part", $active_count_part, time() + (86400 * 30), "/"); 
 
 	  //Active Count should already be limited from the subject cutoff.  
-	  $i=1;$Nheader=0;$Ncontent=0;$Nfooter=0;
+	    $i=1;$Nheader=0;$Ncontent=0;$Nfooter=0;
+	    //With multiple catalogs need more than 10 so using total count.
 	    while ($i <= $active_count_part ) {
+	    //while ($i <= $count ) {
+	    //while ($i <=10  ) {
 
+                  //need more than 10 for parts
 		  $raw_body = $this->get_part_body($sess_user,$flag_count[$i-1]);
+		  //$raw_body = $this->get_part_body($sess_user,$i-1);
+
                   //Needs to be rcd_header=header rcd_content=content rcd_footer=footer
 		  $typeof =  $this->scan_part_type( $raw_body );
 		  if($typeof == "header")  {$Nheader++; $Ni  = $Nheader;
@@ -519,8 +575,9 @@ function stripDivById(string $html, string $id): string
     $messages = $storage->fetch_headers( 'part', $uids);
 
     foreach ($messages as $message) {
-            //Limit to 10 flagged subjects     
-	    if (!empty($message->flags['FLAGGED']) && $num <= 10 ) {
+            //Limit to 10 flagged subjects *** NO LONGER LIMIT TO 10    
+	    //if (!empty($message->flags['FLAGGED']) && $num <= 10 ) {
+	    if (!empty($message->flags['FLAGGED']) ) {
 	            $numf++;  //increment the flagged count.
 		    $subject = $message->get('subject');
 

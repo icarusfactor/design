@@ -25,9 +25,9 @@ if (window.rcmail) {
         var activecountpartcontent = 0;
         var activecountpartfooter = 0;
 	var tmplsubj = new Array(10).fill(""); 
-	var partheadersubj = new Array(10).fill(""); 
-	var partcontentsubj = new Array(10).fill(""); 
-	var partfootersubj = new Array(10).fill(""); 
+	var partheadersubj = new Array(20).fill(""); 
+	var partcontentsubj = new Array(20).fill(""); 
+	var partfootersubj = new Array(20).fill(""); 
 
 document.addEventListener("DOMContentLoaded", function() { 	
 
@@ -236,6 +236,20 @@ document.addEventListener("DOMContentLoaded", function() {
      }  
 
 
+     function clearIt( type ) {
+
+     if(type == "cookies") {
+      clearAllCookies();  
+     }	     
+
+     if(type == "localstorage") {
+      localStorage.clear();
+     }	     
+
+     return 1;	     
+     }
+
+
 
        //All this does is set the cookie to true from the SYNC button on settings and then reloads and run synctmpl function
        function updateTmpl() {
@@ -399,7 +413,9 @@ function saveSession() {
         activecountpartcontent = getCookie("active_count_partcontent") || 0;
         activecountpartfooter = getCookie("active_count_partfooter") || 0;
 
-        activecountpart = getCookie("active_count_part") || 0;
+	//This needs to be for total part count.    
+        // var activecountpart = getCookie("active_count_part") || 0;
+        var totalcountpart = getCookie("total_count_part") || 0;
 
         sess_user = getCookie("sess_user") || "";
 
@@ -417,7 +433,9 @@ function saveSession() {
          //console.log(allLocalStorageKeys);
 
         i=1;
-	while (i <= activecountpart ) {
+	//total Count Part    
+	//while (i <= activecountpart ) {
+	while (i <= totalcountpart ) {
               key_header = key_set( sess_user , "header", i );
 	      //console.log("header: "+key_header );	
 	      if( key_header !== "none" ) { partheadersubj[i] = key_header; console.log("header: "+key_header );}
@@ -540,4 +558,16 @@ function getCookie(cname) {
   }
   return "";
 }
+
+function clearAllCookies() {
+  const cookies = document.cookie.split(';');
+
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i];
+    const eqPos = cookie.indexOf('=');
+    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    document.cookie = name.trim() + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+  }
+}
+
 
