@@ -271,6 +271,7 @@
 
     </script>
 
+
     <script >
     (function (factory) {
     /* global define */
@@ -392,6 +393,7 @@
                             var value = $button.data('value');
 			    var num = value.replace(/\D/g, "");
                             window.parent.importTemplate(num); 
+			    documentTypeNotice();
                             console.log('template ID: ' + num );
 
 
@@ -1015,12 +1017,6 @@ function generateLoremText (count, type, html) {
   }
 };
 
-
-
-
-
-
-
     </script>
 
     <style>
@@ -1089,8 +1085,62 @@ function generateLoremText (count, type, html) {
     <script>
 
 
+// Function to detect if document in editor window is FIXED or DYNAMIC and return this value.
+function documentType() {
+  var fullContent = $("#summernote").summernote("code");              
+  const firstComment = fullContent.match(/<\!\-\-(.*?)\-\->/);
+  var docTButton = $('.note-btn[data-original-title="FIXED"]');		     
+ if (firstComment === undefined || firstComment === null) { 
+   console.log("DYNAMIC TEMPLATE NOT FOUND" );
+   return "FIXED";		
+ } else {
+ var comment = firstComment.toString(firstComment);
+ console.log("1ST COMMENT IS: "+comment );
+ var found = comment.indexOf(" DYNAMIC ");
+    if(found == -1) {  return "FIXED";               
+                    }  else {   
+                       console.log("IS DYNAMIC: "+found );
+                       return "DYNAMIC" ;
+                            }
+        }
+
+ return "FIXED";
+ } 
+
+// Change text in button to FIXED or DYNAMIC
+function documentTypeNotice()  {
+
+         var docT = documentType();  
+         var docTButton = $('.note-btn[data-original-title="Document Type"]'); 
+         switch (docT) {
+		case "FIXED": 
+                          docTButton.html("FIXED");            
+			  console.log("CHANGE BUTTON TO FIXED");	     
+			  return "FIXED";	     
+			  break;	     
+                case "DYNAMIC":
+		          docTButton.html("DYNAMIC");
+			  console.log("CHANGE BUTTON TO DYNAMIC");	     
+		          return "DYNAMIC";		  
+			  break;	     
+                default:
+		      if (docTButton.length > 0) {docTButton.find(".note-btn").html("FIXED");}
+			  console.log("CHANGE BUTTON TO DEFAULT");	     
+		          return "FIXED";		     
+		       }
+				     
+		       }
 
 
+//  Set Disabled button to notify of document is FIXED or DYNAMIC
+var documentTypeButton = function (context) {
+    var ui = $.summernote.ui;
+    var button = ui.button({
+          contents: '<i class="fa fa-ban"/> FIXED',
+          tooltip: 'Document Type',
+        });
+        return button.render();
+      }   	    
 
 // Replace current IMG element src value with a dialog for url.
 var ReplaceIMG = function (context) {
@@ -1155,6 +1205,8 @@ function isValidUrl(url_string) {
     return false;
   }
 }
+
+
 
 // Replace current Table element background style color by grabbing background color in toolbar in realtime.
  function getBGcolor() {
@@ -1461,9 +1513,10 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
             ]
         },
   buttons: {
-            ReplaceIMG: ReplaceIMG, // Define your button function
-            ChangeColorTable: ChangeColorTable,  // Define your button function
-            ChangeColorTd: ChangeColorTd,  // Define your button function
+            ReplaceIMG: ReplaceIMG, 
+            ChangeColorTable: ChangeColorTable,  
+            ChangeColorTd: ChangeColorTd,  
+	    documentTypeButton: documentTypeButton
         },			  
   callbacks: {
 		      //callbacks
@@ -1478,44 +1531,29 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
                                            customPopup.style.top = event.clientY + 'px';
                                            customPopup.style.display = 'block'; // Show the popup
                                            customPopup.style.visibility = 'visible'; // Show the popup
-
-
-                                           var fullContent = $('#summernote').summernote('code');              
-                                           var firstComment = fullContent.match(/<\!\-\-(.*?)\-\->/);
-				           if (firstComment === undefined || firstComment === null) {		  
-							       
-					   console.log("DYNAMIC TEMPLATE NOT FOUND" );
-					   console.log("REMOVE DYNAMIC OPTIONS");
-                                           
+					   docT = documentTypeNotice();
+					   // var docT = documentType();
                                            const dynamicElements = document.querySelectorAll('.dynamic');
-                                           dynamicElements.forEach(element => {
-					     element.style.display = 'none';
-                                             element.style.visibility = 'hidden'; // Show the popup
-                                           }); 
-
-                                           } else {
-					   var comment = firstComment.toString(firstComment);
-					   console.log("1ST COMMENT IS: "+comment );
-					   var found = comment.indexOf(" DYNAMIC ");
-					   //Remove dynamic template options if not found.
-					   console.log("IS DYNAMIC: "+found );
-					   if(found == -1) { 
-                                           			const dynamicElements = document.querySelectorAll('.dynamic');
+					   switch(docT) { 
+							   case "FIXED":
                                            			dynamicElements.forEach(element => {
 					     			element.style.display = 'none';
                                                                 element.style.visibility = 'hidden'; 
                                                                 }); 
-
-						           }	else {
-                                           			const dynamicElements = document.querySelectorAll('.dynamic');
+                                                                break;
+                                                            case "DYNAMIC": 
                                            			dynamicElements.forEach(element => {
 					     			element.style.display = 'block';
                                                                 element.style.visibility = 'visible'; 
+                                                                });
+								break;       
+							    default:
+                                           			dynamicElements.forEach(element => {
+					     			element.style.display = 'none';
+                                                                element.style.visibility = 'hidden'; 
                                                                 }); 
-								} 
-								   }
-
-
+							       break;
+							  }
 
 					  });
 
@@ -1528,7 +1566,6 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
                        //testhis();
 
                        });			   
-
 
 
 				         }
@@ -1547,7 +1584,9 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
     ['insert', ['link','hr','picture', 'video']],
     ['insert', ['template','partheader','partcontent','partfooter','lorem']],
     ['view', ['codeview']],		      
-    ['misc', ['undo', 'redo']]		      
+    ['misc', ['undo', 'redo']],
+    ['doctype', ['documentTypeButton']],		      
+    		      
   ],
 
 });	
@@ -1724,11 +1763,11 @@ function getCookie(name) {
 
     <div id="customPopup" style="z-index:9999;display: none; position: absolute;min-width:50px;min-height:100px;border: 1px solid black; padding: 10px; background-color: white;">
 
-    <a class="dropdown-item dynamic" href="#" onclick="EnableMoveDIVs()"  >Move DIVs</a>
-    <a class="dropdown-item dynamic" href="#" onclick="DisableMoveDIVs()" >Lock DIVs</a>
+    <a class="dropdown-item dynamic" href="#" onclick="EnableMoveDIVs()"  >Move Parts</a>
+    <a class="dropdown-item dynamic" href="#" onclick="DisableMoveDIVs()" >Lock Parts</a>
 
-    <a class="dropdown-item dynamic" href="#" onclick="DuplicateDIV()" >Duplicate DIV</a>
-    <a class="dropdown-item dynamic" href="#" onclick="CutDIV()" >Cut DIV</a>
+    <a class="dropdown-item dynamic" href="#" onclick="DuplicateDIV()" >Duplicate Part</a>
+    <a class="dropdown-item dynamic" href="#" onclick="CutDIV()" >Cut Part</a>
 
     <a class="dropdown-item" href="#" onclick="CopyText()" >Copy Text</a>
     <a class="dropdown-item" href="#" onclick="PasteText()" >Paste Text</a>

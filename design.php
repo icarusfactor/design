@@ -292,7 +292,6 @@ function stripDivById(string $html, string $id): string
 	    $part = [];
 	    $partname = []; 
 
-            //Will make 10 of each
 
 	    //Header
             if( $type == "header" ){ 
@@ -341,37 +340,45 @@ function stripDivById(string $html, string $id): string
 
             //Content
             if( $type == "content" ){ 
-	    $part[1] = file_get_contents( $this->home . '/part/basic_card.html');
-            $partname[1] = "Card 1";
-	    $part[2] = file_get_contents( $this->home . '/part/basic_image.html');
-            $partname[2] = "Image 1";  
-	    $part[3] = file_get_contents( $this->home . '/part/basic_paragraph.html');
-	    $partname[3] = "Paragraph 1";
-	    $part[4] = file_get_contents( $this->home . '/part/basic_actionbox.html');
-	    $partname[4] = "Actionbox 1";
-	    $part[5] = file_get_contents( $this->home . '/part/basic_social.html');
-	    $partname[5] = "Social 1";
-	    $part[6] = file_get_contents( $this->home . '/part/basic_2colBar.html');
-	    $partname[6] = "Itemized Section";
-	    $part[7] = file_get_contents( $this->home . '/part/basic_2colBline.html');
-	    $partname[7] = "Itemized Detail 1";
-	    $part[8] = file_get_contents( $this->home . '/part/basic_2col1line.html');
-	    $partname[8] = "Itemized Detail 2";
-	    $part[9] = file_get_contents( $this->home . '/part/basic_spacer.html');
-	    $partname[9] = "Single Line Spacer";
-	    $part[10] = file_get_contents( $this->home . '/part/basic_2col4lineLImg.html');
-	    $partname[10] = "2C 4L With L IMG";
-	    $part[11] = file_get_contents( $this->home . '/part/basic_2col4lineRImg.html');
-	    $partname[11] = "2C 4L With R IMG";
-	    $part[12] = file_get_contents( $this->home . '/part/basic_2colLBlank.html');
-	    $partname[12] = "2C With L Blank";
-	    $part[13] = file_get_contents( $this->home . '/part/basic_2colRBlank.html');
-	    $partname[13] = "2C With R Blank";
-	    $part[14] = file_get_contents( $this->home . '/part/basic_2col4line.html');
-	    $partname[14] = "2C 4 Lines";
-	    $part[15] = file_get_contents( $this->home . '/part/basic_3Ctitle.html');
-	    $partname[15] = "3C Title";
-            $this->installParts($part,$partname,15); 
+	    $part[1] = file_get_contents( $this->home . '/part/basic_card1.html');
+	    $partname[1] = "Card 1";
+	    $part[2] = file_get_contents( $this->home . '/part/basic_card2.html');
+	    $partname[2] = "Card 2";
+	    $part[3] = file_get_contents( $this->home . '/part/basic_card3.html');
+	    $partname[3] = "Card 3";
+	    $part[4] = file_get_contents( $this->home . '/part/basic_image.html');
+            $partname[4] = "Image 1";  
+	    $part[5] = file_get_contents( $this->home . '/part/basic_paragraph.html');
+	    $partname[5] = "Paragraph 1";
+	    $part[6] = file_get_contents( $this->home . '/part/basic_actionbox.html');
+	    $partname[6] = "Actionbox 1";
+	    $part[7] = file_get_contents( $this->home . '/part/basic_social.html');
+	    $partname[7] = "Social 1";
+	    $part[8] = file_get_contents( $this->home . '/part/basic_2colBar.html');
+	    $partname[8] = "Itemized Section";
+	    $part[9] = file_get_contents( $this->home . '/part/basic_2colBline.html');
+	    $partname[9] = "Itemized Detail 1";
+	    $part[10] = file_get_contents( $this->home . '/part/basic_2col1line.html');
+	    $partname[10] = "Itemized Detail 2";
+	    $part[11] = file_get_contents( $this->home . '/part/basic_spacer.html');
+	    $partname[11] = "Single Line Spacer";
+	    $part[12] = file_get_contents( $this->home . '/part/basic_2col4lineLImg.html');
+	    $partname[12] = "2C 4L With L IMG";
+	    $part[13] = file_get_contents( $this->home . '/part/basic_2col4lineRImg.html');
+	    $partname[13] = "2C 4L With R IMG";
+	    $part[14] = file_get_contents( $this->home . '/part/basic_2colLBlank.html');
+	    $partname[14] = "2C With L Blank";
+	    $part[15] = file_get_contents( $this->home . '/part/basic_2colRBlank.html');
+	    $partname[15] = "2C With R Blank";
+	    $part[16] = file_get_contents( $this->home . '/part/basic_2col4line.html');
+	    $partname[16] = "2C 4 Lines";
+	    $part[17] = file_get_contents( $this->home . '/part/basic_3Ctitle.html');
+	    $partname[17] = "3C Title";
+	    $part[18] = file_get_contents( $this->home . '/part/dayplannerL.html');
+	    $partname[18] = "Day Plan L";
+	    $part[19] = file_get_contents( $this->home . '/part/dayplannerR.html');
+	    $partname[19] = "Day Plan R";
+            $this->installParts($part,$partname,19); 
 	    }
 
 

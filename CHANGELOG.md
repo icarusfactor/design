@@ -75,4 +75,9 @@
  * Added to Summernote menu items arrays to show up to 20 for each part type Header  / Content / Footer
  * Added two button in Settings to clear cookies and localstoage.When lots of changes are made or upgrade. Clear it all.
 
+### v0.8.7
+ * Added more default parts
+ * Changed right click to say Move, Lock, Cut, Duplicate Part on Dynamic popup.
+ * Added menu button for notice that document is FIXED or DYNAMIC.
+
 
