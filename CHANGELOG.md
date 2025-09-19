@@ -66,18 +66,24 @@
  - Rewrote Drag & drop, now all items work. Was issue with insertBefore, instead of using insertAdjacent. 
 
 ### v0.8.5
- * Add 3 specific Part buttons to install | Headers | Footers | Content Pull from single Parts email folder.  
- * Added two svg icons for new menu items one for header and one for footer.
+ - Add 3 specific Part buttons to install | Headers | Footers | Content Pull from single Parts email folder.  
+ - Added two svg icons for new menu items one for header and one for footer.
 
 ### v0.8.6
- * Added more default parts 
- * Removed 10 part limit as split three catalogs for parts. Which needed more.
- * Added to Summernote menu items arrays to show up to 20 for each part type Header  / Content / Footer
- * Added two button in Settings to clear cookies and localstoage.When lots of changes are made or upgrade. Clear it all.
+ - Added more default parts 
+ - Removed 10 part limit as split three catalogs for parts. Which needed more.
+ - Added to Summernote menu items arrays to show up to 20 for each part type Header  / Content / Footer
+ - Added two button in Settings to clear cookies and localstoage.When lots of changes are made or upgrade. Clear it all.
 
 ### v0.8.7
- * Added more default parts
- * Changed right click to say Move, Lock, Cut, Duplicate Part on Dynamic popup.
- * Added menu button for notice that document is FIXED or DYNAMIC.
+ - Added more default parts
+ - Changed right click to say Move, Lock, Cut, Duplicate Part on Dynamic popup.
+ - Added menu button for notice that document is FIXED or DYNAMIC.
 
+### v0.8.8
+ - Made icons for top buttons.  
+ - Changed Theme to match RoundCube Elastic. 
+ - Added Make Template button to the top menu that will move a FIXED or DYNAMIC editor page to the template directory. 
+ - Added modal popup to give a name for new templates and saved to draft emails.  
 
+ 

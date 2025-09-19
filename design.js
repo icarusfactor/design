@@ -34,6 +34,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
      const btn_design = document.querySelector('.btn-design'); 
      const btn_savedraft = document.querySelector('.btn-savedraft'); 
+     const btn_maketmpl = document.querySelector('.btn-maketmpl'); 
+
      const btn_designsettings = document.querySelector('.btn-designsettings'); 
      const btn_tsize = document.querySelector('.btn-tsize' );
      const btn_tzoom = document.querySelector('.btn-tzoom' );
@@ -54,7 +56,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
   if (btn_savedraft) {
      btn_savedraft.addEventListener('click', () => { 
-     draftit();	     
+     Dname =  draftName();	     
+     draftit(Dname);	     
+            });
+                  }
+  if (btn_maketmpl) {
+     btn_maketmpl.addEventListener('click', () => { 
+     Tname =  tmplPressName();	     
+     tmplPressMake( Tname );	     
             });
                   }
 
@@ -141,12 +150,40 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
     
-    function draftit() {
+    function draftit(draftName) {
+
+             if(draftName !== undefined ) {
 	     var txtNote = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
 	     txtNote.forEach ( function (comment){
+		const encodedName = encodeURI(draftName);     
 		const encodedString = encodeURI(comment.innerHTML);     
- 	        rcmail.http_post('senddraft', { _message: encodedString} , false );
+ 	        rcmail.http_post('senddraft', { _dn: encodedName ,_message: encodedString} , false );
 	     }); 
+	                                 }
+                                }
+
+    function draftName() {
+	     document.querySelector("iframe").contentWindow.sendDraftName();    	
+	     //console.log("Template Name Will be:"+tmplName);
+                       }
+
+
+    function tmplPressName() {
+	     document.querySelector("iframe").contentWindow.makeTemplateName();    	
+	     //console.log("Template Name Will be:"+tmplName);
+                       }
+
+    function tmplPressMake( tmplName ) {
+
+             if(tmplName !== undefined ) {
+	     console.log("Encoded Template Name :"+tmplName);
+	     var txtNote = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
+	     txtNote.forEach ( function (comment){		     
+             const encodedName = encodeURI( tmplName );	
+	     const encodedString = encodeURI( comment.innerHTML);     
+ 	     rcmail.http_post('tmplpress', { _tn: encodedName ,_tp: encodedString} , false );
+	     }); 
+                       }
                        }
 
 

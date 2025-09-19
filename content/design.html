@@ -223,11 +223,11 @@
     }
 
     div.note-editing-area { 
-    background: grey;
-    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc4JyBoZWlnaHQ9JzgnPgogIDxyZWN0IHdpZHRoPSc4JyBoZWlnaHQ9JzgnIGZpbGw9JyNmZmYnLz4KICA8cGF0aCBkPSdNMCAwTDggOFpNOCAwTDAgOFonIHN0cm9rZS13aWR0aD0nMC41JyBzdHJva2U9JyNhYWEnLz4KPC9zdmc+Cg==");
+    /* background: #2f3a3e; */
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc4JyBoZWlnaHQ9JzgnPgogIDxyZWN0IHdpZHRoPSc4JyBoZWlnaHQ9JzgnIGZpbGw9JyNmZmYnLz4KICA8cGF0aCBkPSdNMCAwTDggOFpNOCAwTDAgOFonIHN0cm9rZS13aWR0aD0nMC41JyBzdHJva2U9JyNhYWEnLz4KPC9zdmc+Cg=="); 
     background-repeat: repeat;
     min-height: 100%;
-    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.4); 
     }
     </style>
 
@@ -258,6 +258,7 @@
     //Enable sub-usable buttons.
     const tsize = window.parent.document.querySelector('.btn-tsize');
     const savedraft = window.parent.document.querySelector('.btn-savedraft');        
+    const maketmpl = window.parent.document.querySelector('.btn-maketmpl');        
     const tzoom = window.parent.document.querySelector('.btn-tzoom');        
     const savesess = window.parent.document.querySelector('.btn-savesess');        
     const loadsess = window.parent.document.querySelector('.btn-loadsess');        
@@ -265,6 +266,7 @@
 
     tsize.disabled= false;
     savedraft.disabled= false;
+    maketmpl.disabled= false;
     tzoom.disabled= false;
     savesess.disabled= false;
     loadsess.disabled= false;
@@ -1021,21 +1023,28 @@ function generateLoremText (count, type, html) {
 
     <style>
    .note-editor .note-toolbar {
-  background: #f0f0f1;
-  border-bottom: 1px solid #c2cad8;
+  /* background: #f0f0f1; */
+  background: #2f3a3e;	   
+ /* border-bottom: 1px solid #c2cad8; */
   -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.14), 0 3px 4px 0 rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.14), 0 3px 4px 0 rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
    }
+  
+   .note-toolbar .card-header {
+  background: #2f3a3e;	   
+   }
 
 .summernote .btn-group, .popover-content .btn-group {
-  background: transparent;
+  /*background: transparent; */
+  background: #8b9fa6;	
   -webkit-box-shadow: none;
   box-shadow: none;
 }
 
 .summernote .btn, .note-btn {
   color: rgba(0, 0, 0, .54)!important;
-  background-color: transparent!important;
+  /* background-color: transparent!important; */
+  background-color: #8b9fa6;
   padding: 6px 12px;
   font-size: 14px;
   line-height: 1.42857;
@@ -1058,11 +1067,12 @@ function generateLoremText (count, type, html) {
 .note-editor.card {
   -webkit-box-shadow: none;
   box-shadow: none;
-  border-radius: 2px;
+  border-radius: none; 
 }
 
 .note-editor.note-frame {
-  border: 1px solid rgba(0, 0, 0, .14);
+  /*border: 1px solid rgba(0, 0, 0, .14);*/
+  background: #2f3a3e;
 }
 
 .note-editor.note-frame .note-editing-area .note-editable {
@@ -1073,6 +1083,7 @@ function generateLoremText (count, type, html) {
                      max-height: 300px; 
                      overflow-y: auto !important;
 		     z-index: 9999;
+		     background: #8b9fa6;
                     }
 
     </style>
@@ -1207,7 +1218,16 @@ function isValidUrl(url_string) {
 }
 
 
+ function sendDraftName() {
+             $("#saveDraft").modal("show");
+	     }
 
+ function makeTemplateName() {
+             //var templateName;
+             $("#makeTmpl").modal("show");
+             //return templateName;
+	     }
+ 
 // Replace current Table element background style color by grabbing background color in toolbar in realtime.
  function getBGcolor() {
                   var bgcolor ="rgb(255,255,255);";
@@ -1615,6 +1635,58 @@ $('body').append(
         '</div>'
 );
 
+
+// Will be Modal for Make Template Button to give template  a name.
+$('body').append('<!-- Make Template Modal -->' +
+ '<div class="modal fade" id="makeTmpl" role="dialog">' + 
+ '  <div class="modal-dialog modal-sm">' +
+ '    <!-- Modal content-->' +
+ '    <div class="modal-content">' + 
+ '        <div class="modal-header">' + 
+ '        <h4 class="modal-title">Make Template</h4>' + 
+ '        </div>' +
+ '       <div class="modal-body">' +
+        '<label for="myInput">Enter Template Name:</label>' +
+        '<input type="text" id="tmplFileInput" class="form-control" />' +
+ '      </div>' +
+ '       <div class="modal-footer">' +
+ '         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
+          '<button type="button" class="btn btn-primary" onclick="handleMakeTmplAction()">Make Template</button>' +
+ '       </div>' +
+ '      </div> ' +
+ '   </div>' +
+ '</div>');
+
+/*  To launch modal        */
+/*  $("#makeTmpl").modal(); */
+
+
+/* Modal for Save Draft Button to give draft email a name. */
+$('body').append('<!-- Save To Draft Modal -->' +
+ '<div class="modal fade" id="saveDraft" role="dialog">' + 
+ '  <div class="modal-dialog modal-sm">' +
+ '    <!-- Modal content-->' +
+ '    <div class="modal-content">' + 
+ '        <div class="modal-header">' + 
+ '        <h4 class="modal-title">Save To Draft</h4>' + 
+ '        </div>' +
+ '       <div class="modal-body">' +
+        '<label for="myInput">Enter Draft Email Name:</label>' +
+        '<input type="text" id="draftFileInput" class="form-control" />' +
+ '      </div>' +
+ '       <div class="modal-footer">' +
+ '         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
+          '<button type="button" class="btn btn-primary" onclick="handleSaveDraftAction()">Save To Draft</button>' +
+ '       </div>' +
+ '      </div> ' +
+ '   </div>' +
+ '</div>');
+
+/*  To launch modal        */
+/*  $("#saveDraft").modal(); */
+
+
+
 // Set Defaults	    
 
 $('#summernote').summernote('fullscreen.toggle');
@@ -1734,6 +1806,27 @@ function handleCustomAction() {
     console.log("HIDE"); // Access the DOM element
     $('#myCustomModal').modal('hide');
 }
+
+
+function handleMakeTmplAction() {
+    var tmplName = $('#tmplFileInput').val();
+    //Will need to send template name to php side.
+    console.log("Template Name:"+tmplName ); 
+    console.log("HIDE"); 
+    $('#makeTmpl').modal('hide');
+    window.parent.tmplPressMake( tmplName );		    
+}
+
+
+function handleSaveDraftAction() {
+    var draftName = $('#draftFileInput').val();
+    //Will need to send template name to php side.
+    console.log("Draft Name:"+draftName ); 
+    console.log("HIDE"); 
+    $('#saveDraft').modal('hide');
+    window.parent.draftit( draftName );		    
+}
+
 
 // Experimental Drag and Drop Template Element.
 function makemoveable() {
