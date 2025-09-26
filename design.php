@@ -34,6 +34,9 @@ class design extends rcube_plugin
 	$this->register_action('license', [$this, 'action']);
 
 	$this->register_action('senddraft', [$this, 'action']); 
+	$this->register_action('tmplpress', [$this, 'action']); 
+	$this->register_action('partpress', [$this, 'action']); 
+
 
 	$this->register_action('sessnotice', [$this, 'action']); 
 	$this->register_action('editnotice', [$this, 'action']); 
@@ -56,6 +59,7 @@ class design extends rcube_plugin
 
 	// register hook for message headers being processed
 	$this->add_hook('message_headers_output', array($this, 'headers'));
+
 
     }
 
@@ -113,6 +117,8 @@ class design extends rcube_plugin
 	$this->include_stylesheet($this->local_skin_path() . '/design.css');
     }
 
+
+
     //Session Notices will end up here.
     function sessnotice() {
 	    $rcmail = rcmail::get_instance();
@@ -142,15 +148,19 @@ class design extends rcube_plugin
              switch($right_click) {
 		case "moveenabled":
 		// code block
-                $response = "DIV Move Enabled";
+                $response = "Part Move Enabled";
                 break;
                 case "movedisabled":
 		// code block
-                $response = "DIV Move Disabled";
+                $response = "Part Move Disabled";
 		break;
                 case "dupdiv":
 		// code block
-                $response = "DIV Duplicated";
+                $response = "Part Duplicated";
+		break;
+                case "cutdiv":
+		// code block
+                $response = "Part Cut";
 		break;
                 default:
                 break;
@@ -715,15 +725,50 @@ function stripDivById(string $html, string $id): string
 
     function savetodraft()
     {
+
+          $draftname = rcube_utils::get_input_string('_dn', rcube_utils::INPUT_POST);
 	  $draftdata = rcube_utils::get_input_string('_message', rcube_utils::INPUT_POST);
 	  $rcmail = rcmail::get_instance();
 	  //Send draftdata to draft mbox.
           $store_target = $rcmail->config->get('drafts_mbox');
 	  $storage = $rcmail->get_storage();
-	  $mboxdata = "From: \r\n"."To: \r\n"."Subject: RoundCube Design Save\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".urldecode($draftdata); 
+	  $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".urldecode($draftname)."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".urldecode($draftdata); 
 	  $saved = $storage->save_message($store_target, $mboxdata,'', null, ['NOTSEEN'] );
 	  $rcmail->output->command('display_message', 'SAVED DRAFT', 'confirmation');
     }
+
+    public function tmplpress()
+    {
+          $tmplname = rcube_utils::get_input_string('_tn', rcube_utils::INPUT_POST);
+          $tmpldata = rcube_utils::get_input_string('_tp', rcube_utils::INPUT_POST);
+
+	  $rcmail = rcmail::get_instance();
+	  //Send editor page to template mbox.
+	  $storage = $rcmail->get_storage();
+    
+	 $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".urldecode($tmplname)."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".urldecode($tmpldata); 
+	  $saved = $storage->save_message('template', $mboxdata,'', null, ['FLAGGED'] );
+	  $rcmail->output->command('display_message', 'Template Made', 'confirmation');
+    }
+
+
+    public function partpress()
+    {
+          $partname = rcube_utils::get_input_string('_pn', rcube_utils::INPUT_POST);
+          $partdata = rcube_utils::get_input_string('_pp', rcube_utils::INPUT_POST);
+
+	  $rcmail = rcmail::get_instance();
+	  //Send editor part to part mbox.
+	  $storage = $rcmail->get_storage();
+         //TODO FOR SOME REASON PART DATA IS NOT DECODED. 
+	 $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".urldecode($partname)."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".urldecode($partdata); 
+	  $saved = $storage->save_message('part', $mboxdata,'', null, ['FLAGGED'] );
+	  $rcmail->output->command('display_message', 'Part Made', 'confirmation');
+    }
+
+
+
+
 
     function action()
     {
@@ -738,7 +783,16 @@ function stripDivById(string $html, string $id): string
         else if ($rcmail->action == 'senddraft') {
 		$rcmail->output->set_pagetitle($this->gettext('design'));
 		$this->savetodraft();
-            }
+	}
+        else if ($rcmail->action == 'tmplpress') {
+		$rcmail->output->set_pagetitle($this->gettext('design'));
+		$this->tmplpress();
+	}
+        else if ($rcmail->action == 'partpress') {
+		$rcmail->output->set_pagetitle($this->gettext('design'));
+		$this->partpress();
+	}
+
         else if ($rcmail->action == 'sessnotice') {
 		$rcmail->output->set_pagetitle($this->gettext('design'));
 		$this->sessnotice();

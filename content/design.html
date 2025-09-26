@@ -22,6 +22,13 @@
     src: url(font/summernote-ext-table.eot?#iefix) format("embedded-opentype"), url(font/summernote-ext-table.woff2) format("woff2"), url(font/summernote-ext-table.woff) format("woff"), url(font/summernote-ext-table.ttf) format("truetype")
 }
 
+
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+} 
+
+
 .note-icon-table-merge:before {
     font-family: summernoteexttable;
     content: "\ea91"
@@ -1096,6 +1103,23 @@ function generateLoremText (count, type, html) {
     <script>
 
 
+function documentDraggable() {
+  var fullContent = $("#summernote").summernote("code");              
+  const regex = /draggable\s*=\s*['"]true['"]/;
+  var isDraggable = regex.test(fullContent); 
+		    if(isDraggable) {  
+                                console.log('Found a draggable div');
+				return true;
+				} else {
+                                console.log('Found no draggable div');
+				return false;		    
+				    }
+			            }
+
+
+
+
+
 // Function to detect if document in editor window is FIXED or DYNAMIC and return this value.
 function documentType() {
   var fullContent = $("#summernote").summernote("code");              
@@ -1227,6 +1251,12 @@ function isValidUrl(url_string) {
              $("#makeTmpl").modal("show");
              //return templateName;
 	     }
+
+ function makePartName() {
+             $("#makePart").modal("show");
+	     }
+
+
  
 // Replace current Table element background style color by grabbing background color in toolbar in realtime.
  function getBGcolor() {
@@ -1344,14 +1374,45 @@ function DisableMoveDIVs() {
 		    }
 	    }
 
+
+function MakePart() {
+
+           // Get rid of the popup menu to get closest div before right click.
+	   const customPopup = document.getElementById('customPopup');
+           customPopup.style.display = 'none'; // hide the popup            
+           console.log("MakePart:HIDE MENU");
+
+           //Get Closest Div 
+        
+           var divHTML ="";
+           var selection = window.getSelection();
+	   const selectedText = selection.toString();
+           console.log("MakePart:SELECTED TEXT: "+selectedText);
+
+
+
+           if (selection.rangeCount > 0) {
+             var selectedNode = selection.anchorNode;
+	     // Find the closest parent table element
+             var closestDiv = selectedNode.closest('div');
+             divHtml = closestDiv.outerHTML;		       
+             console.log("MakePart:CLOSEST DIV TO SAVE AS PART " + divHtml); // This will output the full HTML of the closest div
+
+            //encode part data
+            const encodedString = encodeURI( divHtml );
+	    //Load part data into localstorage. Not best way will refactor later. 		       
+            localStorage.setItem('rcd_MakePart', encodedString );
+	   //Modal popup for part name to make.
+           makePartName(); 
+	   }
+
+	           }
+
 	 //Duplicate closest DIV to mouse click.Then move to where you want it.     
 function DuplicateDIV() {
          const customPopup = document.getElementById('customPopup');
          customPopup.style.display = 'none'; // hide the popup 
 
-         // Get summernote closest match div and copy everything between the tags. 
-	 var divHTML ="";		    
-         var selection = window.getSelection();
            if (selection.rangeCount > 0) {
             var selectedNode = selection.anchorNode;
                 // Find the closest parent table element
@@ -1404,7 +1465,7 @@ function CutDIV() {
             console.log("DIV REMOVED");
             }                              
             //Give Notice that DIV was Cut.                  
-            window.parent.noticeiCutDIV();
+            window.parent.noticeCutDIV();
             }
 
 
@@ -1552,7 +1613,7 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
                                            customPopup.style.display = 'block'; // Show the popup
                                            customPopup.style.visibility = 'visible'; // Show the popup
 					   docT = documentTypeNotice();
-					   // var docT = documentType();
+					   //Need to add to DYNAMIC section to disable them if not movable.
                                            const dynamicElements = document.querySelectorAll('.dynamic');
 					   switch(docT) { 
 							   case "FIXED":
@@ -1562,9 +1623,22 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
                                                                 }); 
                                                                 break;
                                                             case "DYNAMIC": 
+					   			isDrag = documentDraggable();
                                            			dynamicElements.forEach(element => {
 					     			element.style.display = 'block';
                                                                 element.style.visibility = 'visible'; 
+								// This part controls the clickable or not link options.	    
+								eltext = element.textContent;
+                                                                element.classList.remove('disabled'); //init all disabled.
+                                                                if(!isDrag ){ 
+                                                                // Only allow Move Parts as options
+							        if(eltext != "Move Parts"){element.classList.add('disabled');} 
+
+							        }else{ 
+                                                                //Disable Move Parts and enable the rest. 
+								if(eltext == "Move Parts") {element.classList.add('disabled');}
+								else {element.classList.remove('disabled');} 
+								     }
                                                                 });
 								break;       
 							    default:
@@ -1636,7 +1710,33 @@ $('body').append(
 );
 
 
-// Will be Modal for Make Template Button to give template  a name.
+// Modal for Make Part Menu Item to give part a name.
+$('body').append('<!-- Make Part Modal -->' +
+ '<div class="modal fade" id="makePart" role="dialog">' + 
+ '  <div class="modal-dialog modal-sm">' +
+ '    <!-- Modal content-->' +
+ '    <div class="modal-content">' + 
+ '        <div class="modal-header">' + 
+ '        <h4 class="modal-title">Make Part</h4>' + 
+ '        </div>' +
+ '       <div class="modal-body">' +
+        '<label for="myInput">Enter Part Name:</label>' +
+        '<input type="text" id="partFileInput" class="form-control" />' +
+ '      </div>' +
+ '       <div class="modal-footer">' +
+ '         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
+          '<button type="button" class="btn btn-primary" onclick="handleMakePartAction()">Make Part</button>' +
+ '       </div>' +
+ '      </div> ' +
+ '   </div>' +
+ '</div>');
+
+/*  To launch modal        */
+/*  $("#makePart").modal(); */
+
+
+
+// Modal for Make Template Button to give template a name.
 $('body').append('<!-- Make Template Modal -->' +
  '<div class="modal fade" id="makeTmpl" role="dialog">' + 
  '  <div class="modal-dialog modal-sm">' +
@@ -1808,6 +1908,19 @@ function handleCustomAction() {
 }
 
 
+function handleMakePartAction() {
+    var partName = $('#partFileInput').val();
+    //Will need to send part name to php side.
+    console.log("handleMakePartAction:Part Name:"+partName ); 
+    console.log("handleMakePartAction:HIDE"); 
+    $('#makePart').modal('hide');
+
+    // I need to get the divhtml data here. Will place it into LocalStorage
+    
+
+    window.parent.partPressMake( partName );		    
+}
+
 function handleMakeTmplAction() {
     var tmplName = $('#tmplFileInput').val();
     //Will need to send template name to php side.
@@ -1861,6 +1974,7 @@ function getCookie(name) {
 
     <a class="dropdown-item dynamic" href="#" onclick="DuplicateDIV()" >Duplicate Part</a>
     <a class="dropdown-item dynamic" href="#" onclick="CutDIV()" >Cut Part</a>
+    <a class="dropdown-item dynamic" href="#" onclick="MakePart()" >Make Part</a>
 
     <a class="dropdown-item" href="#" onclick="CopyText()" >Copy Text</a>
     <a class="dropdown-item" href="#" onclick="PasteText()" >Paste Text</a>

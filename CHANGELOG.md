@@ -86,4 +86,9 @@
  - Added Make Template button to the top menu that will move a FIXED or DYNAMIC editor page to the template directory. 
  - Added modal popup to give a name for new templates and saved to draft emails.  
 
- 
+### v0.8.9
+ - Fix icon for smaller size to show left right instead of diagonal 
+ - Make Settings Page like About and able to scroll down. Removed CSS shadow box.
+ - Added custom icon image for part and template mail box folders. 
+ - Added logic to control Right Click actions so errors can not be user forced. Better UI flow.
+ - Add Right Click Make Part. Copies current part to part folder along with modifications. 

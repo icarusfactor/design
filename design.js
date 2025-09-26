@@ -173,6 +173,12 @@ document.addEventListener("DOMContentLoaded", function() {
 	     //console.log("Template Name Will be:"+tmplName);
                        }
 
+    //function partPressName() {
+	//     document.querySelector("iframe").contentWindow.makePartName();    	
+	 //    //console.log("Template Name Will be:"+tmplName);
+         //              }
+
+
     function tmplPressMake( tmplName ) {
 
              if(tmplName !== undefined ) {
@@ -186,7 +192,27 @@ document.addEventListener("DOMContentLoaded", function() {
                        }
                        }
 
+    //need to have this not only pass the part name ,but the encoded part also. 	
+    function partPressMake( partName ) {
 
+
+             if(partName !== undefined ) {
+          
+             // If the console outputs the correct part data then move to encoding it and passing it to server with rcmail.http_post.
+             console.log("partPressMake:Part Name:"+partName);
+	     let  partHTML = localStorage.getItem('rcd_MakePart');
+             //clear value.So we dont get parts mixed up.
+	     localStorage.setItem("rcd_MakePart","" );
+             //now things should be in sync.		     
+             console.log("partPressMake:Part Data:"+partHTML);
+             const encodedName = encodeURI( partName );	
+             //partdata is already encoded.		      
+	     //const encodedString = encodeURI( partHTML );     
+ 	     rcmail.http_post('partpress', { _pn: encodedName ,_pp: partHTML} , false );
+	    } else { console.log("partPressMake:No Part Name found"); }
+		     
+	     
+             }
 
      function noticeSessSave() {
 	     const Bpress = "sesssave";
@@ -217,6 +243,12 @@ document.addEventListener("DOMContentLoaded", function() {
 	     const Bpress = "dupdiv";
  	     rcmail.http_post('editnotice', { _button: Bpress} , false );
      }
+
+     function noticeCutDIV() {
+	     const Bpress = "cutdiv";
+ 	     rcmail.http_post('editnotice', { _button: Bpress} , false );
+     }
+
 
 
 
