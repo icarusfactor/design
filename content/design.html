@@ -1375,37 +1375,62 @@ function DisableMoveDIVs() {
 	    }
 
 
-function MakePart() {
+function MakePart( partSection  ) {
 
            // Get rid of the popup menu to get closest div before right click.
 	   const customPopup = document.getElementById('customPopup');
            customPopup.style.display = 'none'; // hide the popup            
            console.log("MakePart:HIDE MENU");
 
-           //Get Closest Div 
-        
-           var divHTML ="";
-           var selection = window.getSelection();
-	   const selectedText = selection.toString();
-           console.log("MakePart:SELECTED TEXT: "+selectedText);
+           //Get Closest Div of part section. Content / Header / Footer
+       
+           var divHtml ="";
+           switch( partSection ) {
+             case "content": 
+
+                     var selection = window.getSelection();
+	             const selectedText = selection.toString();
+                     console.log("MakePart:SELECTED TEXT: "+selectedText);
 
 
-
-           if (selection.rangeCount > 0) {
-             var selectedNode = selection.anchorNode;
-	     // Find the closest parent table element
-             var closestDiv = selectedNode.closest('div');
-             divHtml = closestDiv.outerHTML;		       
-             console.log("MakePart:CLOSEST DIV TO SAVE AS PART " + divHtml); // This will output the full HTML of the closest div
+                     if (selection.rangeCount > 0) {
+                      var selectedNode = selection.anchorNode;
+	              // Find the closest parent table element
+                     var closestDiv = selectedNode.closest('div');
+                     divHtml = closestDiv.outerHTML;		       
+                     console.log("MakePart:CLOSEST DIV TO SAVE AS PART " + divHtml); // Output full HTML of closest div
+	                                           }
+             break;
+	     case "header":
+             //Will need to create a blank part container. 
+	     divHtml ="<div id=\"rcd_container\" ></div>";				       
+	     //Get full content and grab only rcd_header div.
+             var summernoteContent = $('#summernote').summernote('code');
+             var headerContent = document.getElementById('rcd_header').outerHTML; 
+	     divHtml = divHtml.slice(0, 25) + headerContent + divHtml.slice(25);			       
+             console.log("HEADER:"+divHtml);
+             break;			       
+             case "footer":
+             //Will need to create a blank part container. 
+	     divHtml ="<div id=\"rcd_container\" ></div>";				       
+	     //Get full content and grab only rcd_header div.
+             var summernoteContent = $('#summernote').summernote('code');
+             var footerContent = document.getElementById('rcd_footer').outerHTML; 
+	     divHtml = divHtml.slice(0, 25) + footerContent + divHtml.slice(25);			       
+             console.log("FOOTER:"+divHtml);
+	     break;
+	     default: 
+	     //Default is treat as no acton and go no further.			       
+	     return;			       
+	     break;			       
+		                  } //End switch of partSection. 
 
             //encode part data
             const encodedString = encodeURI( divHtml );
 	    //Load part data into localstorage. Not best way will refactor later. 		       
             localStorage.setItem('rcd_MakePart', encodedString );
-	   //Modal popup for part name to make.
-           makePartName(); 
-	   }
-
+	    //Modal popup for part name to make.
+            makePartName(); 
 	           }
 
 	 //Duplicate closest DIV to mouse click.Then move to where you want it.     
@@ -1974,7 +1999,10 @@ function getCookie(name) {
 
     <a class="dropdown-item dynamic" href="#" onclick="DuplicateDIV()" >Duplicate Part</a>
     <a class="dropdown-item dynamic" href="#" onclick="CutDIV()" >Cut Part</a>
-    <a class="dropdown-item dynamic" href="#" onclick="MakePart()" >Make Part</a>
+
+    <a class="dropdown-item dynamic" href="#" onclick="MakePart('header')" >Make Header</a>
+    <a class="dropdown-item dynamic" href="#" onclick="MakePart('content')" >Make Part</a>
+    <a class="dropdown-item dynamic" href="#" onclick="MakePart('footer')" >Make Footer</a>
 
     <a class="dropdown-item" href="#" onclick="CopyText()" >Copy Text</a>
     <a class="dropdown-item" href="#" onclick="PasteText()" >Paste Text</a>

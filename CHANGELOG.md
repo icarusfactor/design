@@ -92,3 +92,8 @@
  - Added custom icon image for part and template mail box folders. 
  - Added logic to control Right Click actions so errors can not be user forced. Better UI flow.
  - Add Right Click Make Part. Copies current part to part folder along with modifications. 
+
+### v0.8.10    
+ - Add Right Click menu option to make header.
+ - Add Right Click menu option to make footer.
+
