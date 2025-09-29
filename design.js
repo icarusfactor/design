@@ -33,16 +33,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
      const btn_design = document.querySelector('.btn-design'); 
+ 
      const btn_savedraft = document.querySelector('.btn-savedraft'); 
      const btn_maketmpl = document.querySelector('.btn-maketmpl'); 
 
-     const btn_designsettings = document.querySelector('.btn-designsettings'); 
+     
      const btn_tsize = document.querySelector('.btn-tsize' );
      const btn_tzoom = document.querySelector('.btn-tzoom' );
+
+     const btn_importtmpl = document.querySelector('.btn-importtmpl' );
+     const btn_exporttmpl = document.querySelector('.btn-exporttmpl' );
 
      const btn_savesess = document.querySelector('.btn-savesess' );
      const btn_loadsess = document.querySelector('.btn-loadsess' );
      
+     const btn_designsettings = document.querySelector('.btn-designsettings'); 
      const btn_about = document.querySelector('.btn-about');
 
   if (btn_design) {
@@ -78,6 +83,18 @@ document.addEventListener("DOMContentLoaded", function() {
      toggleDivZoom();	     
             });
                   }
+  if (btn_importtmpl) {
+     btn_importtmpl.addEventListener('click', () => { 
+	     //Place import function here. 
+	     importCLItmpl();
+            });
+                  }
+  if (btn_exporttmpl) {
+     btn_exporttmpl.addEventListener('click', () => { 
+	     //Place expormportClitmplt function here. 
+	     exportCLItmpl();
+            });
+                  }
 
   if (btn_savesess) {
      btn_savesess.addEventListener('click', () => { 
@@ -111,6 +128,78 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 //Start	after menu stuff here.
+
+
+    function importCLItmpl( ) {
+      var importf = document.createElement('input');
+      importf.setAttribute('type' , "file");
+      importf.setAttribute('accept' , ".rcdt");
+
+      const reader = new FileReader();
+
+      importf.type = 'file';
+      importf.onchange = _ => {
+            var files =   Array.from(importf.files);
+	    const file = event.target.files[0];   //Get Selected file. 
+	    //filetext = reader.readAsText(file); 
+            //console.log(filetext);
+	     if (file) {
+            reader.onload = function(e) {
+
+		               if(e.target.result !== null) {
+                                  const fileContent = e.target.result;
+                                  console.log(fileContent); // Print the file content to the console
+                                  //document.getElementById('output').textContent = fileContent; // Display in the <pre> tag
+				  document.querySelector("iframe").contentWindow.LoadEditor(fileContent);     
+				                            }  
+                                        };
+
+            reader.onerror = (errorEvent) => {console.error("Error reading file:", errorEvent); };
+
+                                  reader.readAsText(file); // Read the file as text
+                       } 
+
+                            };
+     importf.click();
+    }
+
+    function exportCLItmpl() {
+
+
+      //This needs to be a modal popup for name of file entry.
+      fileName = document.querySelector("iframe").contentWindow.SetExportName();     
+
+      //Still needs some error catching. 
+
+      //var domdata = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");	
+      //console.log( domdata );	    
+      //domdata.forEach ( function (tdata){
+      //console.log( tdata.outerHTML );
+      //tmpldata = tdata.innerHTML; 	    
+      //console.log( tmpldata  );	    
+
+      //});
+
+      //const file = new Blob([tmpldata], { type: 'text/html' });
+
+
+      //Temp file name until modal is working. 	     
+      //const fileName = 'rcdesign_template.rcdt';
+
+
+
+
+      //const link = document.createElement('a');
+      //link.href = URL.createObjectURL(file);
+      //link.download = fileName;	     
+      //document.body.appendChild(link);
+      //link.click();
+      //document.body.removeChild(link);	    
+      //URL.revokeObjectURL(link.href);
+    } 	
+
+
+
 
     function toggleDivSize() {
     var tDiv = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");	
@@ -191,6 +280,34 @@ document.addEventListener("DOMContentLoaded", function() {
 	     }); 
                        }
                        }
+
+
+
+   function tmplPresExport( tmplName ) {
+
+             console.log( "The Template Name Will Be "+tmplName );
+
+             if(tmplName !== undefined ) {
+             //Add file ext to end of name.
+	     tmplName = tmplName+".rcdt";	     
+	     var domdata = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");               //console.log( domdata ); 
+	     domdata.forEach ( function (tdata){
+             //console.log( tdata.outerHTML );
+             tmpldata = tdata.innerHTML;         
+             //console.log( tmpldata  );           
+             });	     
+             const file = new Blob([tmpldata], { type: 'text/html' });
+             const link = document.createElement('a');
+	     link.href = URL.createObjectURL(file);	     
+	     //May or May not need decode	     
+             link.download = decodeURI(tmplName);
+	     document.body.appendChild(link);
+	     link.click();
+	     document.body.removeChild(link);
+	     URL.revokeObjectURL(link.href);
+                       }
+                       }
+	
 
     //need to have this not only pass the part name ,but the encoded part also. 	
     function partPressMake( partName ) {

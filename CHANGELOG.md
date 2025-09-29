@@ -97,3 +97,10 @@
  - Add Right Click menu option to make header.
  - Add Right Click menu option to make footer.
 
+### v0.9.0
+ - Seperated top menu items into same activity structure. 
+ - Add Export Template to top menu to save to a local file filename.rcdt
+ - Add Import Template to top menu to load from a local file filename.rcdt
+ - Added icons for Import and Export device files. 
+ - Added modal dialog for setting name to export template file rcdt
+

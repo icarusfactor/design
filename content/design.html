@@ -264,9 +264,14 @@ a.disabled {
 
     //Enable sub-usable buttons.
     const tsize = window.parent.document.querySelector('.btn-tsize');
+    const tzoom = window.parent.document.querySelector('.btn-tzoom');        
+
     const savedraft = window.parent.document.querySelector('.btn-savedraft');        
     const maketmpl = window.parent.document.querySelector('.btn-maketmpl');        
-    const tzoom = window.parent.document.querySelector('.btn-tzoom');        
+
+    const importtmpl = window.parent.document.querySelector('.btn-importtmpl');        
+    const exporttmpl = window.parent.document.querySelector('.btn-exporttmpl');        
+
     const savesess = window.parent.document.querySelector('.btn-savesess');        
     const loadsess = window.parent.document.querySelector('.btn-loadsess');        
 
@@ -274,6 +279,10 @@ a.disabled {
     tsize.disabled= false;
     savedraft.disabled= false;
     maketmpl.disabled= false;
+   
+    importtmpl.disabled = false;
+    exporttmpl.disabled = false;	   
+	   
     tzoom.disabled= false;
     savesess.disabled= false;
     loadsess.disabled= false;
@@ -1257,6 +1266,14 @@ function isValidUrl(url_string) {
 	     }
 
 
+ function LoadEditor( templateD ) {
+              $('#summernote').summernote('code', templateD );
+		      }
+
+ function SetExportName() {
+                           $("#exportTmpl").modal("show");
+   		          }
+
  
 // Replace current Table element background style color by grabbing background color in toolbar in realtime.
  function getBGcolor() {
@@ -1786,6 +1803,34 @@ $('body').append('<!-- Make Template Modal -->' +
 /*  $("#makeTmpl").modal(); */
 
 
+// Modal for Make Template Button to give template a name.
+$('body').append('<!-- Export Template Modal -->' +
+ '<div class="modal fade" id="exportTmpl" role="dialog">' + 
+ '  <div class="modal-dialog modal-sm">' +
+ '    <!-- Modal content-->' +
+ '    <div class="modal-content">' + 
+ '        <div class="modal-header">' + 
+ '        <h4 class="modal-title">Export Template</h4>' + 
+ '        </div>' +
+ '       <div class="modal-body">' +
+        '<label for="myInput">Enter Template Name:</label>' +
+        '<input type="text" id="exportFileInput" class="form-control" />' +
+ '      </div>' +
+ '       <div class="modal-footer">' +
+ '         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
+          '<button type="button" class="btn btn-primary" onclick="handleExportTmplAction()">Export Template</button>' +
+ '       </div>' +
+ '      </div> ' +
+ '   </div>' +
+ '</div>');
+
+/*  To launch modal        */
+/*  $("#exportTmpl").modal(); */
+
+
+
+
+
 /* Modal for Save Draft Button to give draft email a name. */
 $('body').append('<!-- Save To Draft Modal -->' +
  '<div class="modal fade" id="saveDraft" role="dialog">' + 
@@ -1954,6 +1999,17 @@ function handleMakeTmplAction() {
     $('#makeTmpl').modal('hide');
     window.parent.tmplPressMake( tmplName );		    
 }
+
+
+function handleExportTmplAction() {
+    var tmplName = $('#exportFileInput').val();
+    //Will need to send template name to php side.
+    console.log("Template Name:"+tmplName ); 
+    console.log("HIDE"); 
+    $('#exportTmpl').modal('hide');
+    window.parent.tmplPresExport( tmplName );		    
+}
+
 
 
 function handleSaveDraftAction() {
