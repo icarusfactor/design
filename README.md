@@ -1,6 +1,6 @@
-# Roundcube Design v0.9.0
+# Roundcube Design v0.9.1
 
-![RoundCube Design View ](/images/rcDesign090.png "In design mode.")
+![RoundCube Design View ](/images/rcDesign091.png "In design mode.")
 
 ### Install 
 
@@ -39,11 +39,11 @@ dropdown and be able to select and add them if Template is active.
 * ALT + CTRL Raises image controls.
 
 ### Objectives: 
- I created the Design plugin to make custom HTML emails quick & easy. Anyone should be able to build their own template or use one from the installed examples with little effort for one off events or for medium sized family , friends or business lists that do not adhear to periodic release times. Wanted to keep it all simple and work within the Roundcube environment, so that no custom setup or duplication is needed. I wanted everyone wanting to try it to just install the plugin and run the setting setups and start to work on a email design right away and send it off when done.
+ I created the Design plugin to make custom HTML emails quick & easy. Anyone should be able to build their own template and parts or use one from the installed examples with little effort for one off events or for medium sized friends or business lists that do not adhear to periodic release times. Wanted to keep it all simple and work within the Roundcube environment, so that no custom setup or duplication is needed. I wanted everyone wanting to try it to just install the plugin and run the setting setups and start to work on a email design right away and send it off when done.
 
 
 ### Key Elements: 
-* Quick Start to Go Setup
+* Quick Start Plugin And Play Setup.
 * No Special Configurations
 * Email Sending Is Left to Compose
 * Uses Mbox Folders For Templates and Holding
@@ -52,18 +52,15 @@ dropdown and be able to select and add them if Template is active.
 * Make and Use Your Own Templates
 
 ### Status:
- This is a useful Beta version , previous release was usable but not functional ,this version fixed that and works for its intended purpose,but will have glitches and loss of active data may occur. So be sure to select HTML CODE mode and cut and paste the text of your customizations of the templates frequently and new versions can wildly change with each revsion at this time, until it reaches a stable version. For example if you make a template , future versions may not support it and may not be complatible or if you switch off of the design your changes are not saved. So use it as is.
+With the functionality to save templates and parts locally on a seprate device one should be able to save parts for use and install later so no loss of custom templates could take place. Now on to the refactoring phase. 
 
 ### Benifits: 
 * Make eye catching email with little effort.
-* Be able to save templates to use again.
+* Be able to make and save templates to use quickly again.
 * Dont have to worry about confusing or overwhelming apllications to do this.
 
 ### Next Steps: 
- Now with the template system getting close to stable I plan to create more templates and parts, the current ones are good and can be used,but limited. I have added all of the supported fonts for email clients. Source mode will still need to be used for big changes and cut blocks or sections. Would like to add image connectors lke S3 and others. Still lots of bug fixes and better design flow to work on fixing while using the opensource SummerNote editor.
-
-### BUGS:
-  Issue with after duplicating a section of the template, and then jumping to zoom, the zoom view will be too small. Just click toggle zoom a couple of times and will work again. Also need to reset dynamic values once load in new template.They currently will get out of sync. Highlighting dynamic parts mostly works. Mostly. When new versions are released as of now its best to delete part and template directory and recreate and sync until stable.
+ I've Made it to the final phase and will be limiting feature adds, not a freeze, but will be working on refactoring code and making it stable up to version 1.0. All of the base functionalilty has been added,from install to removing templates, export and importing templates and parts from local devices, create and making custom templates and parts visually or just use the default ones. I'll be adding the email list and image connectors after 1.0 and will be a Wordpress based plugin. The database of the Wordpress site will host the email images from its Media Library and site url and will gather list emails from a Wordpress block to add to the RoundCube Listcommnads plugin capability.  
 
 ### Template Rules:
  When making a template some rules need to be followed when making one from scratch or modifying a current one that the editor will recognizes and parse accordingly.
@@ -82,6 +79,11 @@ dropdown and be able to select and add them if Template is active.
 * **rcd_div** : General use section within the main content holder.
 * **rcd_footer** : Attached to bottom of content div for various contact & site links.
 * **rcd_container** : Only for part items, will be for packs, not used for that yet. 
+
+### File extentions used.
+* **filename.rcdt** : File extention used for fixed or dynamic templates.
+* **filename.rcdp** : File extention used for template parts.
+
 
 ### Contact:   
 Daniel Yount

@@ -104,3 +104,13 @@
  - Added icons for Import and Export device files. 
  - Added modal dialog for setting name to export template file rcdt
 
+### v0.9.1
+ - Add Right Click Export Part as local file filename.rcdp
+ - Add Right Click Export Header as local file filename.rcdp
+ - Add Right Click Export Footer as local file filename.rcdp
+ - Add Right Click Import Part as local file filename.rcdp
+
+
+
+
+

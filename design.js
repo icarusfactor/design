@@ -330,6 +330,38 @@ document.addEventListener("DOMContentLoaded", function() {
 		     
 	     
              }
+ 
+
+//  FUTURE SPOT  exPartPressMake( partName )
+function exPartPressMake( partName ) {
+if(partName !== undefined ) {
+
+     let partHTML = decodeURI( localStorage.getItem('rcd_ExportPart')); 
+     //clear value.So we dont get parts mixed up.
+     localStorage.setItem("rcd_ExportPart","" );
+     //now things should be in sync.                 
+     console.log("exPartPressMake:Part Data:"+partHTML);	
+     //const encodedName = encodeURI( partName );
+     //No need to pass this to php side , will save everything to client device side. 
+     partName = partName+".rcdp";
+     //var domdata = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
+     //domdata.forEach ( function (pdata){
+     //    //console.log( tdata.outerHTML );
+     //    partdata = pdata.innerHTML;
+     //    //console.log( tmpldata  );           
+     //    });	
+     const file = new Blob([partHTML], { type: 'text/html' });
+     const link = document.createElement('a');
+     link.href = URL.createObjectURL(file);
+     //May or May not need decode            
+     link.download = decodeURI(partName);
+     document.body.appendChild(link);
+     link.click();
+     document.body.removeChild(link);
+     URL.revokeObjectURL(link.href);	
+
+     } else { console.log("partPressMake:No Part Name found"); }
+     } 
 
      function noticeSessSave() {
 	     const Bpress = "sesssave";

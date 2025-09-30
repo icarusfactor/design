@@ -36,6 +36,7 @@ class design extends rcube_plugin
 	$this->register_action('senddraft', [$this, 'action']); 
 	$this->register_action('tmplpress', [$this, 'action']); 
 	$this->register_action('partpress', [$this, 'action']); 
+	//$this->register_action('expartpress', [$this, 'action']); 
 
 
 	$this->register_action('sessnotice', [$this, 'action']); 
@@ -767,6 +768,24 @@ function stripDivById(string $html, string $id): string
     }
 
 
+//    public function expartpress()
+//    {
+//          $partname = rcube_utils::get_input_string('_pn', rcube_utils::INPUT_POST);
+//          $partdata = rcube_utils::get_input_string('_pp', rcube_utils::INPUT_POST);
+//
+//	  $rcmail = rcmail::get_instance();
+	  
+//	  //Send editor part to part mbox.
+//	  $storage = $rcmail->get_storage();
+//         //TODO FOR SOME REASON PART DATA IS NOT DECODED. 
+//	 $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".urldecode($partname)."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".urldecode($partdata); 
+//	  $saved = $storage->save_message('part', $mboxdata,'', null, ['FLAGGED'] );
+
+// Export the part item to device. 
+
+
+//	  $rcmail->output->command('display_message', 'Part Made', 'confirmation');
+//    }
 
 
 
@@ -791,6 +810,10 @@ function stripDivById(string $html, string $id): string
         else if ($rcmail->action == 'partpress') {
 		$rcmail->output->set_pagetitle($this->gettext('design'));
 		$this->partpress();
+	}
+        else if ($rcmail->action == 'expartpress') {
+		$rcmail->output->set_pagetitle($this->gettext('design'));
+		$this->expartpress();
 	}
 
         else if ($rcmail->action == 'sessnotice') {

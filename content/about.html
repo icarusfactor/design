@@ -46,7 +46,7 @@
 
     <div class="container">
 <fieldset>
-<h3>&nbsp;ABOUT DESIGN v0.9.0</h3>
+<h3>&nbsp;ABOUT DESIGN v0.9.1</h3>
 
 
 <b>Setup:</b></BR>
@@ -81,7 +81,7 @@ dropdown and be able to select them.</BR>
 </BR>
 <b>Key Elements:</b></BR>
 <ul>
-  <li>Quick Start to Go Setup</li>
+  <li>Quick Start Plugin And Play Setup.</li>
   <li>No Special Configurations</li>
   <li>Email Sending Is Left to Compose</li>
   <li>Uses Mbox Folders For Templates and Holding</li>
@@ -92,7 +92,7 @@ dropdown and be able to select them.</BR>
 </BR>
 <b>Status:</b></BR>
 <p>
-&nbsp;This is a useful Beta version and new versions can wildly change with each revsion at this time, until it reaches a stable version. For example if you make a template , future versions may not support it and may not be complatible or if you switch off of the design your changes are not saved. So use it as is.
+&nbsp;ith the functionality to save templates and parts locally on a seprate device one should be able to save parts for use and install later so no loss of custom templates could take place. Now on to the refactoring phase.
 </p>
 </BR>
 <b>Benifits:</b></BR>
@@ -104,13 +104,9 @@ dropdown and be able to select them.</BR>
 </BR>
 <b>Next Steps:</b></BR>
 <p>
-&nbsp;Now with the template system getting close to stable I plan to create more templates and parts, the current ones are good and can be used,but limited. I have added all of the supported fonts for email clients. Source mode will still need to be used for big changes and cut blocks or sections. Would like to add image connectors lke S3 and others. Still lots of bug fixes and better design flow to work on fixing while using the opensource SummerNote editor. 
+&nbsp;I've Made it to the final phase and will be limiting feature adds, not a freeze, but will be working on refactoring code and making it stable up to version 1.0. All of the base functionalilty has been added,from install to removing templates, export and importing templates and parts from local devices, create and making custom templates and parts visually or just use the default ones. I'll be adding the email list and image connectors after 1.0 and will be a Wordpress based plugin. The database of the Wordpress site will host the email images from its Media Library and site url and will gather list emails from a Wordpress block to add to the RoundCube Listcommnads plugin capability. 
 </p>
 </BR>
-<b>BUGS:</b></BR>
-<p>
-&nbsp; Issue with after duplicating a section of the template, and then jumping to zoom, the zoom view will be too small. Just click toggle zoom a couple of times and will work again. Also need to reset dynamic values once load in new template.They currently will get out of sync. Highlighting dynamic parts mostly works. Mostly. When new versions are released as of now its best to delete part and template directory and recreate and sync until stable.
-</p>
 <b>Template Rules:</b></BR>
 <p>
 &nbsp;When making a template some rules need to be followed when making one from scratch or modifying a current one that the editor will recognizes and parse accordingly.  
@@ -134,6 +130,15 @@ dropdown and be able to select them.</BR>
 	<li><b>rcd_footer</b> : Attached to bottom of content div for various contact & site links.</li>
 	<li><b>rcd_container</b> : Only for part items, will be for packs, not used for that yet. 
 </ol>
+
+<b>File extentions used.</b>
+
+<ol> 
+	<li><b>filename.rcdt</b> : File extention used for fixed or dynamic templates.</li>
+	<li><b>filename.rcdp</b> : File extention used for template parts.</li>
+</ol>
+
+
 </ul>	
 
 <b>Contact:</b></BR>

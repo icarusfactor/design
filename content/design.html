@@ -1265,6 +1265,12 @@ function isValidUrl(url_string) {
              $("#makePart").modal("show");
 	     }
 
+// FUTURE SPOT exportPartName
+	    
+ function exportPartName() {
+             $("#exportPart").modal("show");
+	     }
+
 
  function LoadEditor( templateD ) {
               $('#summernote').summernote('code', templateD );
@@ -1324,10 +1330,16 @@ var ChangeColorTable = function (context) {
     return button.render();
 };
 
+
+function rightClickMenuHide() {
+         const rightClickMenu = document.getElementById('rightClickMenu');
+	 rightClickMenu.style.display = 'none'; // hide the popup
+         console.log("HIDE RIGHT CLICK MENU");
+			      }
+
          //Add drag js attribs to div with rcd_div id. 
 function EnableMoveDIVs() {
-         const customPopup = document.getElementById('customPopup');
-	 customPopup.style.display = 'none'; // hide the popup
+         rightClickMenuHide();
 
         //Get all of the editor HTML. Scan for id with rcd_div. Add needed js to enable drag.
         var editorContent = document.querySelector('.note-editable');
@@ -1362,8 +1374,8 @@ function EnableMoveDIVs() {
 
          //Remove js attributes from div with rcd_div id. 
 function DisableMoveDIVs() {
-         const customPopup = document.getElementById("customPopup");
-	 customPopup.style.display = "none"; // hide the popup
+         rightClickMenuHide();
+
          //Get all of the edtor HTML. Scan for id with rcd_div. Remove all of the drag and drop options.
         var editorContent = document.querySelector(".note-editable");
         if (editorContent) {
@@ -1393,10 +1405,7 @@ function DisableMoveDIVs() {
 
 
 function MakePart( partSection  ) {
-
-           // Get rid of the popup menu to get closest div before right click.
-	   const customPopup = document.getElementById('customPopup');
-           customPopup.style.display = 'none'; // hide the popup            
+           rightClickMenuHide(); 
            console.log("MakePart:HIDE MENU");
 
            //Get Closest Div of part section. Content / Header / Footer
@@ -1450,17 +1459,118 @@ function MakePart( partSection  ) {
             makePartName(); 
 	           }
 
+
+
+
+function ExportPart( partSection  ) {
+
+           console.log("ExportPart:HIDE MENU");
+
+	
+            rightClickMenuHide();	    
+
+                    //Get Closest Div of part section. Content / Header / Footer
+	            var divHtml ="";
+		    switch( partSection ) {
+                                    case "content": 
+                                    divHtml ="<div id=\"rcd_container\" ></div>"; 
+                                    divHtml = divHtml.slice(0, 25) + GETpart() + divHtml.slice(25);
+				    console.log("ExportPart:DIV TO SAVE AS PART " + divHtml); 
+                                    break;
+
+                                    case "header":
+                                    //Will need to create a blank part container. 
+                                    divHtml ="<div id=\"rcd_container\" ></div>";                                                                       //Get full content and grab only rcd_header div.
+                                    var summernoteContent = $('#summernote').summernote('code');
+                                    var headerContent = document.getElementById('rcd_header').outerHTML; 
+                                    divHtml = divHtml.slice(0, 25) + headerContent + divHtml.slice(25);                                                 console.log("ExportPart:HEADER:"+divHtml);
+                                    break;
+				    case "footer":
+                                    //Will need to create a blank part container. 
+            			    divHtml ="<div id=\"rcd_container\" ></div>";                                                                       //Get full content and grab only rcd_header div.
+                                    var summernoteContent = $('#summernote').summernote('code');
+                                    var footerContent = document.getElementById('rcd_footer').outerHTML; 
+                                    divHtml = divHtml.slice(0, 25) + footerContent + divHtml.slice(25);                                                 console.log("ExportPart:FOOTER:"+divHtml);
+				    break;
+				    default:
+
+				    break;	
+			 	          }
+		      
+                        //Set divHtml in localStorage
+                        const encodedString = encodeURI( divHtml );
+                        //Load part data into localstorage. Not best way will refactor later.                      
+                        localStorage.setItem('rcd_ExportPart', encodedString );
+
+                        exportPartName(); 
+			            }
+
+
+function ImportCLIPart() {
+
+      rightClickMenuHide();	    
+
+      //console.log("IMPORT FROM CLI PART"); 
+      var importp =  window.parent.document.createElement('input');
+      importp.setAttribute('type' , "file");
+      importp.setAttribute('accept' , ".rcdp");
+
+      const reader = new FileReader(); 
+      importp.type = 'file';
+ 
+            importp.onchange = _ => {
+            var files =   Array.from(importp.files);
+            const file = event.target.files[0];   //Get Selected file. 
+             if (file) {
+
+            //  console.log("FILE CLI PART"); 
+            reader.onload = function(e) {
+
+                               if(e.target.result !== null) {
+                                  const fileContent = e.target.result;
+                                  //console.log("PART IMPORT FROM CLI: "+fileContent); 
+				  //Need to remove rcd_contianer tags.		  
+                                  filePart = rmOuterTag( fileContent , "div" );
+                                  //console.log("PART IMPORT FROM CLI: "+filePart); 
+                                  //Append Part to end of Editor Template
+                                  $('#summernote').summernote('pasteHTML', filePart );
+                                                            }
+                                        };
+            reader.onerror = (errorEvent) => {console.error("Error reading file:", errorEvent); };
+            reader.readAsText(file); // Read the file as text
+                       }
+                       };
+              importp.click();
+		       } 
+
+
+function rmOuterTag(htmlString, tagName) {
+  const startTagRegex = new RegExp(`<${tagName}[^>]*>`, 'i');
+  const endTagRegex = new RegExp(`<\/${tagName}>`, 'i');
+
+  // Remove start tag
+  let result = htmlString.replace(startTagRegex, '');
+  // Remove end tag
+  result = result.replace(endTagRegex, '');
+
+  return result;
+}
+
+
+
+
 	 //Duplicate closest DIV to mouse click.Then move to where you want it.     
 function DuplicateDIV() {
-         const customPopup = document.getElementById('customPopup');
-         customPopup.style.display = 'none'; // hide the popup 
 
+	   rightClickMenuHide();	    
+
+           var selection = window.getSelection();
            if (selection.rangeCount > 0) {
             var selectedNode = selection.anchorNode;
                 // Find the closest parent table element
                 var closestDiv = selectedNode.closest('div');
                 divHtml = closestDiv.outerHTML;
-                console.log("CLOSE DIV" + divHtml); // This will output the full HTML of the closest div
+                //console.log("CLOSE DIV" + divHtml); // This will output the full HTML of the closest div
 
 
            } else {
@@ -1488,8 +1598,8 @@ function DuplicateDIV() {
 
          //Cut closest Div. 
 function CutDIV() {
-         const customPopup = document.getElementById('customPopup');
-         customPopup.style.display = 'none'; // hide the popup 
+
+         rightClickMenuHide();
 
          // Get summernote closest match div and cut the node.                             
          var selection = window.getSelection();
@@ -1504,7 +1614,7 @@ function CutDIV() {
             //Need to Cut div from template
             if (closestDiv) {
             closestDiv.remove();            
-            console.log("DIV REMOVED");
+            //console.log("DIV REMOVED");
             }                              
             //Give Notice that DIV was Cut.                  
             window.parent.noticeCutDIV();
@@ -1527,11 +1637,11 @@ function AllstringOccurrences(mainString, subString) {
 	    
 
 
-	 //Copy selected text.     
+//Copy selected text.     
 function CopyText() {
-         const customPopup = document.getElementById('customPopup');
-         customPopup.style.display = 'none'; // Show the popup 
 
+	 rightClickMenuHide();	     
+		    
 	 const selectedText = window.getSelection().toString(); 
 	 if (selectedText) {
             navigator.clipboard.writeText(selectedText)
@@ -1548,10 +1658,10 @@ function CopyText() {
          console.log("Copy Text");
 	    }
 	    
-	 //Paste selected text.     
+ //Paste selected text.     
  async function PasteText() {
-         const customPopup = document.getElementById("customPopup");
-         customPopup.style.display = "none"; // hide the popup 
+
+          rightClickMenuHide();
 
 	  var clipboardText ="";	    
          try {
@@ -1647,14 +1757,14 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
                       $('.note-editable').on('contextmenu', function(e) {
                         e.preventDefault(); // Prevent default browser context menu
 			//console.log("Right-clicked inside Summernote!");
-
-                                           const customPopup = document.getElementById('customPopup');
-					   // Position the custom popup at the mouse coordinates
-                                           customPopup.style.left = event.clientX + 'px';
-                                           customPopup.style.top = event.clientY + 'px';
-                                           customPopup.style.display = 'block'; // Show the popup
-                                           customPopup.style.visibility = 'visible'; // Show the popup
 					   docT = documentTypeNotice();
+                                           const rightClickMenu = document.getElementById('rightClickMenu');
+					   // Position the popup at the mouse coordinates
+                                           rightClickMenu.style.left = event.clientX + 'px';
+                                           rightClickMenu.style.top = event.clientY + 'px';
+                                           rightClickMenu.style.display = 'block'; // Show the popup
+                                           rightClickMenu.style.visibility = 'visible'; // Show the popup
+					   //docT = documentTypeNotice();
 					   //Need to add to DYNAMIC section to disable them if not movable.
                                            const dynamicElements = document.querySelectorAll('.dynamic');
 					   switch(docT) { 
@@ -1697,13 +1807,8 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
                        // Your custom function to execute on left-click
                        //console.log("Left-clicked inside Summernote!");
                        // You can access the clicked element using 'e.target'
-                       const customPopup = document.getElementById('customPopup');
-                       customPopup.style.display = 'none'; // Show the popup
-                       //testhis();
-
+                       rightClickMenuHide();
                        });			   
-
-
 				         }
 
 				  },
@@ -1775,6 +1880,32 @@ $('body').append('<!-- Make Part Modal -->' +
 
 /*  To launch modal        */
 /*  $("#makePart").modal(); */
+
+
+
+// Modal for Export Part Menu Item to give part a name.
+$('body').append('<!--Export Part Modal -->' +
+ '<div class="modal fade" id="exportPart" role="dialog">' + 
+ '  <div class="modal-dialog modal-sm">' +
+ '    <!-- Modal content-->' +
+ '    <div class="modal-content">' + 
+ '        <div class="modal-header">' + 
+ '        <h4 class="modal-title">Export Part</h4>' + 
+ '        </div>' +
+ '       <div class="modal-body">' +
+        '<label for="myInput">Enter Part Name:</label>' +
+        '<input type="text" id="exPartFileInput" class="form-control" />' +
+ '      </div>' +
+ '       <div class="modal-footer">' +
+ '         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
+          '<button type="button" class="btn btn-primary" onclick="handleExportPartAction()">Export Part</button>' +
+ '       </div>' +
+ '      </div> ' +
+ '   </div>' +
+ '</div>');
+
+/*  To launch modal        */
+/*  $("#exportPart").modal(); */
 
 
 
@@ -1908,9 +2039,14 @@ function highlightDIV() {
         const isDraggable = $(this).attr('draggable') === 'true';
 
         if( isDraggable ) {
+        
 	//Enter and set dynamic border.		     
         $(this).mouseenter( (e) => {
-	  mouseIN( $(this) );		     
+
+        //Make working copy for menu items.
+        INpart( $(this).get(0).outerHTML );			    
+	  
+	mouseIN( $(this) );		     
         });
 
         } else {  $(this).off("mouseenter"); }
@@ -1929,6 +2065,20 @@ function highlightDIV() {
         });
 		    
 }
+
+
+//copy HTML to localstorage to work on.
+function INpart( htmlString ) {
+               // console.log( htmlString );
+	       localStorage.setItem( "workcopy" , htmlString); 	    
+		              }
+
+//get HTML from current DYNAMIC part.
+function GETpart(){
+               // console.log( htmlString );
+	       return localStorage.getItem( "workcopy" ); 	    
+		              }		    
+
 
 //Take jQuery object and add highlight.
 function mouseIN( thisobj ) {
@@ -1978,16 +2128,28 @@ function handleCustomAction() {
 }
 
 
+
+// FUTURE SPOT handleExportPartAction
+function handleExportPartAction() {
+    var partName = $('#exPartFileInput').val();
+    //Will need to send part name to php side.
+    console.log("handlexExportePartAction:Part Name:"+partName ); 
+    console.log("handlexExportePartAction:HIDE"); 
+    $('#exportPart').modal('hide');
+    // I need to get the divhtml data here. Will place it into LocalStorage
+    window.parent.exPartPressMake( partName );		    
+}
+
+
+
+
 function handleMakePartAction() {
     var partName = $('#partFileInput').val();
     //Will need to send part name to php side.
     console.log("handleMakePartAction:Part Name:"+partName ); 
     console.log("handleMakePartAction:HIDE"); 
     $('#makePart').modal('hide');
-
     // I need to get the divhtml data here. Will place it into LocalStorage
-    
-
     window.parent.partPressMake( partName );		    
 }
 
@@ -2048,7 +2210,7 @@ function getCookie(name) {
 
     </script>
 
-    <div id="customPopup" style="z-index:9999;display: none; position: absolute;min-width:50px;min-height:100px;border: 1px solid black; padding: 10px; background-color: white;">
+    <div id="rightClickMenu" style="z-index:9999;display: none; position: absolute;min-width:50px;min-height:100px;border: 1px solid black; padding: 10px; background-color: white;">
 
     <a class="dropdown-item dynamic" href="#" onclick="EnableMoveDIVs()"  >Move Parts</a>
     <a class="dropdown-item dynamic" href="#" onclick="DisableMoveDIVs()" >Lock Parts</a>
@@ -2059,6 +2221,13 @@ function getCookie(name) {
     <a class="dropdown-item dynamic" href="#" onclick="MakePart('header')" >Make Header</a>
     <a class="dropdown-item dynamic" href="#" onclick="MakePart('content')" >Make Part</a>
     <a class="dropdown-item dynamic" href="#" onclick="MakePart('footer')" >Make Footer</a>
+
+    <!-- NOT TESTED  -->
+    <a class="dropdown-item dynamic" href="#" onclick="ExportPart('header')" >Export Header</a>
+    <a class="dropdown-item dynamic" href="#" onclick="ExportPart('content')">Export Part</a>
+    <a class="dropdown-item dynamic" href="#" onclick="ExportPart('footer')" >Export Footer</a>
+    <a class="dropdown-item dynamic" href="#" onclick="ImportCLIPart()">Import Part</a>
+
 
     <a class="dropdown-item" href="#" onclick="CopyText()" >Copy Text</a>
     <a class="dropdown-item" href="#" onclick="PasteText()" >Paste Text</a>
