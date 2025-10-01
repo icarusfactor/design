@@ -1,6 +1,6 @@
-# Roundcube Design v0.9.1
+# Roundcube Design v0.9.2
 
-![RoundCube Design View ](/images/rcDesign091.png "In design mode.")
+![RoundCube Design View ](/images/rcdesign091.png "In design mode.")
 
 ### Install 
 

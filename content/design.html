@@ -245,14 +245,14 @@ a.disabled {
    //When loading last session this is used to make sure any dynamic class activity is reset.		      
    let doReload = localStorage.getItem('rcd_reload');
    if (doReload === null || doReload === "false") {
-      console.log("No Reload.");
+      //console.log("No Reload.");
    } else if( doReload === "zoom" ) {
-      console.log("Reload Edit Window");
+      //console.log("Reload Edit Window");
       window.parent.restoreZoom();
       highlightDIV(); //Check if to highlight.		      
       localStorage.setItem('rcd_reload', "false");
    } else if( doReload === "session" ) {
-      console.log("Restore Session");
+      //console.log("Restore Session");
       window.parent.restoreSession(); 
       highlightDIV(); //Check if to highlight.		      
       localStorage.setItem('rcd_reload', "false");
@@ -412,7 +412,7 @@ a.disabled {
 			    var num = value.replace(/\D/g, "");
                             window.parent.importTemplate(num); 
 			    documentTypeNotice();
-                            console.log('template ID: ' + num );
+                            //console.log('template ID: ' + num );
 
 
                         }
@@ -588,7 +588,7 @@ a.disabled {
                             var value = $button.data('value');
                             var num = value.replace(/\D/g, "");
                             window.parent.importPart(num,"header"); 
-                            console.log("partheader ID: " + num );
+                            //console.log("partheader ID: " + num );
 
                         }
                     })
@@ -760,7 +760,7 @@ a.disabled {
                             var value = $button.data('value');
                             var num = value.replace(/\D/g, "");
                             window.parent.importPart(num,"content"); 
-                            console.log('part content ID: ' + num );
+                            //console.log('part content ID: ' + num );
 
 
                         }
@@ -926,7 +926,7 @@ a.disabled {
                             var value = $button.data('value');
                             var num = value.replace(/\D/g, "");
                             window.parent.importPart(num,"footer");
-                            console.log('part footer ID: ' + num );
+                            //console.log('part footer ID: ' + num );
 
 
                         }
@@ -1106,21 +1106,18 @@ function generateLoremText (count, type, html) {
 
   </head>
   <body>
-
-
     <div id="summernote"></div>
     <script>
-
 
 function documentDraggable() {
   var fullContent = $("#summernote").summernote("code");              
   const regex = /draggable\s*=\s*['"]true['"]/;
   var isDraggable = regex.test(fullContent); 
 		    if(isDraggable) {  
-                                console.log('Found a draggable div');
+                                //console.log('Found a draggable div');
 				return true;
 				} else {
-                                console.log('Found no draggable div');
+                                //console.log('Found no draggable div');
 				return false;		    
 				    }
 			            }
@@ -1135,15 +1132,15 @@ function documentType() {
   const firstComment = fullContent.match(/<\!\-\-(.*?)\-\->/);
   var docTButton = $('.note-btn[data-original-title="FIXED"]');		     
  if (firstComment === undefined || firstComment === null) { 
-   console.log("DYNAMIC TEMPLATE NOT FOUND" );
+   //console.log("DYNAMIC TEMPLATE NOT FOUND" );
    return "FIXED";		
  } else {
  var comment = firstComment.toString(firstComment);
- console.log("1ST COMMENT IS: "+comment );
+ //console.log("1ST COMMENT IS: "+comment );
  var found = comment.indexOf(" DYNAMIC ");
     if(found == -1) {  return "FIXED";               
                     }  else {   
-                       console.log("IS DYNAMIC: "+found );
+                       //console.log("IS DYNAMIC: "+found );
                        return "DYNAMIC" ;
                             }
         }
@@ -1159,17 +1156,17 @@ function documentTypeNotice()  {
          switch (docT) {
 		case "FIXED": 
                           docTButton.html("FIXED");            
-			  console.log("CHANGE BUTTON TO FIXED");	     
+			  //console.log("CHANGE BUTTON TO FIXED");	     
 			  return "FIXED";	     
 			  break;	     
                 case "DYNAMIC":
 		          docTButton.html("DYNAMIC");
-			  console.log("CHANGE BUTTON TO DYNAMIC");	     
+			  //console.log("CHANGE BUTTON TO DYNAMIC");	     
 		          return "DYNAMIC";		  
 			  break;	     
                 default:
 		      if (docTButton.length > 0) {docTButton.find(".note-btn").html("FIXED");}
-			  console.log("CHANGE BUTTON TO DEFAULT");	     
+			  //console.log("CHANGE BUTTON TO DEFAULT");	     
 		          return "FIXED";		     
 		       }
 				     
@@ -1191,9 +1188,10 @@ var ReplaceIMG = function (context) {
     var ui = $.summernote.ui;
     var button = ui.button({
         contents: "<i class=\"fa fa-child\"/> Replace", // Button appearance
-        tooltip: "replace", // Tooltip on hover
+        tooltip: "replace", 
         click: function () {
-            	     $("#myCustomModal").modal("show");
+            	     $("#ReplaceIMG").modal("show");
+
 		    }});		    
 
     return button.render();
@@ -1202,9 +1200,6 @@ var ReplaceIMG = function (context) {
 
 let selectedMove = null
 let selectedMoveEnabled = true;
-
-
-
 
 function dragOver(e) {
   //bypass nested drag events, should not be case.Part system only has one event.	    
@@ -1242,10 +1237,10 @@ function dragStart(e) {
 function isValidUrl(url_string) {
   try {
     new URL(url_string);
-    console.log("URL TRUE" );		      
+    //console.log("URL TRUE" );		      
     return true;
   } catch (error) {
-    console.log("URL FALSE" );		      
+    //console.log("URL FALSE" );		      
     return false;
   }
 }
@@ -1286,7 +1281,7 @@ function isValidUrl(url_string) {
                   var bgcolor ="rgb(255,255,255);";
 	          $('.note-recent-color').each(function() {
                   var style = $(this).attr("style");
-                  console.log("Style attribute:", style); 	
+                  //console.log("Style attribute:", style); 	
                   const styleProperties = style.split(';'); 
                   let foundColor = null;	      
                   
@@ -1294,7 +1289,7 @@ function isValidUrl(url_string) {
                   const trimmedProp = prop.trim();
                   if (trimmedProp.startsWith('background-color:')) {
                   bgcolor = trimmedProp.substring('background-color:'.length).trim();
-                  console.log("background Color:", bgcolor); 	
+                  //console.log("background Color:", bgcolor); 	
                   break; // Found the color, exit the loop
                   }
                   }
@@ -1318,7 +1313,7 @@ var ChangeColorTable = function (context) {
    	   if (tableElement) {
            // You now have the selected table element! 
            // You can manipulate it, access its attributes, or perform other actions
-          console.log("Selected table element:", tableElement);
+          //console.log("Selected table element:", tableElement);
           var bgcolor = getBGcolor();
 	  tableElement.style.backgroundColor = bgcolor; 
     } else {
@@ -1334,13 +1329,12 @@ var ChangeColorTable = function (context) {
 function rightClickMenuHide() {
          const rightClickMenu = document.getElementById('rightClickMenu');
 	 rightClickMenu.style.display = 'none'; // hide the popup
-         console.log("HIDE RIGHT CLICK MENU");
+         //console.log("HIDE RIGHT CLICK MENU");
 			      }
 
          //Add drag js attribs to div with rcd_div id. 
 function EnableMoveDIVs() {
          rightClickMenuHide();
-
         //Get all of the editor HTML. Scan for id with rcd_div. Add needed js to enable drag.
         var editorContent = document.querySelector('.note-editable');
         if (editorContent) {
@@ -1364,9 +1358,8 @@ function EnableMoveDIVs() {
         });
 
         }
-
          highlightDIV();
-         console.log("Enable MOVE on all tagged DIVs");
+         //console.log("Enable MOVE on all tagged DIVs");
          //Give notice that tagged DIV are now movable.
          window.parent.noticeMoveEnabled();
 	    }
@@ -1375,7 +1368,6 @@ function EnableMoveDIVs() {
          //Remove js attributes from div with rcd_div id. 
 function DisableMoveDIVs() {
          rightClickMenuHide();
-
          //Get all of the edtor HTML. Scan for id with rcd_div. Remove all of the drag and drop options.
         var editorContent = document.querySelector(".note-editable");
         if (editorContent) {
@@ -1398,7 +1390,7 @@ function DisableMoveDIVs() {
 
         });
          highlightDIV();
-         console.log("Disable MOVE on all tagged DIVs");
+         //console.log("Disable MOVE on all tagged DIVs");
          window.parent.noticeMoveDisabled();
 		    }
 	    }
@@ -1406,17 +1398,15 @@ function DisableMoveDIVs() {
 
 function MakePart( partSection  ) {
            rightClickMenuHide(); 
-           console.log("MakePart:HIDE MENU");
-
+           //console.log("MakePart:HIDE MENU");
            //Get Closest Div of part section. Content / Header / Footer
-       
            var divHtml ="";
            switch( partSection ) {
              case "content": 
 
                      var selection = window.getSelection();
 	             const selectedText = selection.toString();
-                     console.log("MakePart:SELECTED TEXT: "+selectedText);
+                     //console.log("MakePart:SELECTED TEXT: "+selectedText);
 
 
                      if (selection.rangeCount > 0) {
@@ -1424,7 +1414,7 @@ function MakePart( partSection  ) {
 	              // Find the closest parent table element
                      var closestDiv = selectedNode.closest('div');
                      divHtml = closestDiv.outerHTML;		       
-                     console.log("MakePart:CLOSEST DIV TO SAVE AS PART " + divHtml); // Output full HTML of closest div
+                     //console.log("MakePart:CLOSEST DIV TO SAVE AS PART " + divHtml); // Output full HTML of closest div
 	                                           }
              break;
 	     case "header":
@@ -1434,7 +1424,7 @@ function MakePart( partSection  ) {
              var summernoteContent = $('#summernote').summernote('code');
              var headerContent = document.getElementById('rcd_header').outerHTML; 
 	     divHtml = divHtml.slice(0, 25) + headerContent + divHtml.slice(25);			       
-             console.log("HEADER:"+divHtml);
+             //console.log("HEADER:"+divHtml);
              break;			       
              case "footer":
              //Will need to create a blank part container. 
@@ -1443,7 +1433,7 @@ function MakePart( partSection  ) {
              var summernoteContent = $('#summernote').summernote('code');
              var footerContent = document.getElementById('rcd_footer').outerHTML; 
 	     divHtml = divHtml.slice(0, 25) + footerContent + divHtml.slice(25);			       
-             console.log("FOOTER:"+divHtml);
+             //console.log("FOOTER:"+divHtml);
 	     break;
 	     default: 
 	     //Default is treat as no acton and go no further.			       
@@ -1463,37 +1453,31 @@ function MakePart( partSection  ) {
 
 
 function ExportPart( partSection  ) {
-
-           console.log("ExportPart:HIDE MENU");
-
-	
             rightClickMenuHide();	    
-
                     //Get Closest Div of part section. Content / Header / Footer
 	            var divHtml ="";
 		    switch( partSection ) {
                                     case "content": 
                                     divHtml ="<div id=\"rcd_container\" ></div>"; 
                                     divHtml = divHtml.slice(0, 25) + GETpart() + divHtml.slice(25);
-				    console.log("ExportPart:DIV TO SAVE AS PART " + divHtml); 
+				    //console.log("ExportPart:DIV TO SAVE AS PART " + divHtml); 
                                     break;
 
                                     case "header":
                                     //Will need to create a blank part container. 
-                                    divHtml ="<div id=\"rcd_container\" ></div>";                                                                       //Get full content and grab only rcd_header div.
+                                    divHtml ="<div id=\"rcd_container\" ></div>";                                                                                               //Get full content and grab only rcd_header div.
                                     var summernoteContent = $('#summernote').summernote('code');
                                     var headerContent = document.getElementById('rcd_header').outerHTML; 
-                                    divHtml = divHtml.slice(0, 25) + headerContent + divHtml.slice(25);                                                 console.log("ExportPart:HEADER:"+divHtml);
+                                    divHtml = divHtml.slice(0, 25) + headerContent + divHtml.slice(25);                                                                         //console.log("ExportPart:HEADER:"+divHtml);
                                     break;
 				    case "footer":
                                     //Will need to create a blank part container. 
-            			    divHtml ="<div id=\"rcd_container\" ></div>";                                                                       //Get full content and grab only rcd_header div.
+            			    divHtml ="<div id=\"rcd_container\" ></div>";                                                                                               //Get full content and grab only rcd_header div.
                                     var summernoteContent = $('#summernote').summernote('code');
                                     var footerContent = document.getElementById('rcd_footer').outerHTML; 
-                                    divHtml = divHtml.slice(0, 25) + footerContent + divHtml.slice(25);                                                 console.log("ExportPart:FOOTER:"+divHtml);
+                                    divHtml = divHtml.slice(0, 25) + footerContent + divHtml.slice(25);                                                                         //console.log("ExportPart:FOOTER:"+divHtml);
 				    break;
 				    default:
-
 				    break;	
 			 	          }
 		      
@@ -1501,48 +1485,63 @@ function ExportPart( partSection  ) {
                         const encodedString = encodeURI( divHtml );
                         //Load part data into localstorage. Not best way will refactor later.                      
                         localStorage.setItem('rcd_ExportPart', encodedString );
-
                         exportPartName(); 
 			            }
 
-
 function ImportCLIPart() {
-
       rightClickMenuHide();	    
-
       //console.log("IMPORT FROM CLI PART"); 
       var importp =  window.parent.document.createElement('input');
       importp.setAttribute('type' , "file");
       importp.setAttribute('accept' , ".rcdp");
-
       const reader = new FileReader(); 
       importp.type = 'file';
- 
             importp.onchange = _ => {
             var files =   Array.from(importp.files);
             const file = event.target.files[0];   //Get Selected file. 
              if (file) {
-
             //  console.log("FILE CLI PART"); 
             reader.onload = function(e) {
-
                                if(e.target.result !== null) {
                                   const fileContent = e.target.result;
-                                  //console.log("PART IMPORT FROM CLI: "+fileContent); 
 				  //Need to remove rcd_contianer tags.		  
                                   filePart = rmOuterTag( fileContent , "div" );
-                                  //console.log("PART IMPORT FROM CLI: "+filePart); 
-                                  //Append Part to end of Editor Template
-                                  $('#summernote').summernote('pasteHTML', filePart );
+                                  InsertTmplPart( filePart );
                                                             }
                                         };
             reader.onerror = (errorEvent) => {console.error("Error reading file:", errorEvent); };
-            reader.readAsText(file); // Read the file as text
+            reader.readAsText(file); 
                        }
                        };
               importp.click();
 		       } 
 
+function InsertTmplPart( partBody ) {
+		    var tmplContent = document.querySelector(".note-editable");
+		    //Scan for first DIV tag's ID.
+                    const regex = /<div[^>]*id="([^"]*)"[^>]*>/i;
+                    const PartMatch = partBody.match(regex);
+                                 
+                    if (PartMatch && PartMatch[1]) {
+                    //console.log( PartMatch[1] ); 
+                    switch (PartMatch[1]) {
+                        case "rcd_header":
+                        var tmplChildHeader  =  tmplContent.querySelector("#rcd_header");
+                        tmplChildHeader.outerHTML = partBody;
+                        break;
+                        case "rcd_div":
+                        var tmplChildContent =  tmplContent.querySelector("#rcd_content");
+                        tmplChildContent.innerHTML += partBody;
+			break;
+			case "rcd_footer":
+                        var tmplChildFooter  =  tmplContent.querySelector("#rcd_footer");
+                        tmplChildFooter.outerHTML = partBody;
+			break;
+			default:
+			break;
+                      }
+		      }
+                      }
 
 function rmOuterTag(htmlString, tagName) {
   const startTagRegex = new RegExp(`<${tagName}[^>]*>`, 'i');
@@ -1556,14 +1555,9 @@ function rmOuterTag(htmlString, tagName) {
   return result;
 }
 
-
-
-
-	 //Duplicate closest DIV to mouse click.Then move to where you want it.     
+ //Duplicate closest DIV to mouse click.Then move to where you want it.     
 function DuplicateDIV() {
-
 	   rightClickMenuHide();	    
-
            var selection = window.getSelection();
            if (selection.rangeCount > 0) {
             var selectedNode = selection.anchorNode;
@@ -1596,11 +1590,8 @@ function DuplicateDIV() {
 	    }
 	    } 
 
-         //Cut closest Div. 
 function CutDIV() {
-
          rightClickMenuHide();
-
          // Get summernote closest match div and cut the node.                             
          var selection = window.getSelection();
            if (selection.rangeCount > 0) {
@@ -1620,8 +1611,6 @@ function CutDIV() {
             window.parent.noticeCutDIV();
             }
 
-
-
 // Help Support Experiment PasteDIV. NOT USED NOW
 function AllstringOccurrences(mainString, subString) {
   const indices = [];
@@ -1635,8 +1624,6 @@ function AllstringOccurrences(mainString, subString) {
   return indices;
 }
 	    
-
-
 //Copy selected text.     
 function CopyText() {
 
@@ -1646,7 +1633,7 @@ function CopyText() {
 	 if (selectedText) {
             navigator.clipboard.writeText(selectedText)
                 .then(() => {
-                    console.log(selectedText+" : Text copied to clipboard!");
+                    //console.log(selectedText+" : Text copied to clipboard!");
                 })
                 .catch(err => {
                     console.error('Failed to copy text: ', err);
@@ -1655,7 +1642,7 @@ function CopyText() {
             console.log('No text selected.');
          }
 
-         console.log("Copy Text");
+         //console.log("Copy Text");
 	    }
 	    
  //Paste selected text.     
@@ -1666,7 +1653,7 @@ function CopyText() {
 	  var clipboardText ="";	    
          try {
               clipboardText = await navigator.clipboard.readText();
-              console.log("Clipboard content:", clipboardText);
+              //console.log("Clipboard content:", clipboardText);
              } catch (err) {
               console.error("Failed to read clipboard contents:", err);
               }
@@ -1674,7 +1661,7 @@ function CopyText() {
 
          $("#summernote").summernote("editor.pasteHTML", clipboardText );
 
-         console.log("Paste Text");
+         //console.log("Paste Text");
 	    }
 
 
@@ -1696,7 +1683,7 @@ var ChangeColorTd = function (context) {
    	   if (tableElement) {
            // You now have the selected table element! 
            // You can manipulate it, access its attributes, or perform other actions
-          console.log("Selected table element:", tableElement);
+           //console.log("Selected table element:", tableElement);
           var bgcolor = getBGcolor();
 	  tableElement.style.backgroundColor = bgcolor; 
           			       
@@ -1832,9 +1819,8 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
 
 });	
 
-
 $('body').append(
-        '<div id="myCustomModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+        '<div id="ReplaceIMG" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class="modal-dialog">' +
                 '<div class="modal-content">' +
                     '<div class="">' +
@@ -1844,20 +1830,18 @@ $('body').append(
 		    'The numbers in above URL are variable to match need.</br>' +
                         'Otherwise just replace image with a valid URL.</p>' +
 
-                        '<label for="myInput">Enter URL:</label>' +
-                        '<input type="text" id="myInput" class="form-control needs-validation" />' +
+                        '<label for="replaceIMG">Enter URL:</label>' +
+                        '<input type="text" id="replaceIMG" class="form-control needs-validation" />' +
                     '</div>' +
                     '<div class="modal-footer">' +
                         '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>' +
-                        '<button type="button" class="btn btn-primary" onclick="handleCustomAction()">Replace IMG</button>' +
+                        '<button type="button" class="btn btn-primary" onclick="handleReplaceIMGAction()">Replace IMG</button>' +
                     '</div>' +
                 '</div>' +
             '</div>' +
         '</div>'
 );
 
-
-// Modal for Make Part Menu Item to give part a name.
 $('body').append('<!-- Make Part Modal -->' +
  '<div class="modal fade" id="makePart" role="dialog">' + 
  '  <div class="modal-dialog modal-sm">' +
@@ -1867,7 +1851,7 @@ $('body').append('<!-- Make Part Modal -->' +
  '        <h4 class="modal-title">Make Part</h4>' + 
  '        </div>' +
  '       <div class="modal-body">' +
-        '<label for="myInput">Enter Part Name:</label>' +
+        '<label for="partFileInput">Enter Part Name:</label>' +
         '<input type="text" id="partFileInput" class="form-control" />' +
  '      </div>' +
  '       <div class="modal-footer">' +
@@ -1878,12 +1862,6 @@ $('body').append('<!-- Make Part Modal -->' +
  '   </div>' +
  '</div>');
 
-/*  To launch modal        */
-/*  $("#makePart").modal(); */
-
-
-
-// Modal for Export Part Menu Item to give part a name.
 $('body').append('<!--Export Part Modal -->' +
  '<div class="modal fade" id="exportPart" role="dialog">' + 
  '  <div class="modal-dialog modal-sm">' +
@@ -1893,7 +1871,7 @@ $('body').append('<!--Export Part Modal -->' +
  '        <h4 class="modal-title">Export Part</h4>' + 
  '        </div>' +
  '       <div class="modal-body">' +
-        '<label for="myInput">Enter Part Name:</label>' +
+        '<label for="exPartFileInput">Enter Part Name:</label>' +
         '<input type="text" id="exPartFileInput" class="form-control" />' +
  '      </div>' +
  '       <div class="modal-footer">' +
@@ -1904,12 +1882,6 @@ $('body').append('<!--Export Part Modal -->' +
  '   </div>' +
  '</div>');
 
-/*  To launch modal        */
-/*  $("#exportPart").modal(); */
-
-
-
-// Modal for Make Template Button to give template a name.
 $('body').append('<!-- Make Template Modal -->' +
  '<div class="modal fade" id="makeTmpl" role="dialog">' + 
  '  <div class="modal-dialog modal-sm">' +
@@ -1919,7 +1891,7 @@ $('body').append('<!-- Make Template Modal -->' +
  '        <h4 class="modal-title">Make Template</h4>' + 
  '        </div>' +
  '       <div class="modal-body">' +
-        '<label for="myInput">Enter Template Name:</label>' +
+        '<label for="tmplFileInput">Enter Template Name:</label>' +
         '<input type="text" id="tmplFileInput" class="form-control" />' +
  '      </div>' +
  '       <div class="modal-footer">' +
@@ -1930,11 +1902,6 @@ $('body').append('<!-- Make Template Modal -->' +
  '   </div>' +
  '</div>');
 
-/*  To launch modal        */
-/*  $("#makeTmpl").modal(); */
-
-
-// Modal for Make Template Button to give template a name.
 $('body').append('<!-- Export Template Modal -->' +
  '<div class="modal fade" id="exportTmpl" role="dialog">' + 
  '  <div class="modal-dialog modal-sm">' +
@@ -1944,7 +1911,7 @@ $('body').append('<!-- Export Template Modal -->' +
  '        <h4 class="modal-title">Export Template</h4>' + 
  '        </div>' +
  '       <div class="modal-body">' +
-        '<label for="myInput">Enter Template Name:</label>' +
+        '<label for="exportFileInput">Enter Template Name:</label>' +
         '<input type="text" id="exportFileInput" class="form-control" />' +
  '      </div>' +
  '       <div class="modal-footer">' +
@@ -1955,14 +1922,6 @@ $('body').append('<!-- Export Template Modal -->' +
  '   </div>' +
  '</div>');
 
-/*  To launch modal        */
-/*  $("#exportTmpl").modal(); */
-
-
-
-
-
-/* Modal for Save Draft Button to give draft email a name. */
 $('body').append('<!-- Save To Draft Modal -->' +
  '<div class="modal fade" id="saveDraft" role="dialog">' + 
  '  <div class="modal-dialog modal-sm">' +
@@ -1972,7 +1931,7 @@ $('body').append('<!-- Save To Draft Modal -->' +
  '        <h4 class="modal-title">Save To Draft</h4>' + 
  '        </div>' +
  '       <div class="modal-body">' +
-        '<label for="myInput">Enter Draft Email Name:</label>' +
+        '<label for="draftFileInput">Enter Draft Email Name:</label>' +
         '<input type="text" id="draftFileInput" class="form-control" />' +
  '      </div>' +
  '       <div class="modal-footer">' +
@@ -1983,26 +1942,17 @@ $('body').append('<!-- Save To Draft Modal -->' +
  '   </div>' +
  '</div>');
 
-/*  To launch modal        */
-/*  $("#saveDraft").modal(); */
-
-
-
 // Set Defaults	    
-
 $('#summernote').summernote('fullscreen.toggle');
 $('#summernote').summernote('fontName', 'Arial');
 $('#summernote').summernote('lineHeight', 0.2);
 $('#summernote').summernote('dialogsInBody',true);
 
-//$(".note-table-popover").css('visibility', 'hidden');
-
-
 // brings table popup above Image if they both popup. 
 document.addEventListener('keydown', function(event) {
 
   if (event.altKey) {
-    console.log('Alt key was pressed down!');
+    //console.log('Alt key was pressed down!');
     // Perform actions when Alt key is pressed
     $(".note-table-popover").css('z-index', '9999');
     $(".note-image-popover").css('z-index', '1');
@@ -2010,7 +1960,7 @@ document.addEventListener('keydown', function(event) {
   }
 
   if (event.ctrlKey) {
-    console.log('Ctrl key was pressed down!');
+    //console.log('Ctrl key was pressed down!');
     // Perform actions when ctrl key is pressed
     $(".note-link-popover").css('z-index', '9999');
     $(".note-image-popover").css('z-index', '1');
@@ -2019,7 +1969,7 @@ document.addEventListener('keydown', function(event) {
   }
 
   if (event.ctrlKey && event.altKey) {
-    console.log('Alt + Ctrl key was pressed down!');
+    //console.log('Alt + Ctrl key was pressed down!');
     // Perform actions when ctrl key is pressed
     $(".note-image-popover").css('z-index', '9999');
     $(".note-link-popover").css('z-index', '1');
@@ -2027,8 +1977,6 @@ document.addEventListener('keydown', function(event) {
    }
 
 });
-
-
 
 function highlightDIV() {
         // Select all divs with id="rcd_div" within the Summernote editable area
@@ -2065,7 +2013,6 @@ function highlightDIV() {
         });
 		    
 }
-
 
 //copy HTML to localstorage to work on.
 function INpart( htmlString ) {
@@ -2104,7 +2051,7 @@ function mouseOUT( thisobj ) {
                                        
 
 	            			thisobj.unwrap();
-		    			console.log("DIV REMOVED "+parentID ); 
+		    			//console.log("DIV REMOVED "+parentID ); 
 		    		        }
 		      } else {  console.log("PARENT ID NOT FOUND"); }
 		      } else {  console.log("PARENT DIV NOT FOUND"); }
@@ -2112,84 +2059,63 @@ function mouseOUT( thisobj ) {
 	                     }
 
 
-function handleCustomAction() {
-    var text = $('#myInput').val();
+function handleReplaceIMGAction() {
+    var text = $('#replaceIMG').val();
     if(isValidUrl(text) ) { //check if URL is valid. 
     var editor = $('#summernote');			   
     let $node = $(editor.summernote('restoreTarget'));
     if ($node.is('img')) { // Check if it's an image
-    console.log("Selected image:", $node[0]); // Access the DOM element
+    //console.log("Selected image:", $node[0]); // Access the DOM element
     $node[0].src = text; 
-
 		}}
-
-    console.log("HIDE"); // Access the DOM element
-    $('#myCustomModal').modal('hide');
+    // console.log("HIDE"); // Access the DOM element
+    $('#ReplaceIMG').modal('hide');
 }
 
-
-
-// FUTURE SPOT handleExportPartAction
 function handleExportPartAction() {
     var partName = $('#exPartFileInput').val();
     //Will need to send part name to php side.
-    console.log("handlexExportePartAction:Part Name:"+partName ); 
-    console.log("handlexExportePartAction:HIDE"); 
+    //console.log("handlexExportePartAction:Part Name:"+partName ); 
+    //console.log("handlexExportePartAction:HIDE"); 
     $('#exportPart').modal('hide');
-    // I need to get the divhtml data here. Will place it into LocalStorage
     window.parent.exPartPressMake( partName );		    
 }
-
-
-
 
 function handleMakePartAction() {
     var partName = $('#partFileInput').val();
     //Will need to send part name to php side.
-    console.log("handleMakePartAction:Part Name:"+partName ); 
-    console.log("handleMakePartAction:HIDE"); 
+    //console.log("handleMakePartAction:Part Name:"+partName ); 
+    //console.log("handleMakePartAction:HIDE"); 
     $('#makePart').modal('hide');
-    // I need to get the divhtml data here. Will place it into LocalStorage
     window.parent.partPressMake( partName );		    
 }
 
 function handleMakeTmplAction() {
     var tmplName = $('#tmplFileInput').val();
     //Will need to send template name to php side.
-    console.log("Template Name:"+tmplName ); 
-    console.log("HIDE"); 
+    //console.log("Template Name:"+tmplName ); 
+    //console.log("HIDE"); 
     $('#makeTmpl').modal('hide');
     window.parent.tmplPressMake( tmplName );		    
 }
 
-
 function handleExportTmplAction() {
     var tmplName = $('#exportFileInput').val();
     //Will need to send template name to php side.
-    console.log("Template Name:"+tmplName ); 
-    console.log("HIDE"); 
+    //console.log("Template Name:"+tmplName ); 
+    //console.log("HIDE"); 
     $('#exportTmpl').modal('hide');
     window.parent.tmplPresExport( tmplName );		    
 }
 
-
-
 function handleSaveDraftAction() {
     var draftName = $('#draftFileInput').val();
     //Will need to send template name to php side.
-    console.log("Draft Name:"+draftName ); 
-    console.log("HIDE"); 
+    //console.log("Draft Name:"+draftName ); 
+    //console.log("HIDE"); 
     $('#saveDraft').modal('hide');
     window.parent.draftit( draftName );		    
 }
-
-
-// Experimental Drag and Drop Template Element.
-function makemoveable() {
-		    console.log("WILL USE NATIVE JS DRAG");
-	                    }
-
-
 
 function getCookie(name) {
   const nameEQ = name + "="; // Construct the name to search for
@@ -2207,35 +2133,24 @@ function getCookie(name) {
   return null; // Return null if the cookie is not found
 }
 
-
     </script>
 
     <div id="rightClickMenu" style="z-index:9999;display: none; position: absolute;min-width:50px;min-height:100px;border: 1px solid black; padding: 10px; background-color: white;">
-
     <a class="dropdown-item dynamic" href="#" onclick="EnableMoveDIVs()"  >Move Parts</a>
     <a class="dropdown-item dynamic" href="#" onclick="DisableMoveDIVs()" >Lock Parts</a>
-
     <a class="dropdown-item dynamic" href="#" onclick="DuplicateDIV()" >Duplicate Part</a>
     <a class="dropdown-item dynamic" href="#" onclick="CutDIV()" >Cut Part</a>
-
     <a class="dropdown-item dynamic" href="#" onclick="MakePart('header')" >Make Header</a>
     <a class="dropdown-item dynamic" href="#" onclick="MakePart('content')" >Make Part</a>
     <a class="dropdown-item dynamic" href="#" onclick="MakePart('footer')" >Make Footer</a>
-
-    <!-- NOT TESTED  -->
     <a class="dropdown-item dynamic" href="#" onclick="ExportPart('header')" >Export Header</a>
     <a class="dropdown-item dynamic" href="#" onclick="ExportPart('content')">Export Part</a>
     <a class="dropdown-item dynamic" href="#" onclick="ExportPart('footer')" >Export Footer</a>
     <a class="dropdown-item dynamic" href="#" onclick="ImportCLIPart()">Import Part</a>
-
-
     <a class="dropdown-item" href="#" onclick="CopyText()" >Copy Text</a>
     <a class="dropdown-item" href="#" onclick="PasteText()" >Paste Text</a>
     </div>
-
     <div id="summernote"></div>
-
-
   </body>
 </html>
 

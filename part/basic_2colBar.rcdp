@@ -1,0 +1,20 @@
+<div id="rcd_container">
+<!-- Dual Column Bar Begin -->
+<div id="rcd_div" style="margin: 0px; background: none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; max-width: 798px;">
+         
+          <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center" style="max-width:600px; width:100%;background: #CCCCCC;bottom-border: #eeeeee;">
+            <tbody>
+            <tr>
+            <td width="50%" align="left" valign="middle" style="font-size: 10pt;padding:0px 15px 0px 15px;border: none;">
+            <p style="margin: 0px;">COLUMN A</p>
+            </td>
+            <td width="50%" align="right" valign="middle" style="font-size: 10pt; padding:0px 15px 0px 15px;border: none;">
+            <p style="margin: 0px;">COLUMN B</p>                
+            </td>
+            </tr>
+          </tbody>
+          </table>        
+
+</div>
+<!-- Dual Column Bar End -->	
+</div>

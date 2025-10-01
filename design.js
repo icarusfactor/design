@@ -15,8 +15,6 @@
  */
 
 
-
-
 // hook into switch-task event to open the design window
 if (window.rcmail) {
         //Set client values for template button.
@@ -129,7 +127,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //Start	after menu stuff here.
 
-
     function importCLItmpl( ) {
       var importf = document.createElement('input');
       importf.setAttribute('type' , "file");
@@ -148,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		               if(e.target.result !== null) {
                                   const fileContent = e.target.result;
-                                  console.log(fileContent); // Print the file content to the console
+                                  //console.log(fileContent); // Print the file content to the console
                                   //document.getElementById('output').textContent = fileContent; // Display in the <pre> tag
 				  document.querySelector("iframe").contentWindow.LoadEditor(fileContent);     
 				                            }  
@@ -164,42 +161,9 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function exportCLItmpl() {
-
-
       //This needs to be a modal popup for name of file entry.
       fileName = document.querySelector("iframe").contentWindow.SetExportName();     
-
-      //Still needs some error catching. 
-
-      //var domdata = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");	
-      //console.log( domdata );	    
-      //domdata.forEach ( function (tdata){
-      //console.log( tdata.outerHTML );
-      //tmpldata = tdata.innerHTML; 	    
-      //console.log( tmpldata  );	    
-
-      //});
-
-      //const file = new Blob([tmpldata], { type: 'text/html' });
-
-
-      //Temp file name until modal is working. 	     
-      //const fileName = 'rcdesign_template.rcdt';
-
-
-
-
-      //const link = document.createElement('a');
-      //link.href = URL.createObjectURL(file);
-      //link.download = fileName;	     
-      //document.body.appendChild(link);
-      //link.click();
-      //document.body.removeChild(link);	    
-      //URL.revokeObjectURL(link.href);
     } 	
-
-
-
 
     function toggleDivSize() {
     var tDiv = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");	
@@ -217,13 +181,13 @@ document.addEventListener("DOMContentLoaded", function() {
     var scaleX = comment.getBoundingClientRect().width / comment.offsetWidth;  
     var htmlContent = comment.innerHTML;
 
-    console.log( "ScaleY:" + scaleY );	    
-    console.log( "ScaleX:" + scaleX );	    
+    //console.log( "ScaleY:" + scaleY );	    
+    //console.log( "ScaleX:" + scaleX );	    
 
     if ( scaleX === 0.5) {
     var dub = comment.offsetHeight * 1.9;
     comment.style.height = String(dub) +"px";    
-    console.log("shrink");	    
+    //console.log("shrink");	    
     } 
     if (scaleX  === 1 ) {
 
@@ -232,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function() {
     localStorage.setItem('rcd_EditWindow', encodedString);
     localStorage.setItem('rcd_reload', "zoom");
 
-    console.log("No Zoom");	    
+    //console.log("No Zoom");	    
     document.querySelector("iframe").contentWindow.location.reload(true);
 	   
     }  });  }
@@ -262,16 +226,10 @@ document.addEventListener("DOMContentLoaded", function() {
 	     //console.log("Template Name Will be:"+tmplName);
                        }
 
-    //function partPressName() {
-	//     document.querySelector("iframe").contentWindow.makePartName();    	
-	 //    //console.log("Template Name Will be:"+tmplName);
-         //              }
-
-
     function tmplPressMake( tmplName ) {
 
              if(tmplName !== undefined ) {
-	     console.log("Encoded Template Name :"+tmplName);
+	     //console.log("Encoded Template Name :"+tmplName);
 	     var txtNote = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
 	     txtNote.forEach ( function (comment){		     
              const encodedName = encodeURI( tmplName );	
@@ -281,16 +239,14 @@ document.addEventListener("DOMContentLoaded", function() {
                        }
                        }
 
-
-
    function tmplPresExport( tmplName ) {
 
-             console.log( "The Template Name Will Be "+tmplName );
+             //console.log( "The Template Name Will Be "+tmplName );
 
              if(tmplName !== undefined ) {
              //Add file ext to end of name.
 	     tmplName = tmplName+".rcdt";	     
-	     var domdata = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");               //console.log( domdata ); 
+	     var domdata = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");                     //console.log( domdata ); 
 	     domdata.forEach ( function (tdata){
              //console.log( tdata.outerHTML );
              tmpldata = tdata.innerHTML;         
@@ -312,19 +268,16 @@ document.addEventListener("DOMContentLoaded", function() {
     //need to have this not only pass the part name ,but the encoded part also. 	
     function partPressMake( partName ) {
 
-
              if(partName !== undefined ) {
-          
              // If the console outputs the correct part data then move to encoding it and passing it to server with rcmail.http_post.
-             console.log("partPressMake:Part Name:"+partName);
+             //console.log("partPressMake:Part Name:"+partName);
 	     let  partHTML = localStorage.getItem('rcd_MakePart');
              //clear value.So we dont get parts mixed up.
 	     localStorage.setItem("rcd_MakePart","" );
              //now things should be in sync.		     
-             console.log("partPressMake:Part Data:"+partHTML);
+             //console.log("partPressMake:Part Data:"+partHTML);
              const encodedName = encodeURI( partName );	
              //partdata is already encoded.		      
-	     //const encodedString = encodeURI( partHTML );     
  	     rcmail.http_post('partpress', { _pn: encodedName ,_pp: partHTML} , false );
 	    } else { console.log("partPressMake:No Part Name found"); }
 		     
@@ -332,7 +285,6 @@ document.addEventListener("DOMContentLoaded", function() {
              }
  
 
-//  FUTURE SPOT  exPartPressMake( partName )
 function exPartPressMake( partName ) {
 if(partName !== undefined ) {
 
@@ -340,16 +292,7 @@ if(partName !== undefined ) {
      //clear value.So we dont get parts mixed up.
      localStorage.setItem("rcd_ExportPart","" );
      //now things should be in sync.                 
-     console.log("exPartPressMake:Part Data:"+partHTML);	
-     //const encodedName = encodeURI( partName );
-     //No need to pass this to php side , will save everything to client device side. 
      partName = partName+".rcdp";
-     //var domdata = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
-     //domdata.forEach ( function (pdata){
-     //    //console.log( tdata.outerHTML );
-     //    partdata = pdata.innerHTML;
-     //    //console.log( tmpldata  );           
-     //    });	
      const file = new Blob([partHTML], { type: 'text/html' });
      const link = document.createElement('a');
      link.href = URL.createObjectURL(file);
@@ -365,13 +308,13 @@ if(partName !== undefined ) {
 
      function noticeSessSave() {
 	     const Bpress = "sesssave";
-	     console.log("Save Session");
+	     //console.log("Save Session");
  	     rcmail.http_post('sessnotice', { _button: Bpress} , false );
      }
 
      function noticeSessLoad() {
 	     const Bpress = "sessload";
-	     console.log("Load Session");
+	     //console.log("Load Session");
  	     rcmail.http_post('sessnotice', { _button: Bpress} , false );
      }
 
@@ -449,10 +392,7 @@ if(partName !== undefined ) {
  	                //rcmail.http_post('inparts', { _button: Bpress} , false );
 			break;    
                            }
-
-
      }  
-
 
      function clearIt( type ) {
 
@@ -463,20 +403,16 @@ if(partName !== undefined ) {
      if(type == "localstorage") {
       localStorage.clear();
      }	     
-
      return 1;	     
      }
 
-
-
        //All this does is set the cookie to true from the SYNC button on settings and then reloads and run synctmpl function
        function updateTmpl() {
-	       setCookie('design_tmpl_sync','true',2); 
+	      setCookie('design_tmpl_sync','true',2); 
               const url = new URL(window.location.href);
               const params = url.searchParams;
               params.set('_action', 'designsettings');
               window.location.href = url.toString();
-
        }
 
        //All this does is set the cookie to true from the SYNC button on settings and then reloads and run syncpart function
@@ -486,14 +422,11 @@ if(partName !== undefined ) {
               const params = url.searchParams;
               params.set('_action', 'designsettings');
               window.location.href = url.toString();
-
        }
-
-
 
      //All of the needed data is in localstorage.	 
      function importTemplate( num ) {
-             console.log( "IMPORT NUM: "+num );
+             //console.log( "IMPORT NUM: "+num );
              sess_user = getCookie("sess_user") || "";
              const tmplBody =  decodeURIComponent( localStorage.getItem('design_'+sess_user+'_tmpl_body'+num)).replace(/\+/g, " "); 
 	     //Get editor area
@@ -507,11 +440,9 @@ if(partName !== undefined ) {
 
 	//IMPORT SPECIFIC IMPORT PARTS FROM MENU
         function importPart( num , type ) {
-             console.log( "IMPORT "+type+" NUM: "+num );
+             //console.log( "IMPORT "+type+" NUM: "+num );
              sess_user = getCookie("sess_user") || "";
              const partBody =  decodeURIComponent( localStorage.getItem('design_'+sess_user+'_part_body'+type+num)).replace(/\+/g, " "); 
-	
-	     
 		
 	     //Get editor area
              var txtNote = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
@@ -527,49 +458,45 @@ if(partName !== undefined ) {
              const PartMatch = partBody.match(regex);
 		
 	     if (PartMatch && PartMatch[1]) {     
-                  console.log( PartMatch[1] );
+                  //console.log( PartMatch[1] );
 		  
 		  switch (PartMatch[1]) {
   			case "rcd_header":	
                                         // Function to Replace Header DIV tag
                 			var tmplChildHeader  =  doctmpl.querySelector("#rcd_header");
-                                        console.log( tmplChildHeader );
+                                        //console.log( tmplChildHeader );
                                         tmplChildHeader.outerHTML = partBody;  
                                         break;
   			case "rcd_div":	
                                         // Function to Insert Content as child of rcd_content
                 			var tmplChildContent =  doctmpl.querySelector("#rcd_content");
-                                        console.log( tmplChildContent );
+                                        //console.log( tmplChildContent );
 
                                         tmplChildContent.innerHTML += partBody;  
 			                break;
   			case "rcd_footer":	
                                         // Function to Replace Footer DIV tag
                 			var tmplChildFooter  = doctmpl.querySelector("#rcd_footer");
-                                        console.log( tmplChildFooter );
+                                        //console.log( tmplChildFooter );
                                         tmplChildFooter.outerHTML = partBody;  
                                         break;
                         default:
-                                        console.log( "none" );
+                                        //console.log( "none" );
 				        break;
 		                        }
 	        } else { return "none" }  //Not in part format.     
 
 	        } //End of find to skip or not skip part insert
-	     //document.querySelector("iframe").contentWindow.highlightDIV(); //check and enable highlighting.
-
 	     });
 	     }	
-
 
 function restoreZoom() {
              var txtNote = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
              const tmplBody =  decodeURIComponent( localStorage.getItem("rcd_EditWindow")); 
 	     //Place tmplBody in edit area.
 	     txtNote.forEach ( function (comment){
-		comment.innerHTML = tmplBody;     
+	     comment.innerHTML = tmplBody;     
 	     });
-	     
    }
 
 // Restore last Session Save. Button top menu Session Save / Session Load
@@ -584,7 +511,6 @@ function restoreSession() {
 	     
     }
 
-
 function saveSession() {
 
              var txtNote = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
@@ -598,9 +524,7 @@ function saveSession() {
              localStorage.setItem('rcd_reload', "session");	
              noticeSessSave();
 	     });	
-	
 }
-
 
     rcmail.addEventListener('beforeswitch-task', function(prop) {
         // Catch clicks to design task button
@@ -643,28 +567,20 @@ function saveSession() {
         i++;
 	}
 
-	 //const allLocalStorageKeys = [];
-         //for (let i = 0; i < localStorage.length; i++) {
-         //const key = localStorage.key(i);
-         //allLocalStorageKeys.push(key);
-         //}
-         //console.log(allLocalStorageKeys);
-
         i=1;
 	//total Count Part    
-	//while (i <= activecountpart ) {
 	while (i <= totalcountpart ) {
               key_header = key_set( sess_user , "header", i );
 	      //console.log("header: "+key_header );	
-	      if( key_header !== "none" ) { partheadersubj[i] = key_header; console.log("header: "+key_header );}
+	      if( key_header !== "none" ) { partheadersubj[i] = key_header;}
         
 	      key_content = key_set( sess_user , "content", i );
 	      //console.log("content: "+key_content );	
-	      if( key_content !== "none") {partcontentsubj[i] = key_content; console.log("content: "+key_content ); }
+	      if( key_content !== "none") {partcontentsubj[i] = key_content;}
               
 	      key_footer = key_set( sess_user , "footer", i ); 
 	      //console.log("footer: "+key_footer );	
-	      if( key_footer !== "none") { partfootersubj[i] =  key_footer;console.log("footer: "+key_footer ); } 
+	      if( key_footer !== "none") { partfootersubj[i] =  key_footer;} 
         i++;
 	}
 	 //post process and remove empty items add back inital empty.   
@@ -700,28 +616,18 @@ function saveSession() {
     });
 }
 
-
-
 function key_set( user , type , currcnt) {
 
          var allTheKeys = Object.keys(localStorage);
          var PartKey;
-        
 
          PartKey = String(allTheKeys.filter(key => key.startsWith('design_'+user+'_part_subject'+currcnt+'_'+type)) );
          //console.log( "PartKey: " + PartKey );
 
-	if( PartKey != "" ){
-	//if( PartKey != null ){
-	
-	// var modifiedKey = PartKey.replace('_'+type, '');
-	// modifiedKey = modifiedKey.replace( /[\d\.]/g , '');
-        // console.log( "modifiedKey: " + modifiedKey );
-        var subjectKey = "design_"+user+"_part_subject"+currcnt;
-        //console.log( "subjectKey: " + subjectKey + " Subject Type:"+ type  );
-
+	 if( PartKey != "" ){
+         var subjectKey = "design_"+user+"_part_subject"+currcnt;
 	 return localStorage.getItem(subjectKey);
-               }
+                           }
          return "none";
 }
 

@@ -110,6 +110,14 @@
  - Add Right Click Export Footer as local file filename.rcdp
  - Add Right Click Import Part as local file filename.rcdp
 
+### v0.9.2
+ - Added logic to detect if import client part is a content header or footer part and install in correct area. 
+ - Rename modals with correct names instead of default template code name. 
+ - Limited console logs to minimal notification. 
+ - Removed unused code and useless comments. 
+ - Changed all default template files extentions to rcdt
+ - Changed all default part files extentions to rcdp
+
 
 
 

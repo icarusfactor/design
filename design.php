@@ -60,8 +60,6 @@ class design extends rcube_plugin
 
 	// register hook for message headers being processed
 	$this->add_hook('message_headers_output', array($this, 'headers'));
-
-
     }
 
     function start_script($args)
@@ -217,10 +215,10 @@ class design extends rcube_plugin
 
     //Install predefined templates. You can add you own and flag them to be added , but will only recognize 10 at a time. 
     function intemplates() {
-	  $template1 = file_get_contents( $this->home . '/template/basic_invoice.html');
-	  $template2 = file_get_contents( $this->home . '/template/basic_newsletter.html');
-	  $template3 = file_get_contents( $this->home . '/template/basic_template.html');
-	  $template4 = file_get_contents( $this->home . '/template/blank_template.html');
+	  $template1 = file_get_contents( $this->home . '/template/basic_invoice.rcdt');
+	  $template2 = file_get_contents( $this->home . '/template/basic_newsletter.rcdt');
+	  $template3 = file_get_contents( $this->home . '/template/basic_template.rcdt');
+	  $template4 = file_get_contents( $this->home . '/template/blank_template.rcdt');
 
 	  $rcmail = rcmail::get_instance();
 	  $storage = $rcmail->get_storage();
@@ -306,44 +304,44 @@ function stripDivById(string $html, string $id): string
 
 	    //Header
             if( $type == "header" ){ 
-	    $part[1] = file_get_contents( $this->home . '/part/basic_header1.html');
+	    $part[1] = file_get_contents( $this->home . '/part/basic_header1.rcdp');
 	    $partname[1] = "Header 1";
 
-	    $part[2] = file_get_contents( $this->home . '/part/basic_header2.html');
+	    $part[2] = file_get_contents( $this->home . '/part/basic_header2.rcdp');
 	    $partname[2] = "Header 2";
 
-	    $part[3] = file_get_contents( $this->home . '/part/basic_header3.html');
+	    $part[3] = file_get_contents( $this->home . '/part/basic_header3.rcdp');
 	    $partname[3] = "Header 3";
 
-	    $part[4] = file_get_contents( $this->home . '/part/basic_header4.html');
+	    $part[4] = file_get_contents( $this->home . '/part/basic_header4.rcdp');
 	    $partname[4] = "Header 4";
 
-	    $part[5] = file_get_contents( $this->home . '/part/basic_header5.html');
+	    $part[5] = file_get_contents( $this->home . '/part/basic_header5.rcdp');
 	    $partname[5] = "Header 5";
 
-	    $part[6] = file_get_contents( $this->home . '/part/basic_header6.html');
+	    $part[6] = file_get_contents( $this->home . '/part/basic_header6.rcdp');
 	    $partname[6] = "Header 6";
 
             $this->installParts($part,$partname,6); 
 	        }
             //Footer
             if( $type == "footer" ){ 
-	    $part[1] = file_get_contents( $this->home . '/part/basic_footer1.html');
+	    $part[1] = file_get_contents( $this->home . '/part/basic_footer1.rcdp');
 	    $partname[1] = "Footer 1";
 	    
-	    $part[2] = file_get_contents( $this->home . '/part/basic_footer2.html');
+	    $part[2] = file_get_contents( $this->home . '/part/basic_footer2.rcdp');
 	    $partname[2] = "Footer 2";
 
-	    $part[3] = file_get_contents( $this->home . '/part/basic_footer3.html');
+	    $part[3] = file_get_contents( $this->home . '/part/basic_footer3.rcdp');
 	    $partname[3] = "Footer 3";
 
-	    $part[4] = file_get_contents( $this->home . '/part/basic_footer4.html');
+	    $part[4] = file_get_contents( $this->home . '/part/basic_footer4.rcdp');
 	    $partname[4] = "Footer 4";
 
-	    $part[5] = file_get_contents( $this->home . '/part/basic_footer5.html');
+	    $part[5] = file_get_contents( $this->home . '/part/basic_footer5.rcdp');
 	    $partname[5] = "Footer 5";
 
-	    $part[6] = file_get_contents( $this->home . '/part/basic_footer6.html');
+	    $part[6] = file_get_contents( $this->home . '/part/basic_footer6.rcdp');
 	    $partname[6] = "Footer 6";
 
             $this->installParts($part,$partname,6); 
@@ -351,51 +349,47 @@ function stripDivById(string $html, string $id): string
 
             //Content
             if( $type == "content" ){ 
-	    $part[1] = file_get_contents( $this->home . '/part/basic_card1.html');
+	    $part[1] = file_get_contents( $this->home . '/part/basic_card1.rcdp');
 	    $partname[1] = "Card 1";
-	    $part[2] = file_get_contents( $this->home . '/part/basic_card2.html');
+	    $part[2] = file_get_contents( $this->home . '/part/basic_card2.rcdp');
 	    $partname[2] = "Card 2";
-	    $part[3] = file_get_contents( $this->home . '/part/basic_card3.html');
+	    $part[3] = file_get_contents( $this->home . '/part/basic_card3.rcdp');
 	    $partname[3] = "Card 3";
-	    $part[4] = file_get_contents( $this->home . '/part/basic_image.html');
+	    $part[4] = file_get_contents( $this->home . '/part/basic_image.rcdp');
             $partname[4] = "Image 1";  
-	    $part[5] = file_get_contents( $this->home . '/part/basic_paragraph.html');
+	    $part[5] = file_get_contents( $this->home . '/part/basic_paragraph.rcdp');
 	    $partname[5] = "Paragraph 1";
-	    $part[6] = file_get_contents( $this->home . '/part/basic_actionbox.html');
+	    $part[6] = file_get_contents( $this->home . '/part/basic_actionbox.rcdp');
 	    $partname[6] = "Actionbox 1";
-	    $part[7] = file_get_contents( $this->home . '/part/basic_social.html');
+	    $part[7] = file_get_contents( $this->home . '/part/basic_social.rcdp');
 	    $partname[7] = "Social 1";
-	    $part[8] = file_get_contents( $this->home . '/part/basic_2colBar.html');
+	    $part[8] = file_get_contents( $this->home . '/part/basic_2colBar.rcdp');
 	    $partname[8] = "Itemized Section";
-	    $part[9] = file_get_contents( $this->home . '/part/basic_2colBline.html');
+	    $part[9] = file_get_contents( $this->home . '/part/basic_2colBline.rcdp');
 	    $partname[9] = "Itemized Detail 1";
-	    $part[10] = file_get_contents( $this->home . '/part/basic_2col1line.html');
+	    $part[10] = file_get_contents( $this->home . '/part/basic_2col1line.rcdp');
 	    $partname[10] = "Itemized Detail 2";
-	    $part[11] = file_get_contents( $this->home . '/part/basic_spacer.html');
+	    $part[11] = file_get_contents( $this->home . '/part/basic_spacer.rcdp');
 	    $partname[11] = "Single Line Spacer";
-	    $part[12] = file_get_contents( $this->home . '/part/basic_2col4lineLImg.html');
+	    $part[12] = file_get_contents( $this->home . '/part/basic_2col4lineLImg.rcdp');
 	    $partname[12] = "2C 4L With L IMG";
-	    $part[13] = file_get_contents( $this->home . '/part/basic_2col4lineRImg.html');
+	    $part[13] = file_get_contents( $this->home . '/part/basic_2col4lineRImg.rcdp');
 	    $partname[13] = "2C 4L With R IMG";
-	    $part[14] = file_get_contents( $this->home . '/part/basic_2colLBlank.html');
+	    $part[14] = file_get_contents( $this->home . '/part/basic_2colLBlank.rcdp');
 	    $partname[14] = "2C With L Blank";
-	    $part[15] = file_get_contents( $this->home . '/part/basic_2colRBlank.html');
+	    $part[15] = file_get_contents( $this->home . '/part/basic_2colRBlank.rcdp');
 	    $partname[15] = "2C With R Blank";
-	    $part[16] = file_get_contents( $this->home . '/part/basic_2col4line.html');
+	    $part[16] = file_get_contents( $this->home . '/part/basic_2col4line.rcdp');
 	    $partname[16] = "2C 4 Lines";
-	    $part[17] = file_get_contents( $this->home . '/part/basic_3Ctitle.html');
+	    $part[17] = file_get_contents( $this->home . '/part/basic_3Ctitle.rcdp');
 	    $partname[17] = "3C Title";
-	    $part[18] = file_get_contents( $this->home . '/part/dayplannerL.html');
+	    $part[18] = file_get_contents( $this->home . '/part/dayplannerL.rcdp');
 	    $partname[18] = "Day Plan L";
-	    $part[19] = file_get_contents( $this->home . '/part/dayplannerR.html');
+	    $part[19] = file_get_contents( $this->home . '/part/dayplannerR.rcdp');
 	    $partname[19] = "Day Plan R";
             $this->installParts($part,$partname,19); 
 	    }
-
-
                        }
-
-
 
     function installParts( $part = [], $partname = [], $maxval ) {
 
@@ -515,8 +509,6 @@ function stripDivById(string $html, string $id): string
 	    $i=1;$Nheader=0;$Ncontent=0;$Nfooter=0;
 	    //With multiple catalogs need more than 10 so using total count.
 	    while ($i <= $active_count_part ) {
-	    //while ($i <= $count ) {
-	    //while ($i <=10  ) {
 
                   //need more than 10 for parts
 		  $raw_body = $this->get_part_body($sess_user,$flag_count[$i-1]);
@@ -594,7 +586,6 @@ function stripDivById(string $html, string $id): string
 
     foreach ($messages as $message) {
             //Limit to 10 flagged subjects *** NO LONGER LIMIT TO 10    
-	    //if (!empty($message->flags['FLAGGED']) && $num <= 10 ) {
 	    if (!empty($message->flags['FLAGGED']) ) {
 	            $numf++;  //increment the flagged count.
 		    $subject = $message->get('subject');
@@ -606,7 +597,6 @@ function stripDivById(string $html, string $id): string
 		   }
 		    $this->setLocalStoreFromServer( $sess_user , "part_subject".$type.$numf , $subject );
 		    array_push($numbers, $num );
- 		    //$rcmail->output->command('display_message', 'SUBJECT: FLAGGED:'.json_encode($numbers), 'confirmation');
 	    }
             $num++;  //Increament overall count.
             }
@@ -628,8 +618,6 @@ function stripDivById(string $html, string $id): string
     foreach ($uids as $uid) {
 	    if($num == $count ){
 		    $body = $storage->get_body($uid);
-                    //$rcmail->output->command('display_message', 'BODY: '.strval($body) , 'confirmation');
-    		    //$this->setLocalStoreFromServer( $sess_user , "tmpl_body".$num , $body );
                                break;
 	   		      } 
                              $num++;
@@ -700,8 +688,6 @@ function stripDivById(string $html, string $id): string
     foreach ($uids as $uid) {
 	    if($num == $count ){
 		    $body = $storage->get_body($uid);
-                    //$rcmail->output->command('display_message', 'BODY: '.strval($body) , 'confirmation');
-    		    //$this->setLocalStoreFromServer( $sess_user , "tmpl_body".$num , $body );
                                break;
 	   		      } 
                              $num++;
@@ -717,16 +703,12 @@ function stripDivById(string $html, string $id): string
             $userdata = "design_".$user."_".$key;
             $script = <<<EOL
             localStorage.setItem('$userdata', '$value');
-            console.log( "localstorage set" );
             EOL;    
             $rcmail->output->add_script($script, 'docready'); 
     }
-    
-    
 
     function savetodraft()
     {
-
           $draftname = rcube_utils::get_input_string('_dn', rcube_utils::INPUT_POST);
 	  $draftdata = rcube_utils::get_input_string('_message', rcube_utils::INPUT_POST);
 	  $rcmail = rcmail::get_instance();
@@ -752,7 +734,6 @@ function stripDivById(string $html, string $id): string
 	  $rcmail->output->command('display_message', 'Template Made', 'confirmation');
     }
 
-
     public function partpress()
     {
           $partname = rcube_utils::get_input_string('_pn', rcube_utils::INPUT_POST);
@@ -766,27 +747,6 @@ function stripDivById(string $html, string $id): string
 	  $saved = $storage->save_message('part', $mboxdata,'', null, ['FLAGGED'] );
 	  $rcmail->output->command('display_message', 'Part Made', 'confirmation');
     }
-
-
-//    public function expartpress()
-//    {
-//          $partname = rcube_utils::get_input_string('_pn', rcube_utils::INPUT_POST);
-//          $partdata = rcube_utils::get_input_string('_pp', rcube_utils::INPUT_POST);
-//
-//	  $rcmail = rcmail::get_instance();
-	  
-//	  //Send editor part to part mbox.
-//	  $storage = $rcmail->get_storage();
-//         //TODO FOR SOME REASON PART DATA IS NOT DECODED. 
-//	 $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".urldecode($partname)."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".urldecode($partdata); 
-//	  $saved = $storage->save_message('part', $mboxdata,'', null, ['FLAGGED'] );
-
-// Export the part item to device. 
-
-
-//	  $rcmail->output->command('display_message', 'Part Made', 'confirmation');
-//    }
-
 
 
     function action()
