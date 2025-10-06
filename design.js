@@ -127,6 +127,151 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //Start	after menu stuff here.
 
+
+//Takes URL from entry tag and gets rcdt file for https location.
+function ImportTmplURL() {
+    var URLt = document.querySelector("iframe").contentWindow.document.querySelector("#rcdtURL");	
+    const URLValue = URLt.value;
+    if( isValidExtUrl( URLValue ,"rcdt") ) {
+    Tfname = filenameFromURL( URLValue );
+    //Tdata = getFileFromURL(URLValue);
+    getFileFromURL(URLValue)
+    .then(Tdata => {
+    if (Tdata !== null) {
+
+    //Get title from header of template file.	    
+    fc = firstHTMLComment( Tdata );  
+    Tfc = gettmplTitle( fc );
+    console.log("Filename:"+Tfc );	    
+    if(Tfc == "false") {  Tfc = Tfname;  } 
+    console.log("URL to RCDT is:" + URLValue + " File Name:"+ Tfc + " FILE DATA is:" +Tdata );
+    //Next Step import filename and file data into template mail box.  	    
+    const encodedName = encodeURI( Tfc );
+    const encodedString = encodeURI( Tdata );
+    rcmail.http_post('tmplpress', { _tn: encodedName ,_tp: encodedString} , false );
+    } else {
+      console.log('Failed to retrieve text from file.');
+    }
+    });
+}
+}
+
+//Takes URL from entry tag and gets rcdp file for https location.
+function ImportPartURL() {
+    var URLp = document.querySelector("iframe").contentWindow.document.querySelector("#rcdpURL");	
+    const URLValue = URLp.value;
+    if( isValidExtUrl( URLValue ,"rcdp") ) {
+    Pfname = filenameFromURL( URLValue );
+    //Pdata = encodeURI( getFileFromURL(URLValue) );
+    getFileFromURL(URLValue)
+    .then(Pdata => {
+    if (Pdata !== null) {
+     
+      fc = firstHTMLComment( Pdata );
+      Pfc = gettmplTitle( fc );	     
+      console.log("Filename:"+Pfc );	    
+      if(Pfc == "false") {  Pfc = Pfname;  }
+      //console.log('Text from file:', Pdata);
+      console.log("URL to RCDP is:" + URLValue + " File Name:"+Pfc + " FILE DATA is:" +Pdata );
+      //Next Step import filename and file data into part mail box.  	    
+      localStorage.setItem("rcd_MakePart", encodeURI(Pdata) );	
+      partPressMake( Pfc );
+    } else {
+      console.log('Failed to retrieve text from file.');
+    }
+    });
+    }
+}
+
+
+
+function firstHTMLComment( tmplfile ) {
+
+   // The regular expression for an HTML comment
+   const regex = /<!--([\s\S]*?)-->/;
+   // Use String.prototype.match() to find the first comment
+   const match = tmplfile.match(regex);
+   if (match) {
+      //const fullComment = match[0];
+      const commentContent = match[1];
+      //const commentIndex = match.index;
+      
+      //console.log(`Full comment: ${fullComment}`);
+      console.log(`Content: ${commentContent.trim()}`);
+      return commentContent;
+    } else {
+      console.log("No HTML comments were found.");
+      return null;
+    }	
+
+}
+
+
+function filenameFromURL(url) {
+  try {
+    const urlObject = new URL(url);
+    const pathname = urlObject.pathname;
+    const lastSlashIndex = pathname.lastIndexOf('/');
+    if (lastSlashIndex !== -1) {
+      return pathname.substring(lastSlashIndex + 1);
+    }
+    return ''; // No filename found
+  } catch (error) {
+    console.error("Invalid URL:", error);
+    return '';
+  }
+}
+
+function isValidExtUrl(url , ext) {
+  try {
+    const parsedUrl = new URL(url);
+    const pathname = parsedUrl.pathname;
+    
+    // Get the part of the pathname after the last period.
+    const extension = pathname.split('.').pop();
+    
+    // Return true if the extension is 'rcdp' and the URL is well-formed.
+    return extension.toLowerCase() === ext;
+  } catch (error) {
+    // The URL constructor will throw an error for invalid URLs.
+    return false;
+  }
+}
+
+
+
+
+function gettmplTitle( str ) {
+
+const regex = /:([^:]*)/g;
+let matches = [];
+let match;
+
+while ((match = regex.exec(str)) !== null) {
+  matches.push(match[1]);
+}
+
+console.log("TITLE:"+matches[0]);
+if(matches[0] ){ return matches[0]; } else { return "false"; }
+}
+
+
+
+async function getFileFromURL(url) {
+  try {
+    const response = await fetch(url, { cache: "no-store" } );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const fileContent = await response.text(); // Or .json(), .blob(), .arrayBuffer() depending on the file type
+    return fileContent;
+  } catch (error) {
+    console.error("Error fetching file:", error);
+    return null; // Or handle the error as needed
+  }
+}
+
+
     function importCLItmpl( ) {
       var importf = document.createElement('input');
       importf.setAttribute('type' , "file");
@@ -240,18 +385,28 @@ document.addEventListener("DOMContentLoaded", function() {
                        }
 
    function tmplPresExport( tmplName ) {
-
              //console.log( "The Template Name Will Be "+tmplName );
-
              if(tmplName !== undefined ) {
+             let allElementsHtml = '';
+
              //Add file ext to end of name.
 	     tmplName = tmplName+".rcdt";	     
 	     var domdata = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");                     //console.log( domdata ); 
 	     domdata.forEach ( function (tdata){
              //console.log( tdata.outerHTML );
-             tmpldata = tdata.innerHTML;         
+             //tmpldata = tdata.innerHTML;         
              //console.log( tmpldata  );           
-             });	     
+             tmpldata = tdata.innerHTML;         
+
+	     //Make sure no dynamic attributes remain. 	     
+             tmpldata = tmpldata.replace(/\s+draggable=(["']).*?\1/g,  '');
+             tmpldata = tmpldata.replace(/\s+ondragend=(["']).*?\1/g,  '');
+             tmpldata = tmpldata.replace(/\s+ondragover=(["']).*?\1/g, '');
+             tmpldata = tmpldata.replace(/\s+ondragstart=(["']).*?\1/g,'');
+             tmpldata = rmDragPartClass( tmpldata );  
+
+	     console.log( "tmpldata:"+tmpldata );	     
+	     //Unwanted div class and attributes should be rmeoved for templates.	     
              const file = new Blob([tmpldata], { type: 'text/html' });
              const link = document.createElement('a');
 	     link.href = URL.createObjectURL(file);	     
@@ -261,9 +416,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	     link.click();
 	     document.body.removeChild(link);
 	     URL.revokeObjectURL(link.href);
-                       }
-                       }
-	
+                       });}  }	
 
     //need to have this not only pass the part name ,but the encoded part also. 	
     function partPressMake( partName ) {
@@ -284,6 +437,16 @@ document.addEventListener("DOMContentLoaded", function() {
 	     
              }
  
+//Remove drap-part from table tags to make them immutable when drag starts
+function rmDragPartClass(textString) {
+  const regex = /(<table[^>]*class="[^"]*)\bdrag-part\b([^"]*"[^>]*>)/g;
+  return textString.replace(regex, (match, p1, p2) => {
+    const rmClass = (p1 + p2).replace(/\s\s+/g, ' ').trim();
+    return rmClass;
+  });	
+}
+
+
 
 function exPartPressMake( partName ) {
 if(partName !== undefined ) {

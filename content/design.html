@@ -1414,7 +1414,13 @@ function MakePart( partSection  ) {
 	              // Find the closest parent table element
                      var closestDiv = selectedNode.closest('div');
                      divHtml = closestDiv.outerHTML;		       
-                     //console.log("MakePart:CLOSEST DIV TO SAVE AS PART " + divHtml); // Output full HTML of closest div
+                     //Remove Draggable attributes from part.
+                     divHtml = divHtml.replace(/\s+draggable=(["']).*?\1/g,  '');
+                     divHtml = divHtml.replace(/\s+ondragend=(["']).*?\1/g,  '');
+                     divhtml = divHtml.replace(/\s+ondragover=(["']).*?\1/g, '');
+                     divHtml = divHtml.replace(/\s+ondragstart=(["']).*?\1/g,'');
+                     divHtml = window.parent.rmDragPartClass( divHtml );
+                     console.log("MakePart:CLOSEST DIV TO SAVE AS PART " + divHtml); // Output full HTML of closest div
 	                                           }
              break;
 	     case "header":
@@ -1441,6 +1447,7 @@ function MakePart( partSection  ) {
 	     break;			       
 		                  } //End switch of partSection. 
 
+
             //encode part data
             const encodedString = encodeURI( divHtml );
 	    //Load part data into localstorage. Not best way will refactor later. 		       
@@ -1448,7 +1455,6 @@ function MakePart( partSection  ) {
 	    //Modal popup for part name to make.
             makePartName(); 
 	           }
-
 
 
 
@@ -1460,6 +1466,14 @@ function ExportPart( partSection  ) {
                                     case "content": 
                                     divHtml ="<div id=\"rcd_container\" ></div>"; 
                                     divHtml = divHtml.slice(0, 25) + GETpart() + divHtml.slice(25);
+                                    
+				    divHtml = divHtml.replace(/\s+draggable=(["']).*?\1/g,  '');
+                                    divHtml = divHtml.replace(/\s+ondragend=(["']).*?\1/g,  '');
+                                    divHtml = divHtml.replace(/\s+ondragover=(["']).*?\1/g, '');
+                                    divHtml = divHtml.replace(/\s+ondragstart=(["']).*?\1/g,'');
+                                    divHtml = window.parent.rmDragPartClass( divHtml );		
+
+
 				    //console.log("ExportPart:DIV TO SAVE AS PART " + divHtml); 
                                     break;
 

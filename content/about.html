@@ -46,7 +46,7 @@
 
     <div class="container">
 <fieldset>
-<h3>&nbsp;ABOUT DESIGN v0.9.2</h3>
+<h3>&nbsp;ABOUT DESIGN v0.9.3</h3>
 
 
 <b>Setup:</b></BR>
@@ -111,10 +111,11 @@ dropdown and be able to select them.</BR>
 <p>
 &nbsp;When making a template some rules need to be followed when making one from scratch or modifying a current one that the editor will recognizes and parse accordingly.  
 </p>
-<h5>DYNAMIC TEMPLATE SPECIFICATION VERSION 1.1</h5>
+<h5>DYNAMIC TEMPLATE SPECIFICATION VERSION 1.2</h5>
 <ul>
 
-	<li>The first line of a editable template is as follows  <b>&lt;!-- DYNAMIC V1.1 --&gt;</b> otherwise options will be disabled and concidered as a FIXED template. </li>	
+	<li>The first line of a editable template is as follows  <b>&lt;!-- DYNAMIC V1.2 TITLE:DOCUMENT NAME: --&gt;</b> otherwise options will be disabled and concidered as a FIXED template. </li>	
+	<li>The TITLE:DOCUMENT NAME: element from comment will be used to name Template or Part item. </li>
 	<li>The <b>div</b> tag can not be used for any content and is for control,it will only hold sections of html that can have content. Although can be made to have a border.</li>	
 	<li>The <b>table</b> tag is the main content element. Summernote editor popups for changing attrbutes and color are limited to this.</li>	
 	<li>The <b>img</b> tag can only be used from remote store locations like S3 or direct website links via URL.</li>	

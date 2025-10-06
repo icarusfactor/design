@@ -118,6 +118,18 @@
  - Changed all default template files extentions to rcdt
  - Changed all default part files extentions to rcdp
 
+### v0.9.3
+ - Added Settings import to template folder via URL for rcdt files. 
+ - Added Settings import to part folder via URL for part rcdp files. 
+ - Remove drag class info from template files. Confuses editor when loaded in this state. 
+ - Remove drag class info from part files. Will confuse editor when loaded in this state. 
+ - Created Github repo for template/part files to use URL import locations.
+      https://github.com/icarusfactor/designTmplPart Will have to use RAW file view as url.
+
+
+
+
+ 
 
 
 

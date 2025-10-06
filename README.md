@@ -1,6 +1,6 @@
-# Roundcube Design v0.9.2
+# Roundcube Design v0.9.3
 
-![RoundCube Design View ](/images/rcDesign091.png "In design mode.")
+![RoundCube Design View ](/images/rcDesign093.png "In design mode.")
 
 ### Install 
 
@@ -65,8 +65,8 @@ With the functionality to save templates and parts locally on a seprate device o
 ### Template Rules:
  When making a template some rules need to be followed when making one from scratch or modifying a current one that the editor will recognizes and parse accordingly.
 
-### DYNAMIC TEMPLATE SPECIFICATION VERSION 1.1
-*  The first line of a editable template is as follows **&lt;!-- DYNAMIC V1.1 --&gt;** otherwise options will be disabled and concidered as a FIXED template. 
+### DYNAMIC TEMPLATE SPECIFICATION VERSION 1.2
+*  The first line of a editable template is as follows **&lt;!-- DYNAMIC V1.2 TITLE:DOCUMENT NAME: --&gt;** otherwise options will be disabled and concidered as a FIXED template. 
 * The **div** tag can not be used for any content and is for control,it will only hold sections of html that can have content. Although can be made to have a border.
 * The **table** tag is the main content element. Summernote editor popups for changing attrbutes and color are limited to this. 
 * The **img** tag can only be used from remote store locations like S3 or direct website links via URL.
