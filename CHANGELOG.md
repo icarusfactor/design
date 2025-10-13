@@ -126,11 +126,9 @@
  - Created Github repo for template/part files to use URL import locations.
       https://github.com/icarusfactor/designTmplPart Will have to use RAW file view as url.
 
-
-
-
- 
-
-
-
+### v0.9.4
+ - Put any .rcdt file in plugin template directory and will be used as global default template install.
+ - Put any .rcdp file in the plugin part directory and will be used as global default part install.
+ - Pull name for part from TITLE IN HTMl COMMENT like TEMPLATE V1.2  
+ - Made mailview function/event to change part/template folder flag to boxed/puzzle icon instead of off putting red flag. 
 

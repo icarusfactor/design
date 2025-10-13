@@ -27,6 +27,7 @@ if (window.rcmail) {
 	var partcontentsubj = new Array(20).fill(""); 
 	var partfootersubj = new Array(20).fill(""); 
 
+
 document.addEventListener("DOMContentLoaded", function() { 	
 
 
@@ -531,30 +532,30 @@ if(partName !== undefined ) {
  	     rcmail.http_post('createpartbox', { _button: Bpress} , false );
 
      }  
-     function InsertPartMbox( type ) {
+     function InsertPartMbox() {
 	     //Will check templates folder before doing so.
 	     var Bpress = "";
 
-            switch( type ) {
-                  case "header":
-	                Bpress = "inpartheader";
- 	                rcmail.http_post('inpartheader', { _button: Bpress} , false );
-                        break;
+            //switch( type ) {
+            //      case "header":
+	    //            Bpress = "inpartheader";
+ 	    //            rcmail.http_post('inpartheader', { _button: Bpress} , false );
+            //            break;
 
-                  case "content":
+            //      case "content":
 	                Bpress = "inpartcontent";
  	                rcmail.http_post('inpartcontent', { _button: Bpress} , false );
-                        break;
+            //            break;
 
-                  case "footer":
-	                Bpress = "inpartfooter";
- 	                rcmail.http_post('inpartfooter', { _button: Bpress} , false );
-                        break;
-                   default: 
+            //      case "footer":
+	    //            Bpress = "inpartfooter";
+ 	    //            rcmail.http_post('inpartfooter', { _button: Bpress} , false );
+            //            break;
+            //       default: 
 	                //const Bpress = "inparts";
  	                //rcmail.http_post('inparts', { _button: Bpress} , false );
-			break;    
-                           }
+	//		break;    
+           //                }
      }  
 
      function clearIt( type ) {
@@ -702,13 +703,96 @@ function saveSession() {
             }
             else {
                 rcmail.redirect(url, false);
-            }
+           }
 
-            return false;
-        }
-    });
+           return false;
+       }
+   });
+
+
+
+        //From Init change part and template folder messages from the off putting red flag to boxed and active puzzle piece.
+	function setRCDfolders() {
+
+	       //Will usally be INBOX    
+               const rcmail = window.rcmail;
+	       const currentFolder = rcmail.env.mailbox; 
+	        console.log('The user is in the folder:', currentFolder); 
+
+
+        	console.log("Folder changed to: "+ currentFolder);
+                const styleTag = document.getElementById('rcd_style');
+
+		if (styleTag) {
+			  console.log('The style tag with id="rcd_style" exists.');
+			  //exist do nothing else here.
+			  } else {
+			  console.log('The style tag with id="rcd_style" does not exist.');
+		          var styleElement = document.createElement('style');
+		          styleElement.id = 'rcd_style';
+                          document.head.appendChild(styleElement);
+				 }
+
+       if( currentFolder == "template" || currentFolder == "part") { //Add mods if folders are part of rcd. 
+        styleElement.textContent = `
+      .messagelist span.flagged:before {
+	content: "🧩";
+      }
+      .messagelist span.unflagged:before {
+	content: "📦";
+      }
+    `;
+       } else { styleElement.textContent = "";  } //Clear out any modifications if not part of rcd.
+    };
+
+
+
+        //From folder change event for part and template folder messages from the offputting red flag to boxed and active puzzle piece.
+	rcmail.addEventListener('selectfolder', function(evt) {
+        	// The new folder name is in `evt.folder`
+        	var new_folder = evt.folder;
+        	// The previously selected folder name is in `evt.old`
+        	var old_folder = evt.old;
+
+        	console.log("Folder changed to: "+ new_folder);
+                const styleTag = document.getElementById('rcd_style');
+
+		if (styleTag) {
+			  console.log('The style tag with id="rcd_style" exists.');
+			  //exist do nothing else here.
+			  } else {
+			  console.log('The style tag with id="rcd_style" does not exist.');
+		          var styleElement = document.createElement('style');
+		          styleElement.id = 'rcd_style';
+                          document.head.appendChild(styleElement);
+				 }
+
+       if( new_folder == "template" || new_folder == "part") { //Add mods if folders are part of rcd. 
+        styleElement.textContent = `
+      .messagelist span.flagged:before {
+	content: "🧩";
+      }
+      .messagelist span.unflagged:before {
+	content: "📦";
+      }
+    `;
+       } else { styleElement.textContent = "";  } //Clear out any modifications if not part of rcd.
+    },{ passive: true });
+
+
+
+
+
 
     rcmail.addEventListener('init', function(prop) {
+
+	//Will usally be INBOX    
+        const rcmail = window.rcmail;
+	const currentFolder = rcmail.env.mailbox; 
+	console.log('The user is in the folder:', currentFolder); 
+
+	//Update folder info for RCD    
+        setRCDfolders();
 
         //Set client values for template button.
         activecount = getCookie("active_count") || 0;
@@ -753,7 +837,6 @@ function saveSession() {
 	 partcontentsubj.unshift(undefined);    
          partfootersubj = partfootersubj.filter(item => item !== '');
 	 partfootersubj.unshift(undefined);    
-
 
         if (rcmail.env.contentframe && rcmail.task == 'design') {
             $('#' + rcmail.env.contentframe).on('load error', function(e) {

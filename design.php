@@ -50,9 +50,9 @@ class design extends rcube_plugin
 	$this->register_action('intemplates', [$this, 'action']); 
 
 	//$this->register_action('inparts', [$this, 'action']); 
-	$this->register_action('inpartheader', [$this, 'action']); 
+	//$this->register_action('inpartheader', [$this, 'action']); 
 	$this->register_action('inpartcontent', [$this, 'action']); 
-	$this->register_action('inpartfooter', [$this, 'action']); 
+	//$this->register_action('inpartfooter', [$this, 'action']); 
 
 	$this->add_hook('startup', [$this, 'start_script']);
         $this->add_hook('startup', [$this, 'startup']);
@@ -212,40 +212,41 @@ class design extends rcube_plugin
 
     } 
 
+//Will read all rcdt files in plugin template directory and add them to the mailbox folder.  
+function intmpls() {
+	    $rcmail = rcmail::get_instance();
+            $directory = $this->home . '/template';
+            $rcdt_data = []; // An array to store the contents of each file
+            $files = glob($directory . '/*.rcdt');
+            $regexHTMLCOM = '/<!--(.*?)-->/s'; 
 
-    //Install predefined templates. You can add you own and flag them to be added , but will only recognize 10 at a time. 
-    function intemplates() {
-	  $template1 = file_get_contents( $this->home . '/template/basic_invoice.rcdt');
-	  $template2 = file_get_contents( $this->home . '/template/basic_newsletter.rcdt');
-	  $template3 = file_get_contents( $this->home . '/template/basic_template.rcdt');
-	  $template4 = file_get_contents( $this->home . '/template/blank_template.rcdt');
+            // Check if glob() returned files
+	    if ($files !== false) {
+	    $num =0;	    
+            foreach ($files as $filepath) {
+                    $filename = basename($filepath, '.rcdt');
+		    //$rcmail->output->command('display_message', 'FILE:'.$filename , 'confirmation');
 
-	  $rcmail = rcmail::get_instance();
-	  $storage = $rcmail->get_storage();
-	  if ($storage->folder_exists('template', true)) {
-		  $rcmail->output->command('display_message', 'TEMPLATE FOLDER EXIST', 'confirmation');
+                    if (is_readable($filepath)) {
+			    //$rcdt_data[$filename] = file_get_contents($filepath);
+			    $rcdt_data[$num] = file_get_contents($filepath);
 
-		  $mboxdata1 = "From: \r\n"."To: \r\n"."Subject: Invoice\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$template1; 
-		  // Save mesage as FLAGGED , the drop down will only read in 10 and has to be flagged. Subject is limited to 20 chars.
-		  $saved = $storage->save_message('template', $mboxdata1,'', null,['FLAGGED']  );
+			    //Need to read the HTML COMMENT for TITLE. 
+			    if (preg_match($regexHTMLCOM, $rcdt_data[$num] , $matches)) {
+			    $firstComment = $matches[1];
+			    $title = explode(':', $firstComment);
 
-		  $mboxdata2 = "From: \r\n"."To: \r\n"."Subject: NewsLetter\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$template2; 
-		  $saved = $storage->save_message('template', $mboxdata2,'', null,['FLAGGED']  );
-
-		  $mboxdata3 = "From: \r\n"."To: \r\n"."Subject: Basic Template \r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$template3; 
-		  $saved = $storage->save_message('template', $mboxdata3,'', null,['FLAGGED']  );
-
-		  $mboxdata4 = "From: \r\n"."To: \r\n"."Subject: Blank Template \r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$template4; 
-		  $saved = $storage->save_message('template', $mboxdata4,'', null,['FLAGGED']  );
-
-
-	  $rcmail->output->command('display_message', 'INSTALLED TEMPLATES', 'confirmation');
-	  }
-	  else {
-	  $rcmail->output->command('display_message', 'TEMPLATE FOLDER MISSING', 'confirmation');
-	  }
-
-    }
+		            $rcmail->output->command('display_message', 'FILE:'.$num." name:".$filename." TITLE:".$title[1]  , 'confirmation');
+			    ///} 
+	                    $storage = $rcmail->get_storage();
+	                   if ($storage->folder_exists('template', true)) {
+			     
+		           $mboxdata = "From: \r\n"."To: \r\n"."Subject:".$title[1]." \r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$rcdt_data[$num]; 
+			   $saved = $storage->save_message('template', $mboxdata,'', null,['FLAGGED']  );
+		            } } }
+		    $num++;
+		    } }
+                    }
 
  //Plans for future to have more containers to hold multiple parts. When used need to remove it/them though.  
  //For now just one item per mail until I get the bugs worked out.
@@ -295,104 +296,48 @@ function stripDivById(string $html, string $id): string
 }
 
 
-    //Parts has a rcd_container Will need this to accept the part. Wont Read in rcd_container. 
-    //Need to convert to array and loop
-    function inparts( string $type ) {
-	    $part = [];
-	    $partname = []; 
+
+ function inpart() {
+
+	    $rcmail = rcmail::get_instance();
+            $directory = $this->home . '/part';
+	    $rcdp_data = []; // An array to store the contents of each file
+	    $filename = [];
+	    $part_data = []; //To handle pass to fixed array until I get group loading working.
+	    $files = glob($directory . '/*.rcdp');
+
+            // Check if glob() returned files
+	    if ($files !== false) {
+	    $num =0;	    
+            foreach ($files as $filepath) {
+                    $filename[1] = basename($filepath, '.rcdp');
+		    $rcmail->output->command('display_message', 'FILE:'.$filename , 'confirmation');
+
+                    if (is_readable($filepath )) {
+			   //$rcdt_data[$filename] = file_get_contents($filepath);
+			   $rcdp_data[$num] = file_get_contents($filepath);
+			   //$rcmail->output->command('display_message', 'FILE:'.$num." name:".$filename , 'confirmation');
 
 
-	    //Header
-            if( $type == "header" ){ 
-	    $part[1] = file_get_contents( $this->home . '/part/basic_header1.rcdp');
-	    $partname[1] = "Header 1";
+			   //Only one part per file currently. Hack to make this work for now.
+                           $part_data[1] = $rcdp_data[$num]; 
 
-	    $part[2] = file_get_contents( $this->home . '/part/basic_header2.rcdp');
-	    $partname[2] = "Header 2";
+	                   $storage = $rcmail->get_storage();
+			   if ($storage->folder_exists('part', true)) {
 
-	    $part[3] = file_get_contents( $this->home . '/part/basic_header3.rcdp');
-	    $partname[3] = "Header 3";
+            		   $this->installParts($part_data,$filename,1);  //This will be locked to 1 until I get group loads working.
+                         
+			                                              }
+                                                }
 
-	    $part[4] = file_get_contents( $this->home . '/part/basic_header4.rcdp');
-	    $partname[4] = "Header 4";
-
-	    $part[5] = file_get_contents( $this->home . '/part/basic_header5.rcdp');
-	    $partname[5] = "Header 5";
-
-	    $part[6] = file_get_contents( $this->home . '/part/basic_header6.rcdp');
-	    $partname[6] = "Header 6";
-
-            $this->installParts($part,$partname,6); 
-	        }
-            //Footer
-            if( $type == "footer" ){ 
-	    $part[1] = file_get_contents( $this->home . '/part/basic_footer1.rcdp');
-	    $partname[1] = "Footer 1";
-	    
-	    $part[2] = file_get_contents( $this->home . '/part/basic_footer2.rcdp');
-	    $partname[2] = "Footer 2";
-
-	    $part[3] = file_get_contents( $this->home . '/part/basic_footer3.rcdp');
-	    $partname[3] = "Footer 3";
-
-	    $part[4] = file_get_contents( $this->home . '/part/basic_footer4.rcdp');
-	    $partname[4] = "Footer 4";
-
-	    $part[5] = file_get_contents( $this->home . '/part/basic_footer5.rcdp');
-	    $partname[5] = "Footer 5";
-
-	    $part[6] = file_get_contents( $this->home . '/part/basic_footer6.rcdp');
-	    $partname[6] = "Footer 6";
-
-            $this->installParts($part,$partname,6); 
 	    }
+	    $num++;
+	    }}
 
-            //Content
-            if( $type == "content" ){ 
-	    $part[1] = file_get_contents( $this->home . '/part/basic_card1.rcdp');
-	    $partname[1] = "Card 1";
-	    $part[2] = file_get_contents( $this->home . '/part/basic_card2.rcdp');
-	    $partname[2] = "Card 2";
-	    $part[3] = file_get_contents( $this->home . '/part/basic_card3.rcdp');
-	    $partname[3] = "Card 3";
-	    $part[4] = file_get_contents( $this->home . '/part/basic_image.rcdp');
-            $partname[4] = "Image 1";  
-	    $part[5] = file_get_contents( $this->home . '/part/basic_paragraph.rcdp');
-	    $partname[5] = "Paragraph 1";
-	    $part[6] = file_get_contents( $this->home . '/part/basic_actionbox.rcdp');
-	    $partname[6] = "Actionbox 1";
-	    $part[7] = file_get_contents( $this->home . '/part/basic_social.rcdp');
-	    $partname[7] = "Social 1";
-	    $part[8] = file_get_contents( $this->home . '/part/basic_2colBar.rcdp');
-	    $partname[8] = "Itemized Section";
-	    $part[9] = file_get_contents( $this->home . '/part/basic_2colBline.rcdp');
-	    $partname[9] = "Itemized Detail 1";
-	    $part[10] = file_get_contents( $this->home . '/part/basic_2col1line.rcdp');
-	    $partname[10] = "Itemized Detail 2";
-	    $part[11] = file_get_contents( $this->home . '/part/basic_spacer.rcdp');
-	    $partname[11] = "Single Line Spacer";
-	    $part[12] = file_get_contents( $this->home . '/part/basic_2col4lineLImg.rcdp');
-	    $partname[12] = "2C 4L With L IMG";
-	    $part[13] = file_get_contents( $this->home . '/part/basic_2col4lineRImg.rcdp');
-	    $partname[13] = "2C 4L With R IMG";
-	    $part[14] = file_get_contents( $this->home . '/part/basic_2colLBlank.rcdp');
-	    $partname[14] = "2C With L Blank";
-	    $part[15] = file_get_contents( $this->home . '/part/basic_2colRBlank.rcdp');
-	    $partname[15] = "2C With R Blank";
-	    $part[16] = file_get_contents( $this->home . '/part/basic_2col4line.rcdp');
-	    $partname[16] = "2C 4 Lines";
-	    $part[17] = file_get_contents( $this->home . '/part/basic_3Ctitle.rcdp');
-	    $partname[17] = "3C Title";
-	    $part[18] = file_get_contents( $this->home . '/part/dayplannerL.rcdp');
-	    $partname[18] = "Day Plan L";
-	    $part[19] = file_get_contents( $this->home . '/part/dayplannerR.rcdp');
-	    $partname[19] = "Day Plan R";
-            $this->installParts($part,$partname,19); 
-	    }
-                       }
 
     function installParts( $part = [], $partname = [], $maxval ) {
 
+	            $replaceName = []; 
 	            $rcmail = rcmail::get_instance();
 	            $storage = $rcmail->get_storage();
 	            if ($storage->folder_exists('part', true)) {
@@ -401,19 +346,23 @@ function stripDivById(string $html, string $id): string
                      for ($num = 1; $num <= $maxval; $num++) {
 
                           // function to strip rcd_container here. If it does not exist skip. 
-                          // Getting Ready for future plans to have multiple part items in one email. 
-                       $partHTML = $this->stripDivById( $part[$num], "rcd_container");
-                       //$partHTML = $part[$num];         
-                       if($partHTML != "none" ) {
+			  // Getting Ready for future plans to have multiple part items in one email. 
+			  // Want to pull the versioin 1.2 TITLE fro mthe HTML COMMENT TO GET PART NAME
+			  // If TITLE:: DOES NOT EXIST KEEP FILENAME
+			     $replaceName[1] = $this->getFirstHTMLComment( $part[ $num ] );
+			     if($replaceName) { $partname[$num] =  $replaceName[1]; }
 
+			  $partHTML = $this->stripDivById( $part[$num], "rcd_container");
+
+                       if($partHTML != "none" ) {
                        $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".$partname[$num]."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$partHTML;
                        $saved = $storage->save_message("part", $mboxdata,'', null,["FLAGGED"]  );
-                       //$rcmail->output->command('display_message', 'PART'.str($num), 'confirmation');
+                       //$rcmail->output->command('display_message', 'PART'.str($num)." HTML:".$partHTML , 'confirmation');
 		       } else {
-                       $rcmail->output->command('display_message', 'PART '.$num.' MISSING CONTAINER.' , 'confirmation');
+                      $rcmail->output->command('display_message', 'PART '.$num.' MISSING CONTAINER.' , 'confirmation');
 		       }
-                       //$rcmail->output->command('display_message', 'PART PROCESS', 'confirmation');
-                                                   }
+                      $rcmail->output->command('display_message', 'PART PROCESS'.$partHTML , 'confirmation');
+                                                  }
     
 		  $rcmail->output->command('display_message', 'INSTALLED PARTS', 'confirmation');
 
@@ -422,6 +371,29 @@ function stripDivById(string $html, string $id): string
 	          $rcmail->output->command('display_message', 'PART FOLDER MISSING', 'confirmation');
 	          }
                   }
+
+
+            //Still misses if it finds an open colin ,but missing close colon.
+	    function getFirstHTMLComment( $partfile) {
+
+	            $rcmail = rcmail::get_instance();
+		    //$pattern = '/<!--(.*?)-->/sU'; 
+		    $pattern = '/<!--(.*?)-->/s';
+		    if (preg_match($pattern, $partfile, $matches)) {
+                     // $matches[0] will contain the full matched comment (e.g., "<!-- This is a comment -->")
+                     // $matches[1] will contain the content of the comment (e.g., " This is a comment ")
+			    $firstComment = $matches[1];
+			    $pattern2 = '/(?<=:)[^:]+(?=:)/'; 
+			    if (preg_match($pattern2, $firstComment, $matched)) {
+                                    $titleIs = $matched[0];
+				    //$rcmail->output->command('display_message', 'First Comment: '.$titleIs , 'confirmation');
+                                    return $titleIs;
+			    }
+		    } else {
+			    //$rcmail->output->command('display_message', 'First Comment:NOT FOUND '.$partfile , 'confirmation');
+			    return false;
+                    }
+	    }
 
 
     // Need to load all of the body items (up to 10) in local storage. Other subject lines in cookkies for now.
@@ -794,24 +766,29 @@ function stripDivById(string $html, string $id): string
 	}
         else if ($rcmail->action == 'intemplates') {
 		$rcmail->output->set_pagetitle($this->gettext('design'));
-		$this->intemplates();
+		//$this->intemplates();
+		$this->intmpls();
 	}  
 	else if ($rcmail->action == 'createpartbox') {
 		$rcmail->output->set_pagetitle($this->gettext('design'));
                 $this->createpartbox();
 	} 
-        else if ($rcmail->action == 'inpartheader') {
-		$rcmail->output->set_pagetitle($this->gettext('design'));
-		$this->inparts("header");
-	}
+//        else if ($rcmail->action == 'inpartheader') {
+//		$rcmail->output->set_pagetitle($this->gettext('design'));
+//		//$this->inparts("header");
+//		$this->inpart();
+//	}
         else if ($rcmail->action == 'inpartcontent') {
 		$rcmail->output->set_pagetitle($this->gettext('design'));
-		$this->inparts("content");
+		//$this->inparts("content");
+		$this->inpart();
+
 	}
-        else if ($rcmail->action == 'inpartfooter') {
-		$rcmail->output->set_pagetitle($this->gettext('design'));
-		$this->inparts("footer");
-	}
+        //else if ($rcmail->action == 'inpartfooter') {
+//		$rcmail->output->set_pagetitle($this->gettext('design'));
+//		//$this->inparts("footer");
+//		$this->inpart();
+//	}
 
 
         else {

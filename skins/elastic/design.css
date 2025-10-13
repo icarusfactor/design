@@ -28,3 +28,10 @@ visibility: hidden;
 
   }
 
+.flagged-blue tr.message.flagged td.flags span.flag span,flagged:before {
+color:blue;
+}
+
+.flagged-green tr.message.flagged td.flags span.flag span,flagged:before {
+color:blue;
+}
