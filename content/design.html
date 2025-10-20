@@ -1128,15 +1128,19 @@ function documentDraggable() {
 
 // Function to detect if document in editor window is FIXED or DYNAMIC and return this value.
 function documentType() {
+
+  //$('#summernote').trigger('summernote.change');   
+
+//Get active code.
   var fullContent = $("#summernote").summernote("code");              
   const firstComment = fullContent.match(/<\!\-\-(.*?)\-\->/);
   var docTButton = $('.note-btn[data-original-title="FIXED"]');		     
  if (firstComment === undefined || firstComment === null) { 
-   //console.log("DYNAMIC TEMPLATE NOT FOUND" );
+   console.log("DYNAMIC TEMPLATE NOT FOUND" );
    return "FIXED";		
  } else {
  var comment = firstComment.toString(firstComment);
- //console.log("1ST COMMENT IS: "+comment );
+console.log("1ST COMMENT IS: "+comment );
  var found = comment.indexOf(" DYNAMIC ");
     if(found == -1) {  return "FIXED";               
                     }  else {   
@@ -1260,7 +1264,6 @@ function isValidUrl(url_string) {
              $("#makePart").modal("show");
 	     }
 
-// FUTURE SPOT exportPartName
 	    
  function exportPartName() {
              $("#exportPart").modal("show");
@@ -1462,11 +1465,18 @@ function ExportPart( partSection  ) {
             rightClickMenuHide();	    
                     //Get Closest Div of part section. Content / Header / Footer
 	            var divHtml ="";
+		    //This put in place a default name that will be replaced if name given. 
+                    var addTITLEbegin = "<!-- TITLE:DEFAULT: Begin -->";   
+                    var addTITLEend   = "<!-- Part End -->";   
+
+
 		    switch( partSection ) {
                                     case "content": 
                                     divHtml ="<div id=\"rcd_container\" ></div>"; 
-                                    divHtml = divHtml.slice(0, 25) + GETpart() + divHtml.slice(25);
-                                    
+
+                                    //divHtml = divHtml.slice(0, 25) + GETpart() + divHtml.slice(25);
+                                    divHtml = divHtml.slice(0, 25) + addTITLEbegin + "\n" + GETpart() + addTITLEend + "\n" + divHtml.slice(25);
+				    //Remove dynamicly added attributes.		
 				    divHtml = divHtml.replace(/\s+draggable=(["']).*?\1/g,  '');
                                     divHtml = divHtml.replace(/\s+ondragend=(["']).*?\1/g,  '');
                                     divHtml = divHtml.replace(/\s+ondragover=(["']).*?\1/g, '');
@@ -1479,17 +1489,19 @@ function ExportPart( partSection  ) {
 
                                     case "header":
                                     //Will need to create a blank part container. 
-                                    divHtml ="<div id=\"rcd_container\" ></div>";                                                                                               //Get full content and grab only rcd_header div.
+                                    divHtml ="<div id=\"rcd_container\" ></div>"; 
+				    //Get full content and grab only rcd_header div.
                                     var summernoteContent = $('#summernote').summernote('code');
                                     var headerContent = document.getElementById('rcd_header').outerHTML; 
-                                    divHtml = divHtml.slice(0, 25) + headerContent + divHtml.slice(25);                                                                         //console.log("ExportPart:HEADER:"+divHtml);
+                                    divHtml = divHtml.slice(0, 25) + addTITLEbegin + "\n" + headerContent + "\n" + addTITLEend + "\n" + divHtml.slice(25);
+				    //console.log("ExportPart:HEADER:"+divHtml);
                                     break;
 				    case "footer":
                                     //Will need to create a blank part container. 
             			    divHtml ="<div id=\"rcd_container\" ></div>";                                                                                               //Get full content and grab only rcd_header div.
                                     var summernoteContent = $('#summernote').summernote('code');
                                     var footerContent = document.getElementById('rcd_footer').outerHTML; 
-                                    divHtml = divHtml.slice(0, 25) + footerContent + divHtml.slice(25);                                                                         //console.log("ExportPart:FOOTER:"+divHtml);
+                                    divHtml = divHtml.slice(0, 25) + addTITLEbegin + "\n" + footerContent + "\n" + addTITLEend + "\n" + divHtml.slice(25);
 				    break;
 				    default:
 				    break;	
@@ -1801,7 +1813,6 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
                                                                 }); 
 							       break;
 							  }
-
 					  });
 
 	               $(".note-editable").on('click', function(e) {

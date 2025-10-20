@@ -132,3 +132,9 @@
  - Pull name for part from TITLE IN HTMl COMMENT like TEMPLATE V1.2  
  - Made mailview function/event to change part/template folder flag to boxed/puzzle icon instead of off putting red flag. 
 
+### v0.9.5
+ - Global part installer will load multipart data from the .rcdp files. 
+ - URL load multiple parts from one .rcdp file inside individual rcd_contianer tags.
+ - Right-Click Export part needs to attach name for file accoring of Version1.2
+ - Fixed Toggle Zoom when the FIXED/DYNAMIC status was incorrect. 
+

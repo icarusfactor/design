@@ -248,6 +248,36 @@ function intmpls() {
 		    } }
                     }
 
+
+function splitDivsById($html, $id) 
+{
+	
+   $rcmail = rcmail::get_instance();
+   $dom = new DOMDocument();
+   libxml_use_internal_errors(true);
+   $dom->loadHTML($html);
+   libxml_clear_errors();
+
+   $matchingDivs = [];
+   $divs = $dom->getElementsByTagName('div');
+
+   foreach ($divs as $div) {
+    if ($div->hasAttribute('id') && $div->getAttribute('id') === 'rcd_container') {
+        // Use $div->ownerDocument->saveHTML() to preserve the surrounding tags.
+        // Or use $div->textContent to get only the text content.
+        $matchingDivs[] = $dom->saveHTML($div);
+       }
+       }
+
+   //foreach ($matchingDivs as $index => $divContent) {
+   // $rcmail->output->command('display_message', 'FILE:'.$index." content:".$divCcontent , 'confirmation');
+   //} 
+ 
+
+  return $matchingDivs;
+  }
+
+
  //Plans for future to have more containers to hold multiple parts. When used need to remove it/them though.  
  //For now just one item per mail until I get the bugs worked out.
 function stripDivById(string $html, string $id): string
@@ -336,42 +366,62 @@ function stripDivById(string $html, string $id): string
 
 
     function installParts( $part = [], $partname = [], $maxval ) {
-
 	            $replaceName = []; 
 	            $rcmail = rcmail::get_instance();
 	            $storage = $rcmail->get_storage();
 	            if ($storage->folder_exists('part', true)) {
 	            $rcmail->output->command('display_message', 'PART FOLDER EXIST', 'confirmation');
-
                      for ($num = 1; $num <= $maxval; $num++) {
-
                           // function to strip rcd_container here. If it does not exist skip. 
-			  // Getting Ready for future plans to have multiple part items in one email. 
 			  // Want to pull the versioin 1.2 TITLE fro mthe HTML COMMENT TO GET PART NAME
 			  // If TITLE:: DOES NOT EXIST KEEP FILENAME
 			     $replaceName[1] = $this->getFirstHTMLComment( $part[ $num ] );
 			     if($replaceName) { $partname[$num] =  $replaceName[1]; }
+			     //Find how many rcd_containers exist in partname[num] ,if more than one will be multipart load.
+			     $numcontain = $this->containerCount( $part[$num] );
+			     switch ($numcontain) {
+			        case 0:
+                                      $rcmail->output->command('display_message', 'PART '.$num.' MISSING CONTAINER.' , 'confirmation');
+				      break; 
+				case 1:
+				      //Individual part load.
+		                      $partHTML = $this->stripDivById( $part[$num], "rcd_container");
+                                      $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".$partname[$num]."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$partHTML;
+				      $saved = $storage->save_message("part", $mboxdata,'', null,["FLAGGED"]  );
+                                      //$rcmail->output->command('display_message', 'PART PROCESSED'.$partHTML , 'confirmation');
+				      break;	
+				default:
+				      //Multipart load
+				      $partsToInstall = $this->splitDivsById( $part[$num] , "rcd_container");
+				      //Individual load 		
+				      foreach ($partsToInstall as $index => $divContent) {
+					      //$rcmail->output->command('display_message', 'MULTIFILE:'.$index." content:".$divContent , 'confirmation');
+					   //GET PART TITLE NAME
+			                   $replaceName[1] = $this->getFirstHTMLComment( $divContent );
+					   if($replaceName) { $partname[$num] =  $replaceName[1]; }
 
-			  $partHTML = $this->stripDivById( $part[$num], "rcd_container");
-
-                       if($partHTML != "none" ) {
-                       $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".$partname[$num]."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$partHTML;
-                       $saved = $storage->save_message("part", $mboxdata,'', null,["FLAGGED"]  );
-                       //$rcmail->output->command('display_message', 'PART'.str($num)." HTML:".$partHTML , 'confirmation');
-		       } else {
-                      $rcmail->output->command('display_message', 'PART '.$num.' MISSING CONTAINER.' , 'confirmation');
-		       }
-                      $rcmail->output->command('display_message', 'PART PROCESS'.$partHTML , 'confirmation');
-                                                  }
-    
-		  $rcmail->output->command('display_message', 'INSTALLED PARTS', 'confirmation');
-
+		                           $partHTML = $this->stripDivById( $divContent, "rcd_container");
+                                           $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".$partname[$num]."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$partHTML;
+				           $saved = $storage->save_message("part", $mboxdata,'', null,["FLAGGED"]  );
+				                                                           } 
+                                      //$rcmail->output->command('display_message', 'PART '.$num.' MULTIPART CONTAINER.' , 'confirmation');
+			              break;	      
+			                        }
+		                                           }
+		  $rcmail->output->command('display_message', 'INSTALLED PARTS '.$numcontain , 'confirmation');
 	          }
 	          else {
 	          $rcmail->output->command('display_message', 'PART FOLDER MISSING', 'confirmation');
 	          }
                   }
 
+
+	    //Get rcd_container count and return value.
+	    function containerCount( $partfile ) {
+                  $pattern = '/<div[^>]*id=["\']rcd_container["\'][^>]*>/i';
+		  $count = preg_match_all($pattern, $partfile, $matches);
+	    return $count;
+	    }
 
             //Still misses if it finds an open colin ,but missing close colon.
 	    function getFirstHTMLComment( $partfile) {

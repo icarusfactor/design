@@ -1,6 +1,6 @@
-# Roundcube Design v0.9.4
+# Roundcube Design v0.9.5
 
-![RoundCube Design View ](/images/RCDesign094.png "In mailview.")
+![RoundCube Design View ](/images/rcDesign095.png "In Setting")
 
 ### Install 
 
@@ -78,7 +78,7 @@ With the functionality to save templates and parts locally on a seprate device o
 * **rcd_content** : The div that holds other general divs.
 * **rcd_div** : General use section within the main content holder.
 * **rcd_footer** : Attached to bottom of content div for various contact & site links.
-* **rcd_container** : Only for part items, will be for packs, not used for that yet. 
+* **rcd_container** : Only for part items, used to split packs into its parts. 
 
 ### File extentions used.
 * **filename.rcdt** : File extention used for fixed or dynamic templates.

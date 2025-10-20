@@ -143,9 +143,9 @@ function ImportTmplURL() {
     //Get title from header of template file.	    
     fc = firstHTMLComment( Tdata );  
     Tfc = gettmplTitle( fc );
-    console.log("Filename:"+Tfc );	    
+    //console.log("Filename:"+Tfc );	    
     if(Tfc == "false") {  Tfc = Tfname;  } 
-    console.log("URL to RCDT is:" + URLValue + " File Name:"+ Tfc + " FILE DATA is:" +Tdata );
+    //console.log("URL to RCDT is:" + URLValue + " File Name:"+ Tfc + " FILE DATA is:" +Tdata );
     //Next Step import filename and file data into template mail box.  	    
     const encodedName = encodeURI( Tfc );
     const encodedString = encodeURI( Tdata );
@@ -167,22 +167,69 @@ function ImportPartURL() {
     getFileFromURL(URLValue)
     .then(Pdata => {
     if (Pdata !== null) {
-     
+   
+      //Need to have multiparse data here to interate the below section to install contained parts via URL. 
+      Psplit =  splitDivsByIdContainer(Pdata);         
+      const PartCount = Psplit.length -1; //gets trash on first count so skipping it.
+    //Switch based on part count single or multi part. 
+    //console.log("Part Count:"+ PartCount )	    
+    //console.log("Part:"+ Psplit )	    
+    switch (PartCount) {
+     case 0:
+     //Means nothing found need to break out. 		    
+     console.log('Failed to retrieve any part from file.');
+     break;
+     case 1:
+      //Individual install.	     
+      //console.log("Individual part install");
       fc = firstHTMLComment( Pdata );
       Pfc = gettmplTitle( fc );	     
-      console.log("Filename:"+Pfc );	    
+      //console.log("Filename:"+Pfc );	    
       if(Pfc == "false") {  Pfc = Pfname;  }
       //console.log('Text from file:', Pdata);
-      console.log("URL to RCDP is:" + URLValue + " File Name:"+Pfc + " FILE DATA is:" +Pdata );
+      //console.log("URL to RCDP is:" + URLValue + " File Name:"+Pfc + " FILE DATA is:" +Pdata );
       //Next Step import filename and file data into part mail box.  	    
       localStorage.setItem("rcd_MakePart", encodeURI(Pdata) );	
       partPressMake( Pfc );
+     break;
+     default: 
+      //console.log("Pack part install");
+      Psplit.slice(1).forEach(function(Sdata) {	   //First array item skipped ,its empty trash. 
+      //Individual install.	     
+      fc = firstHTMLComment( Sdata );
+      Pfc = gettmplTitle( fc );	     
+      //console.log("Filename:"+Pfc );	    
+      if(Pfc == "false") {  Pfc = Pfname;  }
+      //console.log('Text from file:', Pdata);
+      //console.log("URL to RCDP is:" + URLValue + " File Name:"+Pfc + " FILE DATA is:" +Sdata );
+      //Next Step import filename and file data into part mail box.  	    
+      localStorage.setItem("rcd_MakePart", encodeURI(Sdata) );	
+      partPressMake( Pfc );
+     					 });
+      break;
+                       }
+
     } else {
       console.log('Failed to retrieve text from file.');
     }
     });
     }
 }
+
+
+
+//hard coded id of rcd_container. 
+function splitDivsByIdContainer(htmlString ) {
+  // The regular expression matches the opening and closing div tags
+  // with id="rcd container", including any potential attributes or whitespace.
+  // The parentheses around the div tag ensure that the delimiter itself
+  // is included in the resulting array as separate elements.
+  //  const regex = /(<div\s+id=["']rcd container["'][^>]*>.*?<\/div>)/is;
+  const regex = /<div(?:.*?)id="rcd_container"(?:.*?)>/gi;
+
+  return htmlString.split(regex);
+}
+
 
 
 
@@ -198,7 +245,7 @@ function firstHTMLComment( tmplfile ) {
       //const commentIndex = match.index;
       
       //console.log(`Full comment: ${fullComment}`);
-      console.log(`Content: ${commentContent.trim()}`);
+      //console.log(`Content: ${commentContent.trim()}`);
       return commentContent;
     } else {
       console.log("No HTML comments were found.");
@@ -252,7 +299,7 @@ while ((match = regex.exec(str)) !== null) {
   matches.push(match[1]);
 }
 
-console.log("TITLE:"+matches[0]);
+//console.log("TITLE:"+matches[0]);
 if(matches[0] ){ return matches[0]; } else { return "false"; }
 }
 
@@ -406,7 +453,7 @@ async function getFileFromURL(url) {
              tmpldata = tmpldata.replace(/\s+ondragstart=(["']).*?\1/g,'');
              tmpldata = rmDragPartClass( tmpldata );  
 
-	     console.log( "tmpldata:"+tmpldata );	     
+	     //console.log( "tmpldata:"+tmpldata );	     
 	     //Unwanted div class and attributes should be rmeoved for templates.	     
              const file = new Blob([tmpldata], { type: 'text/html' });
              const link = document.createElement('a');
@@ -453,11 +500,15 @@ function exPartPressMake( partName ) {
 if(partName !== undefined ) {
 
      let partHTML = decodeURI( localStorage.getItem('rcd_ExportPart')); 
+
+     //Replace DEFAULT TITLE with partName here. First HTML COMMENT
+     const partHTMLnamed = partHTML.replace(/<!--(?:.|\n)*?-->/, `<!-- TITLE:${partName}: Begin -->`);
+
      //clear value.So we dont get parts mixed up.
      localStorage.setItem("rcd_ExportPart","" );
      //now things should be in sync.                 
      partName = partName+".rcdp";
-     const file = new Blob([partHTML], { type: 'text/html' });
+     const file = new Blob([partHTMLnamed], { type: 'text/html' });
      const link = document.createElement('a');
      link.href = URL.createObjectURL(file);
      //May or May not need decode            
@@ -602,7 +653,7 @@ if(partName !== undefined ) {
 	     document.querySelector("iframe").contentWindow.highlightDIV(); //check and enable highlighting.
      }
 
-	//IMPORT SPECIFIC IMPORT PARTS FROM MENU
+	//IMPORT SPECIFIC PARTS FROM MENU. THIS DIRECTLY PLACES PART IN EDITOR NOT MAILBOX FOR NOW. SO ONLY INDIVIDUAL PARTS CURRENTLY.
         function importPart( num , type ) {
              //console.log( "IMPORT "+type+" NUM: "+num );
              sess_user = getCookie("sess_user") || "";
@@ -661,6 +712,8 @@ function restoreZoom() {
 	     txtNote.forEach ( function (comment){
 	     comment.innerHTML = tmplBody;     
 	     });
+	     //If was a dynamic document it would get lost on reset.Check again. 
+	     document.querySelector("iframe").contentWindow.documentTypeNotice();
    }
 
 // Restore last Session Save. Button top menu Session Save / Session Load
@@ -717,10 +770,10 @@ function saveSession() {
 	       //Will usally be INBOX    
                const rcmail = window.rcmail;
 	       const currentFolder = rcmail.env.mailbox; 
-	        console.log('The user is in the folder:', currentFolder); 
+	       // console.log('The user is in the folder:', currentFolder); 
 
 
-        	console.log("Folder changed to: "+ currentFolder);
+        	//console.log("Folder changed to: "+ currentFolder);
                 const styleTag = document.getElementById('rcd_style');
 
 		if (styleTag) {
@@ -754,7 +807,7 @@ function saveSession() {
         	// The previously selected folder name is in `evt.old`
         	var old_folder = evt.old;
 
-        	console.log("Folder changed to: "+ new_folder);
+        	//console.log("Folder changed to: "+ new_folder);
                 const styleTag = document.getElementById('rcd_style');
 
 		if (styleTag) {
@@ -789,7 +842,7 @@ function saveSession() {
 	//Will usally be INBOX    
         const rcmail = window.rcmail;
 	const currentFolder = rcmail.env.mailbox; 
-	console.log('The user is in the folder:', currentFolder); 
+        //	console.log('The user is in the folder:', currentFolder); 
 
 	//Update folder info for RCD    
         setRCDfolders();
