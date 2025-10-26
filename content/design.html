@@ -1110,6 +1110,8 @@ function generateLoremText (count, type, html) {
     <script>
 
 function documentDraggable() {
+
+  $('#summernote').trigger('summernote.change');  
   var fullContent = $("#summernote").summernote("code");              
   const regex = /draggable\s*=\s*['"]true['"]/;
   var isDraggable = regex.test(fullContent); 
@@ -1127,6 +1129,7 @@ function documentDraggable() {
 
 
 // Function to detect if document in editor window is FIXED or DYNAMIC and return this value.
+// Will also handle exception of blank document without any rcd_div parts to let import work.
 function documentType() {
 
   //$('#summernote').trigger('summernote.change');   
@@ -1134,6 +1137,11 @@ function documentType() {
 //Get active code.
   var fullContent = $("#summernote").summernote("code");              
   const firstComment = fullContent.match(/<\!\-\-(.*?)\-\->/);
+  //Test for exception		    
+  const partPattern = /<div(?:.*?)id=["']rcd_div["'](?:.*?)>/i;
+  const partExist = partPattern.test(fullContent);
+
+
   var docTButton = $('.note-btn[data-original-title="FIXED"]');		     
  if (firstComment === undefined || firstComment === null) { 
    console.log("DYNAMIC TEMPLATE NOT FOUND" );
@@ -1143,6 +1151,8 @@ function documentType() {
 console.log("1ST COMMENT IS: "+comment );
  var found = comment.indexOf(" DYNAMIC ");
     if(found == -1) {  return "FIXED";               
+		}  else if (!partExist ) {	
+                       return "DYNAMIC_NOCONTENT";
                     }  else {   
                        //console.log("IS DYNAMIC: "+found );
                        return "DYNAMIC" ;
@@ -1168,6 +1178,12 @@ function documentTypeNotice()  {
 			  //console.log("CHANGE BUTTON TO DYNAMIC");	     
 		          return "DYNAMIC";		  
 			  break;	     
+                case "DYNAMIC_NOCONTENT":
+		          docTButton.html("DYNAMIC");
+			  //console.log("CHANGE BUTTON TO DYNAMIC");	     
+		          return "DYNAMIC_NOCONTENT";		  
+			  break;	     
+
                 default:
 		      if (docTButton.length > 0) {docTButton.find(".note-btn").html("FIXED");}
 			  //console.log("CHANGE BUTTON TO DEFAULT");	     
@@ -1406,25 +1422,11 @@ function MakePart( partSection  ) {
            var divHtml ="";
            switch( partSection ) {
              case "content": 
-
-                     var selection = window.getSelection();
-	             const selectedText = selection.toString();
-                     //console.log("MakePart:SELECTED TEXT: "+selectedText);
-
-
-                     if (selection.rangeCount > 0) {
-                      var selectedNode = selection.anchorNode;
-	              // Find the closest parent table element
-                     var closestDiv = selectedNode.closest('div');
-                     divHtml = closestDiv.outerHTML;		       
                      //Remove Draggable attributes from part.
-                     divHtml = divHtml.replace(/\s+draggable=(["']).*?\1/g,  '');
-                     divHtml = divHtml.replace(/\s+ondragend=(["']).*?\1/g,  '');
-                     divhtml = divHtml.replace(/\s+ondragover=(["']).*?\1/g, '');
-                     divHtml = divHtml.replace(/\s+ondragstart=(["']).*?\1/g,'');
-                     divHtml = window.parent.rmDragPartClass( divHtml );
-                     console.log("MakePart:CLOSEST DIV TO SAVE AS PART " + divHtml); // Output full HTML of closest div
-	                                           }
+                     divHtml = GETpart(); // Get Raw Part Data
+                     //console.log("MakePart:Before " + divHtml); // Output full HTML of closest div
+                     divHtml = rmDynaPartMods( divHtml ); //Clean Up Dynamic Code
+                     console.log("MakePart:After " + divHtml); // Output full HTML of closest div
              break;
 	     case "header":
              //Will need to create a blank part container. 
@@ -1514,7 +1516,7 @@ function ExportPart( partSection  ) {
                         exportPartName(); 
 			            }
 
-function ImportCLIPart() {
+function ImportCLIPart( toWhere ) {
       rightClickMenuHide();	    
       //console.log("IMPORT FROM CLI PART"); 
       var importp =  window.parent.document.createElement('input');
@@ -1531,8 +1533,22 @@ function ImportCLIPart() {
                                if(e.target.result !== null) {
                                   const fileContent = e.target.result;
 				  //Need to remove rcd_contianer tags.		  
-                                  filePart = rmOuterTag( fileContent , "div" );
-                                  InsertTmplPart( filePart );
+                                  //filePart = rmOuterTag( fileContent , "div" );
+						   switch( toWhere ) {		   
+                                                       case "editor":     
+				  					  //Need to remove rcd_contianer tag.Only Individual parts.		  
+                                                                          filePart = rmOuterTag( fileContent , "div" );
+									  InsertTmplPartEditor( filePart );
+									  break;
+						       case "folder":     window.parent.ImportPartFolder( fileContent ); //Can Load multi part packs.			       
+									  break;
+
+						       default:		 
+				  					  //Need to remove rcd_contianer tag.Only Individual parts.		  
+                                                                          filePart = rmOuterTag( fileContent , "div" );
+									  InsertTmplPartEditor( filePart );     
+									  break;
+							             }
                                                             }
                                         };
             reader.onerror = (errorEvent) => {console.error("Error reading file:", errorEvent); };
@@ -1542,7 +1558,36 @@ function ImportCLIPart() {
               importp.click();
 		       } 
 
-function InsertTmplPart( partBody ) {
+
+
+//function InsertTmplPartFolder( partBody ) {
+//
+//                    //Will need to add scan for multiple rcd_containers. Just sngle part for now.
+//
+//		    //Scan for first DIV tag's ID.
+//                    const regex = /<div[^>]*id="([^"]*)"[^>]*>/i;
+//                    const PartMatch = partBody.match(regex);
+//                                 
+//                    if (PartMatch && PartMatch[1]) {
+//                    //console.log( PartMatch[1] ); 
+//                    switch (PartMatch[1]) {
+//                        case "rcd_header":
+//                        MakePart('header');
+//                        break;
+//                        case "rcd_div":
+//			MakePart('content');
+//			break;
+//			case "rcd_footer":
+//                        MakePart('footer')
+//			break;
+//			default:
+//			break;
+//                      }
+//		      }
+//                      }
+
+//Directly importing to editor only works with individual parts. 	    
+function InsertTmplPartEditor( partBody ) {
 		    var tmplContent = document.querySelector(".note-editable");
 		    //Scan for first DIV tag's ID.
                     const regex = /<div[^>]*id="([^"]*)"[^>]*>/i;
@@ -1584,19 +1629,20 @@ function rmOuterTag(htmlString, tagName) {
  //Duplicate closest DIV to mouse click.Then move to where you want it.     
 function DuplicateDIV() {
 	   rightClickMenuHide();	    
-           var selection = window.getSelection();
-           if (selection.rangeCount > 0) {
-            var selectedNode = selection.anchorNode;
+           ////var selection = window.getSelection();
+           ////if (selection.rangeCount > 0) {
+           ////var selectedNode = selection.anchorNode;
                 // Find the closest parent table element
-                var closestDiv = selectedNode.closest('div');
-                divHtml = closestDiv.outerHTML;
+           ////    var closestDiv = selectedNode.closest('div');
+           ////    divHtml = closestDiv.outerHTML;
                 //console.log("CLOSE DIV" + divHtml); // This will output the full HTML of the closest div
 
 
-           } else {
-              console.log("No div element found among parent nodes of the selection.");
-           }
-          
+          //// } else {
+          ////    console.log("No div element found among parent nodes of the selection.");
+          //// }
+         
+            let divHtml = GETpart();  		     
             if (divHtml) {
 	    //Duplicate below current copied DIV so no DOM confusion takes place.
             //Then put it back in the same place. 
@@ -1611,31 +1657,55 @@ function DuplicateDIV() {
             const startIndex = outerHTMLContent.indexOf(divHtml);
             const newOuterHTML = outerHTMLContent.substring(0, startIndex - 1) + divHtml + outerHTMLContent.substring(startIndex);
               $('#summernote').summernote('code', newOuterHTML);			
+              $('.summernote').trigger('summernote.change');
+           
+            //Reset To Resync Move Mode		 		
+            DisableMoveDIVs();
+	    EnableMoveDIVs();
+
 	    //Give Notice that DIV was copied.			
             window.parent.noticeDupDIV();
 	    }
 	    } 
 
 function CutDIV() {
-         rightClickMenuHide();
-         // Get summernote closest match div and cut the node.                             
-         var selection = window.getSelection();
-           if (selection.rangeCount > 0) {
-            var selectedNode = selection.anchorNode;
-                // Find the closest parent table element
-                var closestDiv = selectedNode.closest('div'); 
-
-           } else {
-              console.log("No div element found among parent nodes of the selection.");
-           }
+            rightClickMenuHide();
+            //Get current editor content.		      
+	    var edContent = $('#summernote').summernote('code');
+            var partToRm = GETpart(); 
             //Need to Cut div from template
-            if (closestDiv) {
-            closestDiv.remove();            
-            //console.log("DIV REMOVED");
-            }                              
+	    var prunedContent = edContent.replace( partToRm , '');	    
+            //Replace editor content with pruned template.
+            $('#summernote').summernote('code', prunedContent);
+	    $('.summernote').trigger('summernote.change');
+     
+            //Need to reset Move ability.		     
+	    DisableMoveDIVs();
+            EnableMoveDIVs();   
+
             //Give Notice that DIV was Cut.                  
             window.parent.noticeCutDIV();
             }
+
+
+//Remove drag-part from table and div tags,making them clear of dynamic mods,ready for static use.
+function rmDynaPartMods(divHtml) {
+
+  //Remove Draggable attributes.
+  divHtml = divHtml.replace(/\s+draggable=(["']).*?\1/g,  '');
+  divHtml = divHtml.replace(/\s+ondragend=(["']).*?\1/g,  '');
+  divHtml = divHtml.replace(/\s+ondragover=(["']).*?\1/g, '');
+  divHtml = divHtml.replace(/\s+ondragover=(["']).*?\1/g, '');
+  divHtml = divHtml.replace(/\s+ondragstart=(["']).*?\1/g,'');
+
+  //Remove drag-part class.
+  const regex = /(<table[^>]*class="[^"]*)\bdrag-part\b([^"]*"[^>]*>)/g;
+  return divHtml.replace(regex, (match, p1, p2) => {
+    const rmClass = (p1 + p2).replace(/\s\s+/g, ' ').trim();
+    //Return clean HTML text to use as part.
+    return rmClass;
+  });
+}
 
 // Help Support Experiment PasteDIV. NOT USED NOW
 function AllstringOccurrences(mainString, subString) {
@@ -1771,6 +1841,7 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
                         e.preventDefault(); // Prevent default browser context menu
 			//console.log("Right-clicked inside Summernote!");
 					   docT = documentTypeNotice();
+					   console.log("document Type:"+ docT);
                                            const rightClickMenu = document.getElementById('rightClickMenu');
 					   // Position the popup at the mouse coordinates
                                            rightClickMenu.style.left = event.clientX + 'px';
@@ -1789,6 +1860,7 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
                                                                 break;
                                                             case "DYNAMIC": 
 					   			isDrag = documentDraggable();
+								console.log("isDrag: "+ isDrag );       
                                            			dynamicElements.forEach(element => {
 					     			element.style.display = 'block';
                                                                 element.style.visibility = 'visible'; 
@@ -1806,6 +1878,21 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
 								     }
                                                                 });
 								break;       
+                                                            case "DYNAMIC_NOCONTENT":  //exception for blank template. 
+								dynamicElements.forEach(element => {
+
+								eltext = element.textContent;
+                                                                element.classList.remove('disabled'); //init all disabled.
+					     			element.style.display = 'block';
+                                                                element.style.visibility = 'visible'; 
+								// Only allow Import Parts as options
+                                                                // if(eltext != "Import Part &#8628;"){
+   							        if(!eltext.includes("Import Part ")){		    
+							        element.classList.add('disabled'); 
+					     			element.style.display = 'none';
+                                                                element.style.visibility = 'hidden'; 
+									    }}); 
+                                                                break;
 							    default:
                                            			dynamicElements.forEach(element => {
 					     			element.style.display = 'none';
@@ -1973,6 +2060,15 @@ $('#summernote').summernote('fontName', 'Arial');
 $('#summernote').summernote('lineHeight', 0.2);
 $('#summernote').summernote('dialogsInBody',true);
 
+
+//let inEditor = $("div.note-editable.card-block");
+
+// Add mouseover editor event listener
+// inEditor.on('mouseover', function() {
+//        console.log('Mouse is inside Summernote editor');
+//    });
+
+
 // brings table popup above Image if they both popup. 
 document.addEventListener('keydown', function(event) {
 
@@ -2045,7 +2141,7 @@ function INpart( htmlString ) {
 	       localStorage.setItem( "workcopy" , htmlString); 	    
 		              }
 
-//get HTML from current DYNAMIC part.
+//get HTML from current DYNAMIC part. DIV of rcd_content.
 function GETpart(){
                // console.log( htmlString );
 	       return localStorage.getItem( "workcopy" ); 	    
@@ -2160,21 +2256,88 @@ function getCookie(name) {
 
     </script>
 
-    <div id="rightClickMenu" style="z-index:9999;display: none; position: absolute;min-width:50px;min-height:100px;border: 1px solid black; padding: 10px; background-color: white;">
-    <a class="dropdown-item dynamic" href="#" onclick="EnableMoveDIVs()"  >Move Parts</a>
-    <a class="dropdown-item dynamic" href="#" onclick="DisableMoveDIVs()" >Lock Parts</a>
-    <a class="dropdown-item dynamic" href="#" onclick="DuplicateDIV()" >Duplicate Part</a>
-    <a class="dropdown-item dynamic" href="#" onclick="CutDIV()" >Cut Part</a>
-    <a class="dropdown-item dynamic" href="#" onclick="MakePart('header')" >Make Header</a>
-    <a class="dropdown-item dynamic" href="#" onclick="MakePart('content')" >Make Part</a>
-    <a class="dropdown-item dynamic" href="#" onclick="MakePart('footer')" >Make Footer</a>
-    <a class="dropdown-item dynamic" href="#" onclick="ExportPart('header')" >Export Header</a>
-    <a class="dropdown-item dynamic" href="#" onclick="ExportPart('content')">Export Part</a>
-    <a class="dropdown-item dynamic" href="#" onclick="ExportPart('footer')" >Export Footer</a>
-    <a class="dropdown-item dynamic" href="#" onclick="ImportCLIPart()">Import Part</a>
-    <a class="dropdown-item" href="#" onclick="CopyText()" >Copy Text</a>
-    <a class="dropdown-item" href="#" onclick="PasteText()" >Paste Text</a>
-    </div>
+		<script>
+                $('.dropdown-submenu > a').on("click", function(e) {
+                   var submenu = $(this);
+                $('.dropdown-submenu .dropdown-menu').removeClass('show');
+                   submenu.next('.dropdown-menu').addClass('show');
+                   e.stopPropagation();
+                });
+
+                $('.dropdown').on("hidden.bs.dropdown", function() {
+                // hide any open menus when parent closes
+                $('.dropdown-menu.show').removeClass('show');
+                });
+		</script>	
+
+
+     <div id="rightClickMenu" class="dropdown-menu" style="z-index:9999;display: none; position: absolute;min-width:50px;min-height:100px;border: 1px solid black; padding: 10px; background-color: white;">        
+
+            <li><a href="#" class="dropdown-item dynamic" onclick="EnableMoveDIVs()" >Move Parts</a></li>
+	    <li><a href="#" class="dropdown-item dynamic" onclick="DisableMoveDIVs()">Lock Parts</a></li>
+
+	     <li class="dropdown-item dropdown-submenu dynamic">
+                        <a href="#" data-toggle="dropdown" class="dynamic" >Mod Part &#8628;</a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <a href="#" onclick="DuplicateDIV()" >Duplicate</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a href="#" onclick="CutDIV()" >Cut</a>
+                            </li>
+                        </ul>
+             </li>
+
+	     <li class="dropdown-item dropdown-submenu dynamic">
+                        <a href="#" data-toggle="dropdown" class="dynamic">Make Part &#8628;</a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <a href="#" onclick="MakePart('header')" >Header</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a href="#" onclick="MakePart('content')" >Content</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a href="#" onclick="MakePart('footer')" >Footer</a>
+                            </li>
+                        </ul>
+             </li>
+
+
+	     <li class="dropdown-item dropdown-submenu dynamic">
+                        <a href="#" data-toggle="dropdown" class="dynamic">Export Part &#8628;</a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <a href="#" onclick="ExportPart('header')" >Header</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a href="#" onclick="ExportPart('content')" >Content</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a href="#" onclick="ExportPart('footer')" >Footer</a>
+                            </li>
+                        </ul>
+             </li>
+
+	     <li class="dropdown-item dropdown-submenu dynamic">
+                        <a href="#" data-toggle="dropdown" class="dynamic">Import Part &#8628;</a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <a href="#" onclick="ImportCLIPart('editor')" >To Editor</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a href="#" onclick="ImportCLIPart('folder')" >To Parts</a>
+                            </li>
+                        </ul>
+             </li>
+
+
+            <li><a href="#" class="dropdown-item " onclick="CopyText()"  >Copy Text</a></li>
+            <li><a href="#" class="dropdown-item " onclick="PasteText()" >Paste Text</a></li>
+
+    </div>  
+
+
     <div id="summernote"></div>
   </body>
 </html>

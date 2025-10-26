@@ -135,6 +135,13 @@
 ### v0.9.5
  - Global part installer will load multipart data from the .rcdp files. 
  - URL load multiple parts from one .rcdp file inside individual rcd_contianer tags.
- - Right-Click Export part now attaches name from file accoring of Version1.2
+ - Right-Click Export part now attaches name from file accoring of Version1.2 
  - Fixed Toggle Zoom when the FIXED/DYNAMIC status was incorrect. 
+
+### v0.9.6
+ - Refactored Right-Click menu, using GETpart,very solid and shorter with submenus.
+ - Move parts disable was broken after refactor. Fixed.
+ - Fixed staying in Moveable mode after a Cut or Duplicate operation done. Was left in limbo.
+ - New document type DYNAMIC_NOCONTENT handles blank template exception to allow import part.
+ - Added Part Import option to server, not only direct to editor.Server option also handles part packs.
 

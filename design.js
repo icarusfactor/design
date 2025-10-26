@@ -157,6 +157,58 @@ function ImportTmplURL() {
 }
 }
 
+
+
+function ImportPartFolder( partBody ) {
+    if (partBody !== null) {
+      //Need to have multiparse data here to interate the below section to install contained parts via URL. 
+      Psplit =  splitDivsByIdContainer(partBody);         
+      const PartCount = Psplit.length -1; //gets trash on first count so skipping it.
+    //Switch based on part count single or multi part. 
+    //console.log("Part Count:"+ PartCount )	    
+    //console.log("Part:"+ Psplit )	    
+    switch (PartCount) {
+     case 0:
+     //Means nothing found need to break out. 		    
+     console.log('Failed to retrieve any part from file.');
+     break;
+     case 1:
+      //Individual install.	     
+      //console.log("Individual part install");
+      fc = firstHTMLComment( Pdata );
+      Pfc = gettmplTitle( fc );	     
+      //console.log("Filename:"+Pfc );	    
+      if(Pfc == "false") {  Pfc = Pfname;  }
+      //console.log('Text from file:', Pdata);
+      //console.log("URL to RCDP is:" + URLValue + " File Name:"+Pfc + " FILE DATA is:" +Pdata );
+      //Next Step import filename and file data into part mail box.  	    
+      localStorage.setItem("rcd_MakePart", encodeURI(Pdata) );	
+      partPressMake( Pfc );
+     break;
+     default: 
+      //console.log("Pack part install");
+      Psplit.slice(1).forEach(function(Sdata) {	   //First array item skipped ,its empty trash. 
+      //Individual install.	     
+      fc = firstHTMLComment( Sdata );
+      Pfc = gettmplTitle( fc );	     
+      //console.log("Filename:"+Pfc );	    
+      if(Pfc == "false") {  Pfc = Pfname;  }
+      //console.log('Text from file:', Pdata);
+      //console.log("URL to RCDP is:" + URLValue + " File Name:"+Pfc + " FILE DATA is:" +Sdata );
+      //Next Step import filename and file data into part mail box.  	    
+      localStorage.setItem("rcd_MakePart", encodeURI(Sdata) );	
+      partPressMake( Pfc );
+     					 });
+      break;
+                       }
+
+    } else {
+      console.log('Failed to retrieve text from file.');
+    }
+}
+
+
+
 //Takes URL from entry tag and gets rcdp file for https location.
 function ImportPartURL() {
     var URLp = document.querySelector("iframe").contentWindow.document.querySelector("#rcdpURL");	
