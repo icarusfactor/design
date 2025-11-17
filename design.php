@@ -823,24 +823,12 @@ function stripDivById(string $html, string $id): string
 		$rcmail->output->set_pagetitle($this->gettext('design'));
                 $this->createpartbox();
 	} 
-//        else if ($rcmail->action == 'inpartheader') {
-//		$rcmail->output->set_pagetitle($this->gettext('design'));
-//		//$this->inparts("header");
-//		$this->inpart();
-//	}
         else if ($rcmail->action == 'inpartcontent') {
 		$rcmail->output->set_pagetitle($this->gettext('design'));
 		//$this->inparts("content");
 		$this->inpart();
 
 	}
-        //else if ($rcmail->action == 'inpartfooter') {
-//		$rcmail->output->set_pagetitle($this->gettext('design'));
-//		//$this->inparts("footer");
-//		$this->inpart();
-//	}
-
-
         else {
 		$rcmail->output->set_pagetitle($this->gettext('design'));
         }

@@ -221,6 +221,19 @@ a.disabled {
       transform: scale(0.5);
      /* Need to have javascript set the height in pixles to get scollbar to work. */
     }
+
+     /* used for template modal */
+    .scaledown {
+      position: relative;
+      transform-origin: 1% 1%;
+      transform: scale(0.75);
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+      overflow: none;
+     /* Need to have javascript set the height in pixles to get scollbar to work. */
+    }
+
+
  
     .note-editable {
     background: white;
@@ -236,11 +249,23 @@ a.disabled {
     min-height: 100%;
     box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.4); 
     }
+
+
     </style>
+
+
+
+
 
    <script>
 
    $(document).ready(function() {
+   // Set up click to detect if Modals are active while dropdowns are not.
+   $(document).click(function(event) {		      
+		      console.log("A click occurred on the document.");
+		      checkPartDD();
+		      checkTemplateDD();
+	                            });
    //Reload edit window if needed. Needed after unzoom from class settings cauing issues.  
    //When loading last session this is used to make sure any dynamic class activity is reset.		      
    let doReload = localStorage.getItem('rcd_reload');
@@ -262,12 +287,14 @@ a.disabled {
     });
 
 
+
     //Enable sub-usable buttons.
     const tsize = window.parent.document.querySelector('.btn-tsize');
     const tzoom = window.parent.document.querySelector('.btn-tzoom');        
 
     const savedraft = window.parent.document.querySelector('.btn-savedraft');        
     const maketmpl = window.parent.document.querySelector('.btn-maketmpl');        
+    const printtmpl = window.parent.document.querySelector('.btn-print');        
 
     const importtmpl = window.parent.document.querySelector('.btn-importtmpl');        
     const exporttmpl = window.parent.document.querySelector('.btn-exporttmpl');        
@@ -279,6 +306,7 @@ a.disabled {
     tsize.disabled= false;
     savedraft.disabled= false;
     maketmpl.disabled= false;
+    printtmpl.disabled= false;
    
     importtmpl.disabled = false;
     exporttmpl.disabled = false;	   
@@ -404,20 +432,40 @@ a.disabled {
                     ui.dropdown({
                         className: 'dropdown-template',
                         items: htmlDropdownList,
-                        click: function (event) {
-                            event.preventDefault();
+                        callback: function ($dropdown ) {
 
-                            var $button = $(event.target);
-                            var value = $button.data('value');
-			    var num = value.replace(/\D/g, "");
-                            window.parent.importTemplate(num); 
-			    documentTypeNotice();
-                            //console.log('template ID: ' + num );
+                        $dropdown.find('li a').each(function () {
+
+                        // Attach a click event listener (to handle the selection)
+                        $(this).click(function (event) {
+                        event.preventDefault(); 
+                        var $button = $(event.target);
+                        var value = $button.data('value');
+                        var num = value.replace(/\D/g, "");
+                        window.parent.importTemplate(num);
+			documentTypeNotice();
+                        //console.log("Template ID: " + num );
+                        });
+
+                        $(this).on('mouseenter', function() {
+                        //console.log("Mouseenter detected on option:", $(this).data('value'));
+
+                        //Fill templatebox to show what the template looks like before instaling it.
+                        mixedStr =  $(this).data('value');
+                        var numTmpl = mixedStr.match(/\d+(\.\d+)?/g); 
+                        //tNam = getLSkeyEnd("_tmpl_subject"+numTmpl[0] );
+                        tBod = getLSkeyEnd("_tmpl_body"+numTmpl[0] );
+                        ////console.log("Get Local Storage Key _part_subject"+ numPart[0]+" pNam="+pNam+" pBod="+pBod )
+                        showModalt( "TEMPLATE VIEWER" , tBod );
+                        });
+               
+
+                }); //dropdown find 
+                } //callback            
+                }), //ui.dropdown
+                ]); //create button
 
 
-                        }
-                    })
-                ]);
 
                 // create jQuery object from button instance.
                 return button.render();
@@ -581,18 +629,37 @@ a.disabled {
                     ui.dropdown({
                         className: 'dropdown-partheader',
                         items: htmlDropdownList,
-                        click: function (event) {
-                            event.preventDefault();
+                        callback: function ($dropdown ) {
 
-                            var $button = $(event.target);
-                            var value = $button.data('value');
-                            var num = value.replace(/\D/g, "");
-                            window.parent.importPart(num,"header"); 
-                            //console.log("partheader ID: " + num );
+                        $dropdown.find('li a').each(function () {
 
-                        }
-                    })
-                ]);
+                        // Attach a click event listener (to handle the selection)
+                        $(this).click(function (event) {
+                        event.preventDefault(); 
+                        var $button = $(event.target);
+                        var value = $button.data('value');
+                        var num = value.replace(/\D/g, "");
+                        window.parent.importPart(num,"header"); 
+                        //console.log("part header ID: " + num );
+                        });
+
+                        $(this).on('mouseenter', function() {
+                        //console.log("Mouseenter detected on option:", $(this).data('value'));
+
+                        //Fill partbox to show what the part name looks like before instaling it.
+                        mixedStr =  $(this).data('value');
+                        var numPart = mixedStr.match(/\d+(\.\d+)?/g); 
+                        //pNam = getLSkeyEnd("_part_subject"+numPart[0] );
+                        pBod = getLSkeyEnd("_part_bodyheader"+numPart[0] );
+                        //console.log("Get Local Storage Key _part_subject"+ numPart[0]+" pNam="+pNam+" pBod="+pBod )
+                        showModalp( "PART VIEWER" , pBod );
+                        });
+               
+	       
+	        }); //dropdown find 
+                } //callback 	        
+	        }), //ui.dropdown
+                ]); //create button
 
                 // create jQuery object from button instance.
                 return button.render();
@@ -750,26 +817,47 @@ a.disabled {
                             toggle: 'dropdown'
                         }
                     }),
-                    ui.dropdown({
+                     ui.dropdown({
                         className: 'dropdown-partcontent',
                         items: htmlDropdownList,
-                        click: function (event) {
-                            event.preventDefault();
 
-                            var $button = $(event.target);
-                            var value = $button.data('value');
-                            var num = value.replace(/\D/g, "");
-                            window.parent.importPart(num,"content"); 
-                            //console.log('part content ID: ' + num );
+		        callback: function ($dropdown ) {
+
+                        $dropdown.find('li a').each(function () {
+
+                      // Attach a click event listener (to handle the selection)
+                      $(this).click(function (event) {
+                      event.preventDefault(); 
+                      var $button = $(event.target);
+                      var value = $button.data('value');
+                      var num = value.replace(/\D/g, "");
+                      window.parent.importPart(num,"content"); 
+                      //console.log('part content ID: ' + num );
+                      });
+
+                      $(this).on('mouseenter', function() {
+                      //console.log('Mouseenter detected on option:', $(this).data('value'));
+
+                     //Fill partbox to show what the part name looks like before instaling it.
+                     mixedStr =  $(this).data('value');
+                     var numPart = mixedStr.match(/\d+(\.\d+)?/g); 
+                     //pNam = getLSkeyEnd("_part_subject"+numPart[0] );
+                     pBod = getLSkeyEnd("_part_bodycontent"+numPart[0] );
+	             //console.log("Get Local Storage Key _part_subject"+ numPart[0]+" pNam="+pNam+" pBod="+pBod )
+		     showModalp( "PART VIEWER" , pBod );
+                     }); //mouse enter
 
 
-                        }
-                    })
-                ]);
+	             }); //dropdown find 
+                     } //callback 	        
+	             }), //ui.dropdown
+                     ]); //create button
 
                 // create jQuery object from button instance.
                 return button.render();
             });
+
+
         }
     });
 }));
@@ -919,17 +1007,37 @@ a.disabled {
                     ui.dropdown({
                         className: 'dropdown-partfooter',
                         items: htmlDropdownList,
-                        click: function (event) {
-                            event.preventDefault();
+			callback: function ($dropdown ) {
 
-                            var $button = $(event.target);
-                            var value = $button.data('value');
-                            var num = value.replace(/\D/g, "");
-                            window.parent.importPart(num,"footer");
-                            //console.log('part footer ID: ' + num );
+                        $dropdown.find('li a').each(function () {
+
+                        // Attach a click event listener (to handle the selection)
+                        $(this).click(function (event) {
+                        event.preventDefault();
+                        var $button = $(event.target);
+                        var value = $button.data('value');
+                        var num = value.replace(/\D/g, "");
+                        window.parent.importPart(num,"footer");
+                        //console.log("part footer ID: " + num );
+                        });
+
+                        $(this).on('mouseenter', function() {
+                        //console.log("Mouseenter detected on option:", $(this).data('value'));
+
+                        //Fill partbox to show what the part name looks like before instaling it.
+                        mixedStr =  $(this).data('value');
+                        var numPart = mixedStr.match(/\d+(\.\d+)?/g);
+                        //pNam = getLSkeyEnd("_part_subject"+numPart[0] );
+                        pBod = getLSkeyEnd("_part_bodyfooter"+numPart[0] );
+                        //console.log("Get Local Storage Key _part_subject"+ numPart[0]+" pNam="+pNam+" pBod="+pBod )
+                        showModalp( "PART VIEWER" , pBod );
+                        });
+
+                }); //dropdown find
+                } //callback
+                        
 
 
-                        }
                     })
                 ]);
 
@@ -1109,6 +1217,24 @@ function generateLoremText (count, type, html) {
     <div id="summernote"></div>
     <script>
 
+
+
+
+function getLSkeyEnd(suffix) {
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.endsWith(suffix)) {
+            // Found a matching key, return its value
+            return localStorage.getItem(key);
+        }
+    }
+    // No key found ending with the suffix
+    return null;
+}
+
+
+
+
 function documentDraggable() {
 
   $('#summernote').trigger('summernote.change');  
@@ -1148,7 +1274,7 @@ function documentType() {
    return "FIXED";		
  } else {
  var comment = firstComment.toString(firstComment);
-console.log("1ST COMMENT IS: "+comment );
+//console.log("1ST COMMENT IS: "+comment );
  var found = comment.indexOf(" DYNAMIC ");
     if(found == -1) {  return "FIXED";               
 		}  else if (!partExist ) {	
@@ -1202,6 +1328,23 @@ var documentTypeButton = function (context) {
         });
         return button.render();
       }   	    
+
+//  Button to set the background of div rcd_content tag to current background color. 
+var DivBGcolorButton = function (context) {
+    var ui = $.summernote.ui;
+    var button = ui.button({
+          tooltip: 'Base Background Color',
+	  contents: '<i class="note-icon" ><svg height="18" width="18" viewBox="0 0 1.44 1.44" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><path id="Roller" d="m 1.2321024,0.22841906 h -0.060914 c -3.256e-4,0 -6.083e-4,1.7223e-4 -9.34e-4,1.8937e-4 V 0.17932113 C 1.1702546,0.11244473 1.1160384,0.0582283 1.0491618,0.0582283 H 0.22765378 c -0.0668764,0 -0.12109067,0.0542164 -0.12109067,0.12109283 v 0.14074346 c 0,0.0668764 0.0542146,0.12109282 0.12109067,0.12109282 H 1.0491622 c 0.066876,0 0.1210928,-0.0542164 0.1210928,-0.12109282 v -0.0492873 c 3.256e-4,1.702e-5 6.084e-4,1.8937e-4 9.34e-4,1.8937e-4 h 0.060914 c 0.036274,0 0.065796,0.0279007 0.065796,0.0621813 v 0.11569563 c 0,0.0318491 -0.013007,0.0618686 -0.036587,0.0844933 -0.023537,0.0225415 -0.056176,0.0354638 -0.08952,0.0354638 H 0.75834465 c -0.0375417,0 -0.0728796,0.0140646 -0.0995254,0.0395777 -0.0264985,0.0253863 -0.0416838,0.0606008 -0.0416838,0.0966236 v 0.14035835 h -0.0425475 c -0.0234995,0 -0.0425475,0.0190489 -0.0425475,0.0425475 V 1.3559325 c 0,0.023499 0.0190489,0.042547 0.0425475,0.042547 h 0.12764301 c 0.0234969,0 0.0425475,-0.019049 0.0425475,-0.042547 V 0.88790808 c 0,-0.0234995 -0.0190506,-0.0425475 -0.0425475,-0.0425475 h -0.042548 V 0.70500203 c 0,-0.0248456 0.0101478,-0.0482388 0.0285858,-0.0658979 0.018408,-0.0176385 0.0439391,-0.0277555 0.070076,-0.0277555 H 1.171791 c 0.044853,0 0.087091,-0.0167868 0.1189591,-0.0472851 0.031579,-0.0302904 0.049696,-0.0722977 0.049696,-0.11521983 V 0.33314804 c 0,-0.0577563 -0.048594,-0.10472898 -0.1083437,-0.10472898 z M 1.12989,0.32006466 c 0,0.0445134 -0.036215,0.0807299 -0.080728,0.0807299 H 0.22765378 c -0.0445132,0 -0.0807276,-0.0362166 -0.0807276,-0.0807299 V 0.17932117 c 0,-0.0445134 0.0362145,-0.08073 0.0807276,-0.08073 H 1.0491622 c 0.044513,0 0.080728,0.0362166 0.080728,0.08073 z M 0.70223058,0.88790808 V 1.3559326 H 0.57458756 V 0.88790808 Z" style="stroke-width:0.0212738" /></svg></i>',
+          click: function () {
+                              var bgcolor = getBGcolor();
+			      $('div[id="rcd_content"]').css('background-color',bgcolor );
+
+                             }
+        });
+        return button.render();
+      }   	    
+
+
 
 // Replace current IMG element src value with a dialog for url.
 var ReplaceIMG = function (context) {
@@ -1426,7 +1569,7 @@ function MakePart( partSection  ) {
                      divHtml = GETpart(); // Get Raw Part Data
                      //console.log("MakePart:Before " + divHtml); // Output full HTML of closest div
                      divHtml = rmDynaPartMods( divHtml ); //Clean Up Dynamic Code
-                     console.log("MakePart:After " + divHtml); // Output full HTML of closest div
+                     //console.log("MakePart:After " + divHtml); // Output full HTML of closest div
              break;
 	     case "header":
              //Will need to create a blank part container. 
@@ -1560,32 +1703,6 @@ function ImportCLIPart( toWhere ) {
 
 
 
-//function InsertTmplPartFolder( partBody ) {
-//
-//                    //Will need to add scan for multiple rcd_containers. Just sngle part for now.
-//
-//		    //Scan for first DIV tag's ID.
-//                    const regex = /<div[^>]*id="([^"]*)"[^>]*>/i;
-//                    const PartMatch = partBody.match(regex);
-//                                 
-//                    if (PartMatch && PartMatch[1]) {
-//                    //console.log( PartMatch[1] ); 
-//                    switch (PartMatch[1]) {
-//                        case "rcd_header":
-//                        MakePart('header');
-//                        break;
-//                        case "rcd_div":
-//			MakePart('content');
-//			break;
-//			case "rcd_footer":
-//                        MakePart('footer')
-//			break;
-//			default:
-//			break;
-//                      }
-//		      }
-//                      }
-
 //Directly importing to editor only works with individual parts. 	    
 function InsertTmplPartEditor( partBody ) {
 		    var tmplContent = document.querySelector(".note-editable");
@@ -1629,19 +1746,6 @@ function rmOuterTag(htmlString, tagName) {
  //Duplicate closest DIV to mouse click.Then move to where you want it.     
 function DuplicateDIV() {
 	   rightClickMenuHide();	    
-           ////var selection = window.getSelection();
-           ////if (selection.rangeCount > 0) {
-           ////var selectedNode = selection.anchorNode;
-                // Find the closest parent table element
-           ////    var closestDiv = selectedNode.closest('div');
-           ////    divHtml = closestDiv.outerHTML;
-                //console.log("CLOSE DIV" + divHtml); // This will output the full HTML of the closest div
-
-
-          //// } else {
-          ////    console.log("No div element found among parent nodes of the selection.");
-          //// }
-         
             let divHtml = GETpart();  		     
             if (divHtml) {
 	    //Duplicate below current copied DIV so no DOM confusion takes place.
@@ -1832,16 +1936,36 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
             ReplaceIMG: ReplaceIMG, 
             ChangeColorTable: ChangeColorTable,  
             ChangeColorTd: ChangeColorTd,  
-	    documentTypeButton: documentTypeButton
+	    documentTypeButton: documentTypeButton,
+	    DivBGcolorButton: DivBGcolorButton	      
         },			  
   callbacks: {
-		      //callbacks
+		      //Callbacks
+
+                       onFocus: function() {
+                       //console.log('Summernote editor gained focus!');
+                       //Check to see if drop down is part of page 
+                       checkPartDD();					   
+		       checkTemplateDD();			   
+                       //Make sure Modals are removed when in focus. 
+                       hideModalp();  //parts modal
+                       hideModalt();  //parts modal
+
+                       },
+		       onBlur: function() {
+                       //console.log('Summernote editor lost focus!');
+                       //Check to see if drop down is part of page 
+                       checkPartDD();					   
+                       checkTemplateDD();					   
+					   
+                       },
+		      //Setup for Right Click Menu Setup. 
 		      onInit: function() {
                       $('.note-editable').on('contextmenu', function(e) {
                         e.preventDefault(); // Prevent default browser context menu
 			//console.log("Right-clicked inside Summernote!");
 					   docT = documentTypeNotice();
-					   console.log("document Type:"+ docT);
+					   //console.log("document Type:"+ docT);
                                            const rightClickMenu = document.getElementById('rightClickMenu');
 					   // Position the popup at the mouse coordinates
                                            rightClickMenu.style.left = event.clientX + 'px';
@@ -1860,7 +1984,7 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
                                                                 break;
                                                             case "DYNAMIC": 
 					   			isDrag = documentDraggable();
-								console.log("isDrag: "+ isDrag );       
+								//console.log("isDrag: "+ isDrag );       
                                            			dynamicElements.forEach(element => {
 					     			element.style.display = 'block';
                                                                 element.style.visibility = 'visible'; 
@@ -1907,10 +2031,14 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
                        //console.log("Left-clicked inside Summernote!");
                        // You can access the clicked element using 'e.target'
                        rightClickMenuHide();
+		       hideModalp(); // Part Modal Hide.			   
+		       hideModalt(); //Template Modal Hide.				   
                        });			   
 				         }
 
 				  },
+
+
   toolbar: [
 //    // [groupName, [list of button]]
     ['style', ['style','bold', 'italic', 'underline','clear']],
@@ -1918,6 +2046,7 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
     ['fontname', ['fontname']],
     ['fontsize', ['fontsize']],
     ['color', ['color']],
+    ['bgdiv', ['DivBGcolorButton']],		      
     ['para', ['ul', 'ol', 'paragraph']],
     ['height', ['height']],
     ['table', ['table']],
@@ -1930,6 +2059,52 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
   ],
 
 });	
+
+
+// If drop down for template is not on the screen remove its template show modal.
+function checkTemplateDD() {
+if (!$('.dropdown-template.show').length > 0) {
+    //console.log("No div with class 'dropdown-template' was found.");
+    hideModalt();
+	                                         }
+
+	               }
+// If drop down for part is not on the screen remove its part show modal.
+function checkPartDD() {
+if (!$('.dropdown-partcontent.show').length > 0) {
+    //console.log("No div with class 'dropdown-partcontent' was found.");
+    hideModalp();
+	                                         }
+
+	               }
+
+
+function showModalp( partName , bodyData ) {
+  //console.log("SHOW PART MODAL FOR "+partName );		    
+  $("#PartModal").modal("show");
+  $('.modal-title').text( partName );
+  $('.modal-label').html( decodeURIComponent( bodyData).replace(/\+/g, " "));
+}
+
+// Function to hide the modal
+function hideModalp() {
+  //console.log("HIDE PART MODAL");		    
+  $("#PartModal").modal("hide");
+}	
+
+//TESTING
+function showModalt( bodyTitle , bodyData ) {
+  //console.log("SHOW TEMPLATE MODAL FOR "+bodyData );		    
+  $("#TemplateModal").modal("show");
+  $('.modal-title').text( bodyTitle );
+  $('.modal-label').html( decodeURIComponent( bodyData).replace(/\+/g, " "));
+}
+
+// Function to hide the modal
+function hideModalt() {
+  //console.log("HIDE TEMPLATE MODAL");		    
+  $("#TemplateModal").modal("hide");
+}	
 
 $('body').append(
         '<div id="ReplaceIMG" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
@@ -2054,19 +2229,39 @@ $('body').append('<!-- Save To Draft Modal -->' +
  '   </div>' +
  '</div>');
 
+
+$('body').append('<!-- Part Modal -->' +
+ '<div class="modal fade" id="PartModal" role="dialog" inert>' + 
+ '  <div class="modal-dialog ">' +
+ '    <!-- Modal content-->' +
+ '    <div class="modal-content">' + 
+ '        <div class="modal-header">' + 
+ '        <h4 class="modal-title">Part</h4>' + 
+ '        </div>' +
+        '<div class="modal-label" >Will Show Part Here. </div>' +
+ '       </div>' +
+ '</div>');
+
+//Scale Down CSS to 25% of size.	   
+$('body').append('<!-- Template Modal -->' +
+ '<div class="modal fade scaledown" id="TemplateModal" role="dialog" inert>' + 
+ '  <div class="modal-dialog">' +
+ '    <!-- Modal content-->' +
+ '    <div class="modal-content">' + 
+ '        <div class="modal-header">' + 
+ '        <h4 class="modal-title">Template</h4>' + 
+ '        </div>' +
+        '<div class="modal-label" >Will Show Template Here. </div>' +
+ '       </div>' +
+ '</div>');
+
+
+
 // Set Defaults	    
 $('#summernote').summernote('fullscreen.toggle');
 $('#summernote').summernote('fontName', 'Arial');
 $('#summernote').summernote('lineHeight', 0.2);
 $('#summernote').summernote('dialogsInBody',true);
-
-
-//let inEditor = $("div.note-editable.card-block");
-
-// Add mouseover editor event listener
-// inEditor.on('mouseover', function() {
-//        console.log('Mouse is inside Summernote editor');
-//    });
 
 
 // brings table popup above Image if they both popup. 

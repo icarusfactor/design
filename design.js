@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
  
      const btn_savedraft = document.querySelector('.btn-savedraft'); 
      const btn_maketmpl = document.querySelector('.btn-maketmpl'); 
+     const btn_print = document.querySelector('.btn-print'); 
 
      
      const btn_tsize = document.querySelector('.btn-tsize' );
@@ -70,6 +71,24 @@ document.addEventListener("DOMContentLoaded", function() {
      tmplPressMake( Tname );	     
             });
                   }
+  if (btn_print) {
+     btn_print.addEventListener('click', () => {
+                var pWin = window.open('', '_blank', 'height=800,width=650');
+                pWin.document.write('<html><head><title>Print Template</title></head><body style="page-break-inside: avoid !important;page-break-after: avoid !important;page-break-before: avoid !important; ">');
+	        const htmlArray = []; 
+                var divContent = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
+	        divContent.forEach(element => {
+                htmlArray.push(element.outerHTML);
+                });
+	        const htmlText = htmlArray.join('\n');
+	        
+	        pWin.document.write( htmlText );
+                pWin.document.write('</body></html>');
+                pWin.document.close(); // Important to close the document stream
+	        pWin.print();
+                });
+                }
+
 
   if (btn_tsize) {
      btn_tsize.addEventListener('click', () => { 
@@ -127,6 +146,23 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 //Start	after menu stuff here.
+
+function addPrintEditor() {
+  const divElement = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
+	divElement.forEach(printarea => {
+        printarea.classList.add('printSection');
+    });
+}
+
+function removePrintEditor() {
+  const divElement = document.querySelector("iframe").contentWindow.document.querySelectorAll("div.note-editable.card-block");
+	divElement.forEach(printarea => {
+        printarea.classList.remove('printSection');
+    });
+}
+
+
+//Print Summernote edtior window with template. 
 
 
 //Takes URL from entry tag and gets rcdt file for https location.
@@ -639,26 +675,8 @@ if(partName !== undefined ) {
 	     //Will check templates folder before doing so.
 	     var Bpress = "";
 
-            //switch( type ) {
-            //      case "header":
-	    //            Bpress = "inpartheader";
- 	    //            rcmail.http_post('inpartheader', { _button: Bpress} , false );
-            //            break;
-
-            //      case "content":
 	                Bpress = "inpartcontent";
  	                rcmail.http_post('inpartcontent', { _button: Bpress} , false );
-            //            break;
-
-            //      case "footer":
-	    //            Bpress = "inpartfooter";
- 	    //            rcmail.http_post('inpartfooter', { _button: Bpress} , false );
-            //            break;
-            //       default: 
-	                //const Bpress = "inparts";
- 	                //rcmail.http_post('inparts', { _button: Bpress} , false );
-	//		break;    
-           //                }
      }  
 
      function clearIt( type ) {
@@ -832,7 +850,7 @@ function saveSession() {
 			  console.log('The style tag with id="rcd_style" exists.');
 			  //exist do nothing else here.
 			  } else {
-			  console.log('The style tag with id="rcd_style" does not exist.');
+			  //console.log('The style tag with id="rcd_style" does not exist.');
 		          var styleElement = document.createElement('style');
 		          styleElement.id = 'rcd_style';
                           document.head.appendChild(styleElement);

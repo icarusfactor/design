@@ -1,6 +1,6 @@
-# Roundcube Design v0.9.6
+# Roundcube Design v0.9.7
 
-![RoundCube Design View ](/images/RCDesign096.png "In design view.")
+![RoundCube Design View ](/images/rcDesign097.png "In mailview.")
 
 ### Install 
 
@@ -52,7 +52,7 @@ dropdown and be able to select and add them if Template is active.
 * Make and Use Your Own Templates
 
 ### Status:
-With the functionality to save templates and parts locally on a seprate device one should be able to save parts for use and install later so no loss of custom templates could take place. Now on to the refactoring phase. 
+The visual editor has been complted still working to streamline the code, but functionality I wanted in it,is in it. Extentions for Wordpress and S3 services will be added after version 1.0.
 
 ### Benifits: 
 * Make eye catching email with little effort.
@@ -60,7 +60,7 @@ With the functionality to save templates and parts locally on a seprate device o
 * Dont have to worry about confusing or overwhelming apllications to do this.
 
 ### Next Steps: 
- I've Made it to the final phase and will be limiting feature adds, not a freeze, but will be working on refactoring code and making it stable up to version 1.0. All of the base functionalilty has been added,from install to removing templates, export and importing templates and parts from local devices, create and making custom templates and parts visually or just use the default ones. I'll be adding the email list and image connectors after 1.0 and will be a Wordpress based plugin. The database of the Wordpress site will host the email images from its Media Library and site url and will gather list emails from a Wordpress block to add to the RoundCube Listcommnads plugin capability.  
+ I've Made it to the final phase and will be working on refactoring code and making it stable up to version 1.0. All of the base functionalilty has been added,from install to removing templates, export and importing templates and parts from local devices, create and making custom templates and parts visually or just use the default ones. I'll be adding the email list and image connectors after 1.0 and will be a Wordpress based plugin. The database of the Wordpress site will host the email images from its Media Library and site url and will gather list emails from a Wordpress block to add to the RoundCube Listcommnads plugin capability.  
 
 ### Template Rules:
  When making a template some rules need to be followed when making one from scratch or modifying a current one that the editor will recognizes and parse accordingly.

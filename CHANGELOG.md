@@ -145,3 +145,9 @@
  - New document type DYNAMIC_NOCONTENT handles blank template exception to allow import part.
  - Added Part Import option to server, not only direct to editor.Server option also handles part packs.
 
+### v0.9.7
+ - Added Print Template button to print or create pdf of template. Some parts need tweaked to work with this.  
+ - Added modal when hover over header/content/footer the part will show inside it. 
+ - Added button to set main content div to current background color.
+ - Add modal when hover over template name the item will show up inside it.  
+
