@@ -1,4 +1,4 @@
-# Roundcube Design v0.9.7
+# Roundcube Design v0.9.8
 
 ![RoundCube Design View ](/images/rcDesign097.png "In mailview.")
 

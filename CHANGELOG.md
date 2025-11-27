@@ -151,3 +151,9 @@
  - Added button to set main content div to current background color.
  - Add modal when hover over template name the item will show up inside it.  
 
+### v0.9.8
+ - Added CacheAPI for Main/About/Settings and Editor, when connection fails,plugin main pages fall back to cache. 
+ - Fixed Template and Part Viewer from showing up at the same time. 
+ - Renamed the Print button to Print Template from Print Leaflet.
+ 
+

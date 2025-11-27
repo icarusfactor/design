@@ -28,6 +28,35 @@ if (window.rcmail) {
 	var partfootersubj = new Array(20).fill(""); 
 
 
+//Add CacheAPI events to load main pages if network fails. 	
+        const CACHE_NAME = 'design-cache-v1';
+        const urlsToCache = [
+	 '/plugins/design/design.js',
+         '/plugins/design/content/about.html',
+         '/plugins/design/content/design.html',
+         '/plugins/design/content/designsettings.html'
+		
+         ];
+
+document.addEventListener('install', event => {
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then(cache => {
+                return cache.addAll(urlsToCache);
+            })
+    );
+});
+
+document.addEventListener('fetch', event => {
+    event.respondWith(
+        caches.match(event.request)
+            .then(response => {
+                // Return cached response if found, else fetch from network
+                return response || fetch(event.request);
+            })
+    );
+});
+
 document.addEventListener("DOMContentLoaded", function() { 	
 
 
@@ -142,7 +171,6 @@ document.addEventListener("DOMContentLoaded", function() {
   window.location.href = url.toString();
 });
                           }
-
 });
 
 //Start	after menu stuff here.

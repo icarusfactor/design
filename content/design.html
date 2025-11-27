@@ -262,7 +262,7 @@ a.disabled {
    $(document).ready(function() {
    // Set up click to detect if Modals are active while dropdowns are not.
    $(document).click(function(event) {		      
-		      console.log("A click occurred on the document.");
+		      //console.log("A click occurred on the document.");
 		      checkPartDD();
 		      checkTemplateDD();
 	                            });
@@ -2081,6 +2081,9 @@ if (!$('.dropdown-partcontent.show').length > 0) {
 
 function showModalp( partName , bodyData ) {
   //console.log("SHOW PART MODAL FOR "+partName );		    
+  //Do reset of opposite viewer popups to clear out any leftover popups. 		   
+  hideModalt(); //Template Modal Hide. 
+		    
   $("#PartModal").modal("show");
   $('.modal-title').text( partName );
   $('.modal-label').html( decodeURIComponent( bodyData).replace(/\+/g, " "));
@@ -2095,6 +2098,9 @@ function hideModalp() {
 //TESTING
 function showModalt( bodyTitle , bodyData ) {
   //console.log("SHOW TEMPLATE MODAL FOR "+bodyData );		    
+  //Do reset of opposite viewer popups to clear out any leftover popups. 		   
+  hideModalp(); // Part Modal Hide.                           
+
   $("#TemplateModal").modal("show");
   $('.modal-title').text( bodyTitle );
   $('.modal-label').html( decodeURIComponent( bodyData).replace(/\+/g, " "));
