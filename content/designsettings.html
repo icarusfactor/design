@@ -31,6 +31,35 @@
     background-repeat: repeat;
     min-height: 100%;
     }
+
+
+    .scroll-box {
+    height: 150px; /* Set a fixed height */
+    width: 300px;  /* Set a fixed width */
+    border: 1px solid #ccc; /* Add a border for visibility */
+    overflow: auto; /* Enable scrollbars if content overflows */
+    padding: 10px;    
+    }
+
+    .file-selected {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #000000;
+    cursor: pointer;
+    }
+
+    .file-selected:hover {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: #5179ff;
+    color: #ffffff;
+    cursor: pointer;
+    }
+
+
     </style>
 
     <script>
@@ -41,6 +70,158 @@
 
     tsize.disabled= true;
     savedraft.disabled= true;
+
+    let TypeAr = [];	    
+    let NameAr = [];	    
+    let contentString = "";
+
+
+async function GitHubDirContent(owner, repo, path = '', token = null) {
+  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+  const headers = {
+    'Accept': 'application/vnd.github.v3+json'
+  };
+
+  //Does not need to be added for public access. 		    
+  if (token) {
+    headers['Authorization'] = `token ${token}`;
+  }
+
+  try {
+    const response = await fetch(url, { headers });
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data; // This will be an array of file/directory objects
+  } catch (error) {
+    console.error('Error fetching GitHub directory contents:', error);
+    return [];
+  }
+}
+
+
+
+    //Init load of Github part file system 
+    const owner = 'icarusfactor'; 
+    const repo = 'designTmplPart'; 
+    const directoryPath = 'part'; // Optional: path, or empty for root          
+
+
+ function GitDirChange( owner, repo, directoryPath , subDirectory , type  ) {
+
+  //If Subdirectory is empty dont add it.  
+  if( subDirectory == '' ) {
+              var directoryChange = directoryPath;
+	      } else {
+              //Changing directory we will need to add the new subdirectory, then auto update/refresh the list. 
+              var directoryChange = directoryPath +"/" + subDirectory;
+              }
+
+  //Clear Arrays
+  TypeAr.length = 0;	    
+  NameAr.length = 0;	    
+  contentString = "";
+
+  GitHubDirContent(owner, repo, directoryChange )
+  .then(contents => {
+    if (contents.length > 0) {
+      //console.log(`Files and directories in ${owner}/${repo}/${directoryChange || '(root)'}:`);
+      var num=0;        
+
+      //console.log( "LENGTH:" + contents.length);
+
+      //contents.forEach(item => {
+      for (const item of contents) {
+
+        // Load Filenames into variables here.            
+        //console.log(`- ${num} - ${item.type}: ${item.name}`);
+        let itemtype =item.type;
+        let itemname =item.name;
+
+        TypeAr[num] = itemtype;           
+        NameAr[num] = itemname;           
+        //console.log( itemtype +" "+itemname );                  
+        num++;            
+      };
+ 
+                        contentString = ' ';
+       NameAr.forEach(itemText => {
+
+			   contentString += `<button class="file-selected" onclick="partpicker( '${directoryChange}' , '${itemText}' , '${type}' );"  > ${itemText} </button></br>`;
+
+
+       });
+       contentString +=  '';                    
+       loadFromGithub(type); 			
+
+    } else {
+      console.log('Directory is empty or path is invalid.');
+    }
+  });
+
+
+
+ }
+
+
+
+function hasExt(filename) {
+  const regex = /\.([^.]+)$/; 
+  return regex.test(filename);
+}
+
+ /* For now copy url to part import entry */
+ /* Need to have check for file ext. If none use it as a directory and refresh with new subdirectory values */		      
+ function partpicker( dirdata ,  itemdata = "none" , type = "part" ) {
+              //console.log("part clicked "+itemdata);
+            
+              /* Need switch statement to find if itemdata has ext , if not its a directory change and refresh.  */
+              switch( hasExt(itemdata) ) {
+
+              case true: 				  
+	       var toGetGit = "https://raw.githubusercontent.com/icarusfactor/designTmplPart/refs/heads/main/"+ dirdata + "/" + itemdata;
+                if( type == "part" ) {					  
+	          var inputElement = document.getElementById("rcdpURL"); 
+	          inputElement.value = toGetGit;	     
+			             }
+                 if( type == "template") { 					  
+	          var inputElement = document.getElementById("rcdtURL"); 
+	          inputElement.value = toGetGit;	     
+			             }
+               break;
+              case false:
+               // add itemdata to path and refresh list.
+	       const owner = 'icarusfactor'; 
+               const repo = 'designTmplPart'; 
+               GitDirChange( owner, repo, dirdata , itemdata , type );  						  
+	       break;					  
+	      default:
+	       break;				  
+	     }
+	     }
+
+ function loadFromGithub( type ) {
+            //Now load up gitfile. 
+
+		let listElement = "";     
+
+	     switch( type  ) {
+		case "part": 		 
+                 listElement = document.getElementById("gitfilebox");                        
+                 listElement.innerHTML = contentString;  
+                 break;
+		case "template":
+                 listElement = document.getElementById("gitfileboxT");                        
+                 listElement.innerHTML = contentString;  
+	         break;
+                default:
+                 listElement = document.getElementById("gitfilebox");                        
+                 listElement.innerHTML = contentString;  
+                 break;					 
+          	   }
+
+	     }	    
 
     </script>
 
@@ -59,15 +240,30 @@
         <button class="btn btn-primary" onclick="window.parent.createCheckTemplateMbox()" >CREATE / CHECK</button>
         <button class="btn btn-primary" onclick="window.parent.updateTmpl()" >SYNC</button>
 	<button class="btn btn-primary" onclick="window.parent.InsertTemplatesMbox()" >INSTALL TEMPLATES</button> </BR></BR>
-	<button class="btn btn-primary" onclick="window.parent.ImportTmplURL()">Import URL .rcdt file:</button>&nbsp;<input maxlength="256" type="text" id="rcdtURL" name="rcdtURLInput" style="width: 300px;">  </BR> 
-	Example Templates(Right-Click Copy Link): <a target="_blank" href="https://raw.githubusercontent.com/icarusfactor/designTmplPart/refs/heads/main/template/basic_newsletter.rcdt">rcdt</a> <BR><BR>
 
-	Find More here: https://github.com/icarusfactor/designTmplPart/tree/main/template<BR><BR>
+        &nbsp;This mailbox folder is used to pull base HTML email pages to work from and save them as drafts before final edit and sending them from Compose.
+	You can move emails to this mailbox to create a new template and flag them to be recognized as such, no more than 10 templates can be 
+	recognized,if you have more than ten, then these will be ignored until you unflag other templates. You can also make templates from inside the Design editor. If the servers templates gets out 
+	of sync with client browser the editor can be updated from here to fix that.   
 
-        &nbsp;This mailbox is used to pull base HTML email pages to work off from and save them as drafts before final edit of them in Composer.
-	You can move emails to this mailbox to create a new template and flag them to be recognized, no more than 10 templates can be 
-	recognized,if you have more than ten, then these will be ignored until you unflag other templates. If servers templates gets out 
-	of sync with browser editor it can be updated from here.Default templates to work with can be imported from here. 
+
+<BR>
+<BR>
+<button class="btn btn-primary" onclick="window.parent.ImportTmplURL()">Import URL .rcdt file:</button>&nbsp;<input maxlength="256" type="text" id="rcdtURL" name="rcdtURLInput" style="width: 300px;">  </BR> 
+
+Template rcdt files are located here: https://github.com/icarusfactor/designTmplPart/tree/main/template<BR><BR>
+	Below is a list of template fles with rcdt extention dynamically generated from Github, click one to load it into the above Import URL entry and then click that button to install it.<BR>
+<button data-toggle="collapse" data-target="#gitfileT" onclick="GitDirChange( 'icarusfactor', 'designTmplPart', 'template' , '', 'template' );" >Copy GitHub Template Links To Entry</button>
+
+<div id="gitfileT" class="collapse">
+      <div class="scroll-box" id="gitfileboxT" contenteditable="false" >
+         ... URL TEMPLATE LIST ... 
+      </div>
+</div>
+
+</fieldset>
+
+
 </fieldset>
 
 
@@ -76,18 +272,21 @@
 
         <button class="btn btn-primary" onclick="window.parent.createCheckPartMbox()" >CREATE / CHECK</button>
 	<button class="btn btn-primary" onclick="window.parent.updatePart()" >SYNC</button>&nbsp;<button class="btn btn-primary" onclick="window.parent.InsertPartMbox()" >INSTALL PARTS</button><BR><BR>
-	<button class="btn btn-primary" onclick="window.parent.ImportPartURL()">Import URL .rcdp file:</button>&nbsp;<input maxlength="256" type="text" id="rcdpURL" name="rcdpURLInput" style="width: 300px;">  </BR> 
-	 
-	Example Part(Right-Click Copy Link): <a target="_blank" href="https://raw.githubusercontent.com/icarusfactor/designTmplPart/refs/heads/main/part/basic_2col1line.rcdp">rcdp</a><BR><BR>
+        &nbsp;This mailbox is used to pull HTML sections called Parts. You can move emails to this mailbox to create a new parts and flag them to be recognized. If servers parts gets out of sync with browser editor it can be updated from here.  
 
-	Find More here: https://github.com/icarusfactor/designTmplPart/tree/main/part<BR><BR>
+	<BR><BR>
+<button class="btn btn-primary" onclick="window.parent.ImportPartURL()">Import URL .rcdp file:</button>&nbsp;<input maxlength="256" type="text" id="rcdpURL" name="rcdpURLInput" style="width: 300px;">  </BR> 
+	Template rcdt files are located here:<BR>
+	https://github.com/icarusfactor/designTmplPart/tree/main/part<BR><BR>
 
-	Example Part Pack(Right-Click Copy Link): <a target="_blank" href="https://raw.githubusercontent.com/icarusfactor/designTmplPart/refs/heads/main/partpack/invoicepack.rcdp">rcdp</a><BR><BR>
+	Below is a list of part fles with rcdp extention dynamically generated from Github, click one to load it into the above Import URL entry and then click that button to install it.<BR>
+<button data-toggle="collapse" data-target="#gitfileP" onclick="GitDirChange( 'icarusfactor', 'designTmplPart', 'part' , '', 'part' );" >Copy GitHub Part Links To Entry</button><BR>
+<div id="gitfileP" class="collapse">
+      <div class="scroll-box" id="gitfilebox" contenteditable="false" >
+         ... URL PART LIST ... 
+      </div>
+</div>
 
-
-	Find here: https://github.com/icarusfactor/designTmplPart/tree/main/partpack<BR><BR>
-
-        &nbsp;This mailbox is used to pull HTML sections called Parts.	You can move emails to this mailbox to create a new parts and flag them to be recognized. If servers parts gets out of sync with browser editor it can be updated from here. Default Part box to work with can be imported from here. 
 </fieldset>
 
 

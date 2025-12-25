@@ -1,6 +1,6 @@
-# Roundcube Design v0.9.8
+# Roundcube Design v0.9.9
 
-![RoundCube Design View ](/images/rcDesign097.png "In mailview.")
+![RoundCube Design Settings ](/images/rcDesign099.png "In settings")
 
 ### Install 
 

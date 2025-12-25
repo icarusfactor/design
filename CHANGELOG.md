@@ -156,4 +156,8 @@
  - Fixed Template and Part Viewer from showing up at the same time. 
  - Renamed the Print button to Print Template from Print Leaflet.
  
+### v0.9.9
+ - Add remote file manager to pick parts and packs from Github to install. 
+ - Add remote file manager to pick templates from Github to install.
+ - Move inert template and Part viewer further down below the menubar.   
 

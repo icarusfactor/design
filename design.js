@@ -251,6 +251,7 @@ function ImportPartFolder( partBody ) {
      break;
      default: 
       //console.log("Pack part install");
+      //Part Pack		    
       Psplit.slice(1).forEach(function(Sdata) {	   //First array item skipped ,its empty trash. 
       //Individual install.	     
       fc = firstHTMLComment( Sdata );
@@ -293,7 +294,7 @@ function ImportPartURL() {
     switch (PartCount) {
      case 0:
      //Means nothing found need to break out. 		    
-     console.log('Failed to retrieve any part from file.');
+     //console.log('Failed to retrieve any part from file.');
      break;
      case 1:
       //Individual install.	     
@@ -304,20 +305,24 @@ function ImportPartURL() {
       if(Pfc == "false") {  Pfc = Pfname;  }
       //console.log('Text from file:', Pdata);
       //console.log("URL to RCDP is:" + URLValue + " File Name:"+Pfc + " FILE DATA is:" +Pdata );
+      
+      //Unwrap rcd_contianer from single items. Already done for packs. 		    
+      $('#rcd_container').children().first().unwrap();		    
       //Next Step import filename and file data into part mail box.  	    
       localStorage.setItem("rcd_MakePart", encodeURI(Pdata) );	
       partPressMake( Pfc );
      break;
      default: 
-      //console.log("Pack part install");
+      //console.log("Pack part install"); 
+      //Pack install
       Psplit.slice(1).forEach(function(Sdata) {	   //First array item skipped ,its empty trash. 
-      //Individual install.	     
+      //Individual install looped for pack.	     
       fc = firstHTMLComment( Sdata );
       Pfc = gettmplTitle( fc );	     
-      //console.log("Filename:"+Pfc );	    
+      //console.log("Pack Filename:"+Pfc );	    
       if(Pfc == "false") {  Pfc = Pfname;  }
-      //console.log('Text from file:', Pdata);
-      //console.log("URL to RCDP is:" + URLValue + " File Name:"+Pfc + " FILE DATA is:" +Sdata );
+      //console.log('Pack Text from file:', Pdata);
+      //console.log("Pack URL to RCDP is:" + URLValue + " File Name:"+Pfc + " FILE DATA is:" +Sdata );
       //Next Step import filename and file data into part mail box.  	    
       localStorage.setItem("rcd_MakePart", encodeURI(Sdata) );	
       partPressMake( Pfc );
@@ -583,6 +588,7 @@ async function getFileFromURL(url) {
                        });}  }	
 
     //need to have this not only pass the part name ,but the encoded part also. 	
+    //NEED TO FIX: rcd_MakePart get removed after part read in, need a way to detect if its a pack ,if so copy to backup until done. 
     function partPressMake( partName ) {
 
              if(partName !== undefined ) {

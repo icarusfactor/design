@@ -756,6 +756,8 @@ function stripDivById(string $html, string $id): string
 	  $rcmail->output->command('display_message', 'Template Made', 'confirmation');
     }
 
+
+    //This needs a variable to detect if pack or single run. Packs have stripped rcd container  
     public function partpress()
     {
           $partname = rcube_utils::get_input_string('_pn', rcube_utils::INPUT_POST);
@@ -764,10 +766,19 @@ function stripDivById(string $html, string $id): string
 	  $rcmail = rcmail::get_instance();
 	  //Send editor part to part mbox.
 	  $storage = $rcmail->get_storage();
-         //TODO FOR SOME REASON PART DATA IS NOT DECODED. 
-	 $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".urldecode($partname)."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".urldecode($partdata); 
+	  
+	  //Need to urldecode data and remove rcd_contianer tag from data then save it as part. 
+          $parttopeel = urldecode($partdata);
+	  //$parttopeel = $this->stripDivById( $parttopeel, "rcd_container");
+
+	 $mboxdata = "From: \r\n"."To: \r\n"."Subject: ".urldecode($partname)."\r\n"."Content-Type: text/html; charset=utf-8`:\r\n"."\r\n".$parttopeel; 
 	  $saved = $storage->save_message('part', $mboxdata,'', null, ['FLAGGED'] );
-	  $rcmail->output->command('display_message', 'Part Made', 'confirmation');
+          if( strlen($partdata) >= 5   ) {
+		 $rcmail->output->command('display_message', 'Part Made' , 'confirmation');
+	  } else {
+		 $rcmail->output->command('display_message', 'Part Missing', 'confirmation');
+	  }
+
     }
 
 
