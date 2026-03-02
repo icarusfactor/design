@@ -276,12 +276,14 @@ a.disabled {
    } else if( doReload === "zoom" ) {
       //console.log("Reload Edit Window");
       window.parent.restoreZoom();
-      highlightDIV(); //Check if to highlight.		      
+      // Something went wonky with Browser drag and drop removing until fixed highlight.		      
+      ////highlightDIV(); //Check if to highlight.		      
       localStorage.setItem('rcd_reload', "false");
    } else if( doReload === "session" ) {
       //console.log("Restore Session");
       window.parent.restoreSession(); 
-      highlightDIV(); //Check if to highlight.		      
+      // Something went wonky with Browser drag and drop removing until fixed highlight.		      
+      ////highlightDIV(); //Check if to highlight.		      
       localStorage.setItem('rcd_reload', "false");
       window.parent.noticeSessLoad();
    }		      
@@ -1522,7 +1524,8 @@ function EnableMoveDIVs() {
         });
 
         }
-         highlightDIV();
+         //Something went wonky with browser drag and drop.Removing until fix. 		    
+         ////highlightDIV();
          //console.log("Enable MOVE on all tagged DIVs");
          //Give notice that tagged DIV are now movable.
          window.parent.noticeMoveEnabled();
@@ -1553,7 +1556,9 @@ function DisableMoveDIVs() {
 		  }
 
         });
-         highlightDIV();
+
+         //Something went wonky with browser drag and drop.Removing until fix. 		    
+         ////highlightDIV();
          //console.log("Disable MOVE on all tagged DIVs");
          window.parent.noticeMoveDisabled();
 		    }

@@ -161,3 +161,6 @@
  - Add remote file manager to pick templates from Github to install.
  - Move inert template and Part viewer further down below the menubar.   
 
+### v0.9.10 Special version removed highlight when moving elements due to browser changing something at core.  
+ - Removed Element Highlighting in move mode until fixed. 
+
