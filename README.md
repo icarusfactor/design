@@ -14,6 +14,8 @@
 
 5. Log into Roundcube webmail and click Design and navigate to Settings to follow next steps.
 
+
+
 ### Setup: 
 1.  Under Settings click "Create / Check" on both template and part mailbox
 to create them. These folders will be used to store templates and one for parts
@@ -29,6 +31,18 @@ to update them in Design.
 4.  After these steps are done you can click top menu "Design" and should
 be able to see the demo templates in the Template dropdown and parts in the Part
 dropdown and be able to select and add them if Template is active.
+
+5.  Secuirty programs can block saving to Draft/Template/Parts mail folders.
+directory exceptions will need to be added for these operations to work.
+
+### Example MODSECURITY exception:
+#### vim /etc/httpd/conf/httpd.conf
+    <Directory /home/username/public_html/roundcube>
+    <IfModule mod_security2.c>
+    SecRuleEngine Off
+    </IfModule>
+    </Directory>
+
 
 
 ### Special Keys:
