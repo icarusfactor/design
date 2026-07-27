@@ -32,7 +32,7 @@ to update them in Design.
 be able to see the demo templates in the Template dropdown and parts in the Part
 dropdown and be able to select and add them if Template is active.
 
-5.  Secuirty programs can block saving to Draft/Template/Parts mail folders.
+5.  Security programs can block saving to Draft/Template/Parts mail folders.
 Directory exceptions will need to be added for these operations to work.
 
 ### Example MODSECURITY exception:
