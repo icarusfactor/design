@@ -33,7 +33,7 @@ be able to see the demo templates in the Template dropdown and parts in the Part
 dropdown and be able to select and add them if Template is active.
 
 5.  Secuirty programs can block saving to Draft/Template/Parts mail folders.
-directory exceptions will need to be added for these operations to work.
+Directory exceptions will need to be added for these operations to work.
 
 ### Example MODSECURITY exception:
 #### vim /etc/httpd/conf/httpd.conf
