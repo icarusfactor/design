@@ -454,17 +454,21 @@ function stripDivById(string $html, string $id): string
 	    //cookie for php session username.   
             $user = $rcmail->user;
 	    $sess_user = $user->get_username();
-	    setcookie("sess_user", $sess_user, time() + (86400 * 30), "/"); 
+	    //setcookie("sess_user", $sess_user, time() + (86400 * 30), "/"); 
+	    setcookie("sess_user", $sess_user, time() + (86400 * 30)); 
+
 
             //Cookie for total count of template items in template folder
 	    $count = $this->count_tmpls(); 
-	    setcookie("total_count", $count, time() + (86400 * 30), "/"); 
+	    //setcookie("total_count", $count, time() + (86400 * 30), "/"); 
+	    setcookie("total_count", $count, time() + (86400 * 30)); 
 
 	  //Seprate cookie for template list . May make this into an array of subjects and only use one cookie. 
 	  //Will be limited to 10 anyway. 
 	    $flag_count = $this->get_tmpl_subject($sess_user, $count);
             $active_count = count( $flag_count );
-	    setcookie("active_count", $active_count, time() + (86400 * 30), "/"); 
+	    //setcookie("active_count", $active_count, time() + (86400 * 30), "/"); 
+	    setcookie("active_count", $active_count, time() + (86400 * 30)); 
 
 	  //Active Count should already be limited from the subject cutoff.  
 	  $i=1;

@@ -264,7 +264,6 @@ a.disabled {
    $(document).ready(function() {
    // Set up click to detect if Modals are active while dropdowns are not.
    $(document).click(function(event) {		      
-		      //console.log("A click occurred on the document.");
 		      checkPartDD();
 		      checkTemplateDD();
 	                            });
@@ -272,21 +271,16 @@ a.disabled {
    //When loading last session this is used to make sure any dynamic class activity is reset.		      
    let doReload = localStorage.getItem('rcd_reload');
    if (doReload === null || doReload === "false") {
-      //console.log("No Reload.");
    } else if( doReload === "zoom" ) {
-      //console.log("Reload Edit Window");
       window.parent.restoreZoom();
-      // Something went wonky with Browser drag and drop removing until fixed highlight.		      
-      ////highlightDIV(); //Check if to highlight.		      
+      highlightDIV(); //Check if to highlight.		      
       localStorage.setItem('rcd_reload', "false");
    } else if( doReload === "session" ) {
-      //console.log("Restore Session");
       window.parent.restoreSession(); 
-      // Something went wonky with Browser drag and drop removing until fixed highlight.		      
-      ////highlightDIV(); //Check if to highlight.		      
+      highlightDIV(); //Check if to highlight.		      
       localStorage.setItem('rcd_reload', "false");
       window.parent.noticeSessLoad();
-   }		      
+   }
 
     });
 
@@ -319,6 +313,387 @@ a.disabled {
     savesess.disabled= false;
     loadsess.disabled= false;
 
+
+    //test template
+
+    const htmlTest = `<!-- DYNAMIC V1.2 TITLE:Basic Newsletter: -->
+<table role="presentation" style="border: solid 1px; width: 100%;" align="center" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td>
+<div id="rcd_template" style="margin: 0px auto; max-width: 800px;">
+<table role="presentation" style="width: 100%;" align="center" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td style="padding: 0pt; direction: ltr; font-size: 0px; text-align: center;">
+
+<!-- DOCUMENT BEGIN -->
+<div id="rcd_document">
+
+<!-- HEADER BEGIN -->
+<div id="rcd_header" class="" style="">
+<div id="rcd_brandlogo" class="" style="margin: 0px auto; background: none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; max-width: 798px;">
+<table role="presentation" style="background: none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; width: 100%;" align="center" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td style="padding: 0pt; direction: ltr; font-size: 0px; text-align: center; background-color: rgb(66, 66, 66);">
+<!-- UI Logo -->
+
+<div id="rcd_brandtag" class="" style="font-size: 0px; text-align: left; direction: ltr; vertical-align: middle; width: 100%;">
+<img src="https://placehold.co/150x50" style="width: 160px;">
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td style="padding: 0px; vertical-align: middle; background-color: rgb(66, 66, 66);">
+<table role="presentation" style="" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td style="padding: 15px 25px; font-size: 0px;" align="left">
+<div style="font-size: 15px; text-align: left;">
+<div class="header-logo"> <a href="#"></a>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table></td></tr></tbody>
+</table>
+</div>
+
+<div class="" style="font-size: 0px; text-align: left; direction: ltr; vertical-align: middle; width: 100%;">
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td style="padding: 0px; vertical-align: middle;">
+<table role="presentation" style="" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td class="" style="padding: 0px 40px; font-size: 0px;" align="right">
+<div style=" text-align: right;">
+<div class="">
+<h2 style="font-size: 24px;" class="">&nbsp; <a href="#" style="text-decoration: none;" class=""> Site Unit
+Name </a> </h2>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- HEADER END -->
+
+<!-- CONTENT BEGIN -->
+<div id="rcd_content">
+<!-- Image Begin --> 
+<div id="rcd_div" class="" style="margin: 0px auto; max-width: 798px;">
+<table role="presentation" style="width: 100%;" align="center" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td style="padding: 0pt; direction: ltr; font-size: 0px; text-align: center;">
+
+<div class="" style="font-size: 0px; text-align: left; direction: ltr; vertical-align: top; width: 100%;">
+<table role="presentation" style="vertical-align: top;" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td style="padding: 0pt; font-size: 0px;" align="center">
+<table role="presentation" style="border-collapse: collapse; border-spacing: 0px;" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td style="width: 798px;"> <a href="#" target="_blank"> <img alt="" src="https://placehold.co/1600x350" style="border: 0pt none ; display: block; outline-color: invert; outline-style: none; outline-width: medium; text-decoration: none; height: auto; width: 100%; font-size: 15px;" height="auto" width="798"> </a> </td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Image End --> 
+
+</td></tr></tbody></table></div>
+
+<!-- Paragraph Begin -->
+<div id="rcd_div" style="margin: 0px auto; background: none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; max-width: 798px;">
+<table role="presentation" style="background: none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; width: 100%;" align="center" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td style="padding: 0px 20px; direction: ltr; font-size: 0px; text-align: center;">
+
+<div class="" style="font-size: 0px; text-align: left; direction: ltr; vertical-align: top; width: 100%;">
+<table role="presentation" style="vertical-align: top;" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td style="padding: 10px 25px;" align="left">
+<div style="font-size: 15px; line-height: 24px; text-align: left;">
+<p>Enim, sed faucibus turpis in eu mi bibendum. Venenatis cras sed felis eget velit aliquet sagittis id. Nam libero justo, laoreet sit amet. Non curabitur gravida arcu ac tortor dignissim convallis. Nulla facilisi cras fermentum, odio. Orci sagittis eu volutpat odio. Consectetur lorem donec massa sapien, faucibus et molestie ac. Et, egestas quis ipsum suspendisse ultrices. Lectus mauris ultrices eros, in cursus turpis massa. Lorem mollis aliquam ut porttitor. Nibh venenatis cras sed felis. Nulla at volutpat diam ut venenatis. Nunc sed id semper risus in hendrerit gravida. Fringilla ut morbi tincidunt augue interdum. Arcu vitae elementum curabitur vitae nunc sed velit. Suspendisse ultrices gravida dictum fusce ut.</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Paragraph End -->
+
+<!-- Card Begin -->
+<div id="rcd_div" class="" style="margin:10px; padding:10px; border: solid 1px;font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:90%;">
+																														<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+																															<tbody>
+																																<tr>
+																																	<td style="border:1px solid #555555;vertical-align:top;padding-top:0;padding-right:0;padding-left:0;">
+
+
+<table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;">
+																																							<tbody>
+																																								<tr>
+																																									<td style="width:696px;"> <a href="#" target="_blank"> <img alt="Downtown at night" src="https://placehold.co/740x175" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:15px;" width="696" height="auto"> </a> </td>
+																																								</tr>
+																																							</tbody>
+																																						</table>
+																																					</td>
+																																				</tr>
+																																				<tr>
+																																					<td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+																																						<div style="font-size:15px;line-height:24px;text-align:center;color:#000000;">
+																																							<h2 style="margin-left:0px; margin-top: 11px;"> Donec quis ex vel eros euismod </h2>
+																																							<p>Ut ac odio sed metus posuere aliquam in ut diam. Sed est tellus, dictum id nisl sed, fringilla finibus mauris. Sed ante elit, accumsan eget feugiat a, interdum in magna. Mauris interdum, massa faucibus tincidunt accumsan, ipsum velit vehicula ligula, eget malesuada sem mi et diam.</p>
+																																						</div>
+																																					</td>
+																																				</tr>
+																																				<tr>
+																																					<td align="center" class="" style="font-size:0px;padding:0 25px 25px 25px;word-break:break-word;">
+																																						<table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
+																																							<tbody>
+																																								<tr>
+																																									<td align="center" bgcolor="#555555" role="presentation" style="border:none;border-radius:0;cursor:auto;mso-padding-alt:10px 25px;background:#555555;" valign="middle">
+																																										<a href="#" style="display:inline-block;background:#555555;color:#FFFFFF;font-size:18px;font-weight:700;margin:10px;text-decoration:none;text-transform:none;padding:10px;mso-padding-alt:0px;border-radius:0;" target="_blank">																																											TAKE ACTION 																																								</a>
+																																									</td>
+																																								</tr>
+																																							</tbody>
+																																						</table>
+
+</td>																														</tr>																															</tbody>																													</table>
+</div>
+<!-- Card End -->
+
+<!-- Card Begin -->
+<div id="rcd_div" class="" style="margin:10px; padding:10px; border: solid 1px;font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:90%;">
+																														<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+																															<tbody>
+																																<tr>
+																																	<td style="border:1px solid #555555;vertical-align:top;padding-top:0;padding-right:0;padding-left:0;">
+
+
+<table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;">
+																																							<tbody>
+																																								<tr>
+																																									<td style="width:696px;"> <a href="#" target="_blank"> <img alt="Downtown at night" src="https://placehold.co/740x175" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:15px;" width="696" height="auto"> </a> </td>
+																																								</tr>
+																																							</tbody>
+																																						</table>
+																																					</td>
+																																				</tr>
+																																				<tr>
+																																					<td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+																																						<div style="font-size:15px;line-height:24px;text-align:center;color:#000000;">
+																																							<h2 style="margin-left:0px; margin-top: 11px;"> Donec quis ex vel eros euismod </h2>
+																																							<p>Ut ac odio sed metus posuere aliquam in ut diam. Sed est tellus, dictum id nisl sed, fringilla finibus mauris. Sed ante elit, accumsan eget feugiat a, interdum in magna. Mauris interdum, massa faucibus tincidunt accumsan, ipsum velit vehicula ligula, eget malesuada sem mi et diam.</p>
+																																						</div>
+																																					</td>
+																																				</tr>
+																																				<tr>
+																																					<td align="center" class="" style="font-size:0px;padding:0 25px 25px 25px;word-break:break-word;">
+																																						<table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
+																																							<tbody>
+																																								<tr>
+																																									<td align="center" bgcolor="#555555" role="presentation" style="border:none;border-radius:0;cursor:auto;mso-padding-alt:10px 25px;background:#555555;" valign="middle">
+																																										<a href="#" style="display:inline-block;background:#555555;color:#FFFFFF;font-size:18px;font-weight:700;margin:10px;text-decoration:none;text-transform:none;padding:10px;mso-padding-alt:0px;border-radius:0;" target="_blank">																																											TAKE ACTION 																																								</a>
+																																									</td>
+																																								</tr>
+																																							</tbody>
+																																						</table>
+
+</td>																														</tr>																															</tbody>																													</table>
+</div>
+<!-- Card End -->
+
+<!-- Card Begin -->
+<div id="rcd_div" class="" style="margin:10px; padding:10px; border: solid 1px;font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:90%;">
+																														<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+																															<tbody>
+																																<tr>
+																																	<td style="border:1px solid #555555;vertical-align:top;padding-top:0;padding-right:0;padding-left:0;">
+
+
+<table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;">
+																																							<tbody>
+																																								<tr>
+																																									<td style="width:696px;"> <a href="#" target="_blank"> <img alt="Downtown at night" src="https://placehold.co/740x175" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:15px;" width="696" height="auto"> </a> </td>
+																																								</tr>
+																																							</tbody>
+																																						</table>
+																																					</td>
+																																				</tr>
+																																				<tr>
+																																					<td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+																																						<div style="font-size:15px;line-height:24px;text-align:center;color:#000000;">
+																																							<h2 style="margin-left:0px; margin-top: 11px;"> Donec quis ex vel eros euismod </h2>
+																																							<p>Ut ac odio sed metus posuere aliquam in ut diam. Sed est tellus, dictum id nisl sed, fringilla finibus mauris. Sed ante elit, accumsan eget feugiat a, interdum in magna. Mauris interdum, massa faucibus tincidunt accumsan, ipsum velit vehicula ligula, eget malesuada sem mi et diam.</p>
+																																						</div>
+																																					</td>
+																																				</tr>
+																																				<tr>
+																																					<td align="center" class="" style="font-size:0px;padding:0 25px 25px 25px;word-break:break-word;">
+																																						<table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
+																																							<tbody>
+																																								<tr>
+																																									<td align="center" bgcolor="#555555" role="presentation" style="border:none;border-radius:0;cursor:auto;mso-padding-alt:10px 25px;background:#555555;" valign="middle">
+																																										<a href="#" style="display:inline-block;background:#555555;color:#FFFFFF;font-size:18px;font-weight:700;margin:10px;text-decoration:none;text-transform:none;padding:10px;mso-padding-alt:0px;border-radius:0;" target="_blank">																																											TAKE ACTION 																																								</a>
+																																									</td>
+																																								</tr>
+																																							</tbody>
+																																						</table>
+
+</td>																														</tr>																															</tbody>																													</table>
+</div>
+<!-- Card End -->
+
+<!-- SOCIAL BEGIN -->
+<div id="rcd_div" class="" style="margin: 0px auto; background: none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; max-width: 798px;">
+<table role="presentation" style="background: rgb(64,64,64) none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; width: 100%;" align="center" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td style="padding: 0px; direction: ltr; font-size: 0px; text-align: center;">
+
+<div class="" style="font-size: 0px; text-align: left; direction: ltr; vertical-align: top; width: 100%;">
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td style="padding: 5px 0px; vertical-align: top;">
+
+<div style="text-align: center;">
+<a href="#"><img src="https://placehold.co/30x30" alt="" style="padding: 0pt 10px; display: inline;" class="" border="0" height="30" width="30"></a>
+&nbsp;
+<a href="#"><img src="https://placehold.co/30x30" alt="" style="padding: 0pt 10px; display: inline;" class="" border="0" height="30" width="30"></a>
+&nbsp;
+<a href="#"><img src="https://placehold.co/30x30" alt="" style="padding: 0pt 10px; display: inline;" class="" border="0" height="30" width="30"></a>
+&nbsp;
+<a href="#"><img src="https://placehold.co/30x30" alt="" style="padding: 0pt 10px; display: inline;" class="" border="0" height="30" width="30"></a>
+&nbsp;
+<a href="#"><img src="https://placehold.co/30x30" alt="" style="padding: 0pt 10px; display: inline;" class="" border="0" height="30" width="30"></a>
+&nbsp;
+<a href="#"><img src="https://placehold.co/30x30" alt="" style="padding: 0pt 10px; display: inline;" class="" border="0" height="30" width="30"></a>
+&nbsp;
+</div>
+
+<table role="presentation" style="" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- SOCIAL END -->
+
+</div>
+<!-- CONTENT END -->
+
+<!-- FOOTER BEGIN -->
+<div id="rcd_footer" style="margin: 0px auto; background: rgb(0, 0, 0) none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; max-width: 798px;">
+<table role="presentation" style="background: rgb(0, 0, 0) none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; width: 100%;" align="center" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td style="padding: 0pt; direction: ltr; font-size: 0px; text-align: center;">
+<div class="mj-column-per-100 mj-outlook-group-fix" style="font-size: 0px; text-align: left; direction: ltr; vertical-align: top; width: 100%;">
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td style="padding: 0px; vertical-align: top;">
+<table role="presentation" style="" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td style="padding: 30px 0px 15px; font-size: 0px;" align="center">
+<table role="presentation" style="border-collapse: collapse; border-spacing: 0px;" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td style="width: 120px;"> <a href="#" target="_blank"> <img alt="The Site of State" src="https://placehold.co/150x50" style="border: 0pt none ; display: block; outline-color: invert; outline-style: none; outline-width: medium; text-decoration: none; height: auto; width: 100%; font-size: 15px;" height="auto" width="120"> </a> </td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td class="footer" style="padding: 0px 25px; font-size: 0px;" align="center">
+<div style="font-size: 12px; line-height: 24px; text-align: center; color: rgb(255, 255, 255);">
+<p style="font-size: 14px;"><a href="https://google.com" style="color: rgb(255, 255, 255);">&nbsp;Site Unit Name </a></p>
+<p> 123 Street Address, Big City, AA 51142 </p>
+<p> <a href="#">Extra Info One</a> | <a href="#">Extra Info Two</a> | <a href="#">Extra Info Three</a>
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<td class="footer" style="padding: 0px 25px 10px; font-size: 0px;" align="center">
+<div style="font-size: 15px; text-align: center; color: rgb(255, 255, 255);">
+<p>Lorem ipsum dolor sit amet,
+consectetur adipiscing elit. Vestibulum efficitur nibh nulla, eu
+ultricies dui pretium sit amet.</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- FOOTER END -->
+
+</div>
+<!-- DOCUMENT END -->
+
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td></tr></tbody>
+</table>`;
+
+
+    //Used to halt Chrome events that triggers multiple mouseenter before a mouse leave is triggered. 
+    sw_lock = false;	    
+    var templateBackup ="";
+
+
     </script>
 
 
@@ -339,6 +714,7 @@ a.disabled {
     $.extend($.summernote.options, {
         template: {}
     });
+
 
 
 
@@ -448,7 +824,6 @@ a.disabled {
                         var num = value.replace(/\D/g, "");
                         window.parent.importTemplate(num);
 			documentTypeNotice();
-                        //console.log("Template ID: " + num );
                         });
 
                         $(this).on('mouseenter', function() {
@@ -459,7 +834,6 @@ a.disabled {
                         var numTmpl = mixedStr.match(/\d+(\.\d+)?/g); 
                         //tNam = getLSkeyEnd("_tmpl_subject"+numTmpl[0] );
                         tBod = getLSkeyEnd("_tmpl_body"+numTmpl[0] );
-                        ////console.log("Get Local Storage Key _part_subject"+ numPart[0]+" pNam="+pNam+" pBod="+pBod )
                         showModalt( "TEMPLATE VIEWER" , tBod );
                         });
                
@@ -644,7 +1018,6 @@ a.disabled {
                         var value = $button.data('value');
                         var num = value.replace(/\D/g, "");
                         window.parent.importPart(num,"header"); 
-                        //console.log("part header ID: " + num );
                         });
 
                         $(this).on('mouseenter', function() {
@@ -655,7 +1028,6 @@ a.disabled {
                         var numPart = mixedStr.match(/\d+(\.\d+)?/g); 
                         //pNam = getLSkeyEnd("_part_subject"+numPart[0] );
                         pBod = getLSkeyEnd("_part_bodyheader"+numPart[0] );
-                        //console.log("Get Local Storage Key _part_subject"+ numPart[0]+" pNam="+pNam+" pBod="+pBod )
                         showModalp( "PART VIEWER" , pBod );
                         });
                
@@ -836,7 +1208,6 @@ a.disabled {
                       var value = $button.data('value');
                       var num = value.replace(/\D/g, "");
                       window.parent.importPart(num,"content"); 
-                      //console.log('part content ID: ' + num );
                       });
 
                       $(this).on('mouseenter', function() {
@@ -847,7 +1218,6 @@ a.disabled {
                      var numPart = mixedStr.match(/\d+(\.\d+)?/g); 
                      //pNam = getLSkeyEnd("_part_subject"+numPart[0] );
                      pBod = getLSkeyEnd("_part_bodycontent"+numPart[0] );
-	             //console.log("Get Local Storage Key _part_subject"+ numPart[0]+" pNam="+pNam+" pBod="+pBod )
 		     showModalp( "PART VIEWER" , pBod );
                      }); //mouse enter
 
@@ -1022,7 +1392,6 @@ a.disabled {
                         var value = $button.data('value');
                         var num = value.replace(/\D/g, "");
                         window.parent.importPart(num,"footer");
-                        //console.log("part footer ID: " + num );
                         });
 
                         $(this).on('mouseenter', function() {
@@ -1033,7 +1402,6 @@ a.disabled {
                         var numPart = mixedStr.match(/\d+(\.\d+)?/g);
                         //pNam = getLSkeyEnd("_part_subject"+numPart[0] );
                         pBod = getLSkeyEnd("_part_bodyfooter"+numPart[0] );
-                        //console.log("Get Local Storage Key _part_subject"+ numPart[0]+" pNam="+pNam+" pBod="+pBod )
                         showModalp( "PART VIEWER" , pBod );
                         });
 
@@ -1053,7 +1421,7 @@ a.disabled {
 }));
 
 
-/* END : Three section of the same for three part system HEADER CNTENT FOOTER */
+/* END : Three section of the same for three part system HEADER CONTENT FOOTER */
 
 
 /* https://github.com/DiemenDesign/summernote-loremipsum */
@@ -1246,10 +1614,8 @@ function documentDraggable() {
   const regex = /draggable\s*=\s*['"]true['"]/;
   var isDraggable = regex.test(fullContent); 
 		    if(isDraggable) {  
-                                //console.log('Found a draggable div');
 				return true;
 				} else {
-                                //console.log('Found no draggable div');
 				return false;		    
 				    }
 			            }
@@ -1274,17 +1640,14 @@ function documentType() {
 
   var docTButton = $('.note-btn[data-original-title="FIXED"]');		     
  if (firstComment === undefined || firstComment === null) { 
-   console.log("DYNAMIC TEMPLATE NOT FOUND" );
    return "FIXED";		
  } else {
  var comment = firstComment.toString(firstComment);
-//console.log("1ST COMMENT IS: "+comment );
  var found = comment.indexOf(" DYNAMIC ");
     if(found == -1) {  return "FIXED";               
 		}  else if (!partExist ) {	
                        return "DYNAMIC_NOCONTENT";
                     }  else {   
-                       //console.log("IS DYNAMIC: "+found );
                        return "DYNAMIC" ;
                             }
         }
@@ -1300,23 +1663,19 @@ function documentTypeNotice()  {
          switch (docT) {
 		case "FIXED": 
                           docTButton.html("FIXED");            
-			  //console.log("CHANGE BUTTON TO FIXED");	     
 			  return "FIXED";	     
 			  break;	     
                 case "DYNAMIC":
 		          docTButton.html("DYNAMIC");
-			  //console.log("CHANGE BUTTON TO DYNAMIC");	     
 		          return "DYNAMIC";		  
 			  break;	     
                 case "DYNAMIC_NOCONTENT":
 		          docTButton.html("DYNAMIC");
-			  //console.log("CHANGE BUTTON TO DYNAMIC");	     
 		          return "DYNAMIC_NOCONTENT";		  
 			  break;	     
 
                 default:
 		      if (docTButton.length > 0) {docTButton.find(".note-btn").html("FIXED");}
-			  //console.log("CHANGE BUTTON TO DEFAULT");	     
 		          return "FIXED";		     
 		       }
 				     
@@ -1368,14 +1727,15 @@ var ReplaceIMG = function (context) {
 let selectedMove = null
 let selectedMoveEnabled = true;
 
+
+//This section needs work for drag and drop to work on Firefox. Works on Chrome but buggy. 
+
 function dragOver(e) {
   //bypass nested drag events, should not be case.Part system only has one event.	    
   e.preventDefault();
   //Only add as a drop target if id is an rcd_div 		    
-  // console.log("dragOver function for: NAME: "+e.target.tagName+"  ID:"+e.target.id+" Parent ID:"+e.target.parentElement.id+" Parent TAG:"+e.target.parentElement.tagName );
 
   if( selectedMoveEnabled && e.target.parentElement.id == "rcd_div" && e.target.parentElement.tagName == "DIV" ) { 
-   //console.log("%cDRAG OVER SUCCESS WITH TAG:"+e.target.tagName+" ID:"+e.target.id , "color: green;" );
     e.target.parentElement.insertAdjacentElement("beforebegin", selectedMove );		      
 
 	      }
@@ -1383,18 +1743,23 @@ function dragOver(e) {
 
 function dragEnd(e) {
   if( selectedMoveEnabled ) { 
-                          //console.log("DRAG END "+e.target.tagName+" ID:"+e.target.id );
 			  selectedMove = null
 	                    }
 }
 
 function dragStart(e) {
+          event.stopPropagation();
 	  //Bypass nested drag events, should not be case.Part system only has one event.	    
 	  if( selectedMoveEnabled ) { 
-                          //console.log("DRAG START TAG:"+e.target.tagName+" ID:"+e.target.id );
-
                           e.dataTransfer.setData("text/plain", e.target.id);
-			  e.dataTransfer.effectAllowed = 'move';
+
+			  //For Firefox drag and drop    
+			  if (e.dataTransfer.mozSetDataAt) {
+                             e.dataTransfer.mozSetDataAt("application/x-moz-node", e.target, 0);
+                             } 
+
+			  //e.dataTransfer.effectAllowed = 'move';
+			  e.dataTransfer.dropEffect = 'move';
 			  //e.dataTransfer.setData('text/plain', null);
 			  selectedMove = e.target;
 		      } 
@@ -1404,10 +1769,8 @@ function dragStart(e) {
 function isValidUrl(url_string) {
   try {
     new URL(url_string);
-    //console.log("URL TRUE" );		      
     return true;
   } catch (error) {
-    //console.log("URL FALSE" );		      
     return false;
   }
 }
@@ -1447,7 +1810,6 @@ function isValidUrl(url_string) {
                   var bgcolor ="rgb(255,255,255);";
 	          $('.note-recent-color').each(function() {
                   var style = $(this).attr("style");
-                  //console.log("Style attribute:", style); 	
                   const styleProperties = style.split(';'); 
                   let foundColor = null;	      
                   
@@ -1455,7 +1817,6 @@ function isValidUrl(url_string) {
                   const trimmedProp = prop.trim();
                   if (trimmedProp.startsWith('background-color:')) {
                   bgcolor = trimmedProp.substring('background-color:'.length).trim();
-                  //console.log("background Color:", bgcolor); 	
                   break; // Found the color, exit the loop
                   }
                   }
@@ -1479,7 +1840,6 @@ var ChangeColorTable = function (context) {
    	   if (tableElement) {
            // You now have the selected table element! 
            // You can manipulate it, access its attributes, or perform other actions
-          //console.log("Selected table element:", tableElement);
           var bgcolor = getBGcolor();
 	  tableElement.style.backgroundColor = bgcolor; 
     } else {
@@ -1495,7 +1855,6 @@ var ChangeColorTable = function (context) {
 function rightClickMenuHide() {
          const rightClickMenu = document.getElementById('rightClickMenu');
 	 rightClickMenu.style.display = 'none'; // hide the popup
-         //console.log("HIDE RIGHT CLICK MENU");
 			      }
 
          //Add drag js attribs to div with rcd_div id. 
@@ -1507,10 +1866,8 @@ function EnableMoveDIVs() {
         var divsToModify = editorContent.querySelectorAll('div#rcd_div');
 
         divsToModify.forEach(function(div) {
+
         div.setAttribute('draggable', 'true');
-        div.setAttribute('ondragend', 'dragEnd(event)');
-        div.setAttribute('ondragover', 'dragOver(event)');
-        div.setAttribute('ondragstart', 'dragStart(event)');
 
 	//Using class on children of main div to stop it from breaking apart key divs. 		    
         if( div ) { 
@@ -1521,12 +1878,13 @@ function EnableMoveDIVs() {
     		    }		
 		  }
 
+
         });
 
         }
-         //Something went wonky with browser drag and drop.Removing until fix. 		    
-         ////highlightDIV();
-         //console.log("Enable MOVE on all tagged DIVs");
+
+	 //Need to highlightonly active rcd_div where mouse enter took place.	    
+         highlightDIV();
          //Give notice that tagged DIV are now movable.
          window.parent.noticeMoveEnabled();
 	    }
@@ -1542,9 +1900,6 @@ function DisableMoveDIVs() {
 
         divsToModify.forEach(function(div) {
         div.removeAttribute('draggable');
-        div.removeAttribute('ondragend');
-        div.removeAttribute('ondragover');
-        div.removeAttribute('ondragstart');
 
 	//Using class on children of main div to stop it from breaking apart key divs. 		    
         if( div ) { 
@@ -1558,8 +1913,7 @@ function DisableMoveDIVs() {
         });
 
          //Something went wonky with browser drag and drop.Removing until fix. 		    
-         ////highlightDIV();
-         //console.log("Disable MOVE on all tagged DIVs");
+         highlightDIV();
          window.parent.noticeMoveDisabled();
 		    }
 	    }
@@ -1567,16 +1921,13 @@ function DisableMoveDIVs() {
 
 function MakePart( partSection  ) {
            rightClickMenuHide(); 
-           //console.log("MakePart:HIDE MENU");
            //Get Closest Div of part section. Content / Header / Footer
            var divHtml ="";
            switch( partSection ) {
              case "content": 
                      //Remove Draggable attributes from part.
                      divHtml = GETpart(); // Get Raw Part Data
-                     //console.log("MakePart:Before " + divHtml); // Output full HTML of closest div
                      divHtml = rmDynaPartMods( divHtml ); //Clean Up Dynamic Code
-                     //console.log("MakePart:After " + divHtml); // Output full HTML of closest div
              break;
 	     case "header":
              //Will need to create a blank part container. 
@@ -1585,7 +1936,6 @@ function MakePart( partSection  ) {
              var summernoteContent = $('#summernote').summernote('code');
              var headerContent = document.getElementById('rcd_header').outerHTML; 
 	     divHtml = divHtml.slice(0, 25) + headerContent + divHtml.slice(25);			       
-             //console.log("HEADER:"+divHtml);
              break;			       
              case "footer":
              //Will need to create a blank part container. 
@@ -1594,7 +1944,6 @@ function MakePart( partSection  ) {
              var summernoteContent = $('#summernote').summernote('code');
              var footerContent = document.getElementById('rcd_footer').outerHTML; 
 	     divHtml = divHtml.slice(0, 25) + footerContent + divHtml.slice(25);			       
-             //console.log("FOOTER:"+divHtml);
 	     break;
 	     default: 
 	     //Default is treat as no acton and go no further.			       
@@ -1630,13 +1979,12 @@ function ExportPart( partSection  ) {
                                     divHtml = divHtml.slice(0, 25) + addTITLEbegin + "\n" + GETpart() + addTITLEend + "\n" + divHtml.slice(25);
 				    //Remove dynamicly added attributes.		
 				    divHtml = divHtml.replace(/\s+draggable=(["']).*?\1/g,  '');
-                                    divHtml = divHtml.replace(/\s+ondragend=(["']).*?\1/g,  '');
-                                    divHtml = divHtml.replace(/\s+ondragover=(["']).*?\1/g, '');
-                                    divHtml = divHtml.replace(/\s+ondragstart=(["']).*?\1/g,'');
+                                    //NO LONGER USED
+                                    //divHtml = divHtml.replace(/\s+ondragend=(["']).*?\1/g,  '');
+                                    //divHtml = divHtml.replace(/\s+ondragover=(["']).*?\1/g, '');
+                                    //divHtml = divHtml.replace(/\s+ondragstart=(["']).*?\1/g,'');
                                     divHtml = window.parent.rmDragPartClass( divHtml );		
 
-
-				    //console.log("ExportPart:DIV TO SAVE AS PART " + divHtml); 
                                     break;
 
                                     case "header":
@@ -1646,7 +1994,6 @@ function ExportPart( partSection  ) {
                                     var summernoteContent = $('#summernote').summernote('code');
                                     var headerContent = document.getElementById('rcd_header').outerHTML; 
                                     divHtml = divHtml.slice(0, 25) + addTITLEbegin + "\n" + headerContent + "\n" + addTITLEend + "\n" + divHtml.slice(25);
-				    //console.log("ExportPart:HEADER:"+divHtml);
                                     break;
 				    case "footer":
                                     //Will need to create a blank part container. 
@@ -1668,7 +2015,6 @@ function ExportPart( partSection  ) {
 
 function ImportCLIPart( toWhere ) {
       rightClickMenuHide();	    
-      //console.log("IMPORT FROM CLI PART"); 
       var importp =  window.parent.document.createElement('input');
       importp.setAttribute('type' , "file");
       importp.setAttribute('accept' , ".rcdp");
@@ -1678,7 +2024,6 @@ function ImportCLIPart( toWhere ) {
             var files =   Array.from(importp.files);
             const file = event.target.files[0];   //Get Selected file. 
              if (file) {
-            //  console.log("FILE CLI PART"); 
             reader.onload = function(e) {
                                if(e.target.result !== null) {
                                   const fileContent = e.target.result;
@@ -1718,7 +2063,6 @@ function InsertTmplPartEditor( partBody ) {
                     const PartMatch = partBody.match(regex);
                                  
                     if (PartMatch && PartMatch[1]) {
-                    //console.log( PartMatch[1] ); 
                     switch (PartMatch[1]) {
                         case "rcd_header":
                         var tmplChildHeader  =  tmplContent.querySelector("#rcd_header");
@@ -1753,47 +2097,28 @@ function rmOuterTag(htmlString, tagName) {
  //Duplicate closest DIV to mouse click.Then move to where you want it.     
 function DuplicateDIV() {
 	   rightClickMenuHide();	    
-            let divHtml = GETpart();  		     
-            if (divHtml) {
-	    //Duplicate below current copied DIV so no DOM confusion takes place.
-            //Then put it back in the same place. 
-	    var duplicatedDIV = divHtml + divHtml;				
-            var editorEditableArea = $('.note-editable');
-            if (editorEditableArea.length > 0) {
-            var outerHTMLContent = editorEditableArea[0].outerHTML;
-            //console.log(outerHTMLContent);
-            } 
-
-
-            const startIndex = outerHTMLContent.indexOf(divHtml);
-            const newOuterHTML = outerHTMLContent.substring(0, startIndex - 1) + divHtml + outerHTMLContent.substring(startIndex);
-              $('#summernote').summernote('code', newOuterHTML);			
-              $('.summernote').trigger('summernote.change');
-           
-            //Reset To Resync Move Mode		 		
-            DisableMoveDIVs();
-	    EnableMoveDIVs();
-
+            //New Stuff
+	    //This need to be its own function early on to capture needed data for cut.	    
+	     var htmlString = $('#summernote').summernote('code');	    
+             divOffset = GETpartOffset();             
+             //duplicate the offset part value. 
+             var rcdDivs = EditInsertPart( htmlString , divOffset,3);               
+             importToContent(rcdDivs);
+             //End of New Stuff
 	    //Give Notice that DIV was copied.			
             window.parent.noticeDupDIV();
-	    }
 	    } 
 
 function CutDIV() {
             rightClickMenuHide();
-            //Get current editor content.		      
-	    var edContent = $('#summernote').summernote('code');
-            var partToRm = GETpart(); 
-            //Need to Cut div from template
-	    var prunedContent = edContent.replace( partToRm , '');	    
-            //Replace editor content with pruned template.
-            $('#summernote').summernote('code', prunedContent);
-	    $('.summernote').trigger('summernote.change');
-     
-            //Need to reset Move ability.		     
-	    DisableMoveDIVs();
-            EnableMoveDIVs();   
-
+            //New Stuff
+	    //This need to be its own function early on to capture needed data for cut.	    
+	     var htmlString = $('#summernote').summernote('code');	    
+             divOffset = GETpartOffset();             
+             //remove the offset part value. 
+             var rcdDivs = EditInsertPart( htmlString , divOffset ,2);               
+             importToContent(rcdDivs);
+             //End of New Stuff
             //Give Notice that DIV was Cut.                  
             window.parent.noticeCutDIV();
             }
@@ -1804,10 +2129,11 @@ function rmDynaPartMods(divHtml) {
 
   //Remove Draggable attributes.
   divHtml = divHtml.replace(/\s+draggable=(["']).*?\1/g,  '');
-  divHtml = divHtml.replace(/\s+ondragend=(["']).*?\1/g,  '');
-  divHtml = divHtml.replace(/\s+ondragover=(["']).*?\1/g, '');
-  divHtml = divHtml.replace(/\s+ondragover=(["']).*?\1/g, '');
-  divHtml = divHtml.replace(/\s+ondragstart=(["']).*?\1/g,'');
+  //NO LONGER USED		      
+  //divHtml = divHtml.replace(/\s+ondragend=(["']).*?\1/g,  '');
+  //divHtml = divHtml.replace(/\s+ondragover=(["']).*?\1/g, '');
+  //divHtml = divHtml.replace(/\s+ondragover=(["']).*?\1/g, '');
+  //divHtml = divHtml.replace(/\s+ondragstart=(["']).*?\1/g,'');
 
   //Remove drag-part class.
   const regex = /(<table[^>]*class="[^"]*)\bdrag-part\b([^"]*"[^>]*>)/g;
@@ -1849,7 +2175,6 @@ function CopyText() {
             console.log('No text selected.');
          }
 
-         //console.log("Copy Text");
 	    }
 	    
  //Paste selected text.     
@@ -1860,7 +2185,6 @@ function CopyText() {
 	  var clipboardText ="";	    
          try {
               clipboardText = await navigator.clipboard.readText();
-              //console.log("Clipboard content:", clipboardText);
              } catch (err) {
               console.error("Failed to read clipboard contents:", err);
               }
@@ -1868,7 +2192,6 @@ function CopyText() {
 
          $("#summernote").summernote("editor.pasteHTML", clipboardText );
 
-         //console.log("Paste Text");
 	    }
 
 
@@ -1890,7 +2213,6 @@ var ChangeColorTd = function (context) {
    	   if (tableElement) {
            // You now have the selected table element! 
            // You can manipulate it, access its attributes, or perform other actions
-           //console.log("Selected table element:", tableElement);
           var bgcolor = getBGcolor();
 	  tableElement.style.backgroundColor = bgcolor; 
           			       
@@ -1923,12 +2245,12 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
 	  fontSizes: customFontSizes,	  
 	  disableDragAndDrop: true,		  
   popover: {
-            image: [
-		['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
-                ['float', ['floatLeft', 'floatRight', 'floatNone']],
-                ['remove', ['removeMedia']],
-                ['custom', ['ReplaceIMG']], // Replace Current IMG src element.
-            ],
+// :::testing only:::            image: [
+//		['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+ //               ['float', ['floatLeft', 'floatRight', 'floatNone']],
+//                ['remove', ['removeMedia']],
+//                ['custom', ['ReplaceIMG']], // Replace Current IMG src element.
+ //           ],
             link: [
                 ['link', ['linkDialogShow', 'unlink']],
             ],
@@ -1950,7 +2272,6 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
 		      //Callbacks
 
                        onFocus: function() {
-                       //console.log('Summernote editor gained focus!');
                        //Check to see if drop down is part of page 
                        checkPartDD();					   
 		       checkTemplateDD();			   
@@ -1960,19 +2281,16 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
 
                        },
 		       onBlur: function() {
-                       //console.log('Summernote editor lost focus!');
                        //Check to see if drop down is part of page 
                        checkPartDD();					   
-                       checkTemplateDD();					   
+                       checkTemplateDD();	
 					   
                        },
 		      //Setup for Right Click Menu Setup. 
 		      onInit: function() {
                       $('.note-editable').on('contextmenu', function(e) {
                         e.preventDefault(); // Prevent default browser context menu
-			//console.log("Right-clicked inside Summernote!");
 					   docT = documentTypeNotice();
-					   //console.log("document Type:"+ docT);
                                            const rightClickMenu = document.getElementById('rightClickMenu');
 					   // Position the popup at the mouse coordinates
                                            rightClickMenu.style.left = event.clientX + 'px';
@@ -1991,7 +2309,6 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
                                                                 break;
                                                             case "DYNAMIC": 
 					   			isDrag = documentDraggable();
-								//console.log("isDrag: "+ isDrag );       
                                            			dynamicElements.forEach(element => {
 					     			element.style.display = 'block';
                                                                 element.style.visibility = 'visible'; 
@@ -2035,11 +2352,12 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
 
 	               $(".note-editable").on('click', function(e) {
                        // Your custom function to execute on left-click
-                       //console.log("Left-clicked inside Summernote!");
                        // You can access the clicked element using 'e.target'
                        rightClickMenuHide();
 		       hideModalp(); // Part Modal Hide.			   
 		       hideModalt(); //Template Modal Hide.				   
+                       
+
                        });			   
 				         }
 
@@ -2071,7 +2389,6 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
 // If drop down for template is not on the screen remove its template show modal.
 function checkTemplateDD() {
 if (!$('.dropdown-template.show').length > 0) {
-    //console.log("No div with class 'dropdown-template' was found.");
     hideModalt();
 	                                         }
 
@@ -2079,7 +2396,6 @@ if (!$('.dropdown-template.show').length > 0) {
 // If drop down for part is not on the screen remove its part show modal.
 function checkPartDD() {
 if (!$('.dropdown-partcontent.show').length > 0) {
-    //console.log("No div with class 'dropdown-partcontent' was found.");
     hideModalp();
 	                                         }
 
@@ -2087,7 +2403,6 @@ if (!$('.dropdown-partcontent.show').length > 0) {
 
 
 function showModalp( partName , bodyData ) {
-  //console.log("SHOW PART MODAL FOR "+partName );		    
   //Do reset of opposite viewer popups to clear out any leftover popups. 		   
   hideModalt(); //Template Modal Hide. 
 		    
@@ -2098,13 +2413,11 @@ function showModalp( partName , bodyData ) {
 
 // Function to hide the modal
 function hideModalp() {
-  //console.log("HIDE PART MODAL");		    
   $("#PartModal").modal("hide");
 }	
 
 //TESTING
 function showModalt( bodyTitle , bodyData ) {
-  //console.log("SHOW TEMPLATE MODAL FOR "+bodyData );		    
   //Do reset of opposite viewer popups to clear out any leftover popups. 		   
   hideModalp(); // Part Modal Hide.                           
 
@@ -2115,9 +2428,24 @@ function showModalt( bodyTitle , bodyData ) {
 
 // Function to hide the modal
 function hideModalt() {
-  //console.log("HIDE TEMPLATE MODAL");		    
   $("#TemplateModal").modal("hide");
 }	
+
+
+
+$('body').append('<!-- Move UP Or Down Modal -->' +
+ '<div class="modal fade" id="movePart" role="dialog">' + 
+ '  <div class="modal-dialog" style="max-width: 100px;"  >' +
+ '    <!-- Modal content-->' +
+ '    <div class="modal-content">' + 
+ '       <div class="modal-footer">' +
+	   '         <button type="button" class="btn btn-primary" onclick="void()">Move Up</button></br>' +
+ '         <button type="button" class="btn btn-primary" onclick="void()">Move Down</button>' +
+ '       </div>' +
+ '      </div> ' +
+ '   </div>' +
+ '</div>');
+
 
 $('body').append(
         '<div id="ReplaceIMG" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
@@ -2281,7 +2609,6 @@ $('#summernote').summernote('dialogsInBody',true);
 document.addEventListener('keydown', function(event) {
 
   if (event.altKey) {
-    //console.log('Alt key was pressed down!');
     // Perform actions when Alt key is pressed
     $(".note-table-popover").css('z-index', '9999');
     $(".note-image-popover").css('z-index', '1');
@@ -2289,7 +2616,6 @@ document.addEventListener('keydown', function(event) {
   }
 
   if (event.ctrlKey) {
-    //console.log('Ctrl key was pressed down!');
     // Perform actions when ctrl key is pressed
     $(".note-link-popover").css('z-index', '9999');
     $(".note-image-popover").css('z-index', '1');
@@ -2298,8 +2624,7 @@ document.addEventListener('keydown', function(event) {
   }
 
   if (event.ctrlKey && event.altKey) {
-    //console.log('Alt + Ctrl key was pressed down!');
-    // Perform actions when ctrl key is pressed
+    // Perform actions when  alt ctrl key is pressed
     $(".note-image-popover").css('z-index', '9999');
     $(".note-link-popover").css('z-index', '1');
     $(".note-table-popover").css('z-index', '1');
@@ -2309,60 +2634,194 @@ document.addEventListener('keydown', function(event) {
 
 function highlightDIV() {
         // Select all divs with id="rcd_div" within the Summernote editable area
-        $(".note-editable #rcd_div").each(function() {
-     
-        //console.log("Highlight Check" ); 
 
+        $(".note-editable #rcd_div").each(function() {
+        
         const isDraggable = $(this).attr('draggable') === 'true';
 
+
         if( isDraggable ) {
-        
+       
 	//Enter and set dynamic border.		     
         $(this).mouseenter( (e) => {
 
-        //Make working copy for menu items.
+        if(!sw_lock) {   		    
+        // To stop from infinite loop of mouseenter event lock it to only happen once. 
+        sw_lock = true;
+        
+        //Make working copy for menu items. Set offset number to locate. 
         INpart( $(this).get(0).outerHTML );			    
-	  
+
+        //show console what we got. May want to prepend here and then place in editor with summernote function
+
 	mouseIN( $(this) );		     
+
+        }
+
+
         });
 
         } else {  $(this).off("mouseenter"); }
 
-        if( isDraggable ) {
+
+         if( isDraggable ) {
+
         // After leave return styles.
         $(this).mouseleave( (e) => {
-	  mouseOUT( $(this) );		     
-        //Because items are draggable one will now be empty so clean it up before we finish. 
-        $(".note-editable #rcd_highlight").remove();
+
+
+         if(sw_lock) {   		    
+         sw_lock = false;  
+	 mouseOUT( $(this) );		     
+        
+	$("#rcd_highlight").unwrap();
+        $("#rcd_highlight_move").remove();
+        $("#rcd_highlight_move").remove();		     
+
+            }
 
         });
 
-        } else { $(this).off("mouseleave");   }
+	//This will reset the switch lock for Chrome browsers.   		     
+        } else { $(this).parent().off("mouseleave");}
 
         });
 		    
 }
 
+
+
+//After move up or down has been made need this function to add parts to the editor in new stack.  
+function importToContent( partsString ) {
+       
+    var txtNote = document.querySelectorAll("div.note-editable.card-block");
+        txtNote.forEach ( function (doctmpl){
+        // Function to Insert Content as child of rcd_content
+    var tmplChildContent =  doctmpl.querySelector("#rcd_content");
+        tmplChildContent.innerHTML = partsString;
+        });      
+    
+	//Need to clean up move buttons and reinit highlighting. 
+        $("#rcd_highlight").remove();
+        $("#rcd_highlight_move").remove();
+        $("#rcd_highlight_move").remove();
+		    
+        DisableMoveDIVs(); 
+	EnableMoveDIVs();	    
+        return "none";
+        }
+
+// Count of rcd_div that is above highlighted part.  	    
+function PartUPcount() {
+
+  var htmlString = $('#summernote').summernote('code');
+  var $dom = $('<div>').html(htmlString);
+  var $targetElement = $dom.find('#rcd_highlight');  
+  var rcd_divCount = $targetElement.prevAll('div#rcd_div').length;
+  return rcd_divCount ;   
+	    }
+
+// Count of rcd_div that is below highlighted part. 
+function PartDOWNcount() {
+
+  var htmlString = $('#summernote').summernote('code');
+  var $dom = $('<div>').html(htmlString);
+  var $targetElement = $dom.find('#rcd_highlight');  
+  var rcd_divCount = $targetElement.nextAll('div#rcd_div').length;
+
+  //If at bottom no need to work on issue further. 	 	    
+  if(rcd_divCount != 0){		    
+  //Need to get total count and subtract rcd_divCount
+  var total_count = $dom.find('div[id="rcd_div"]').length;
+  rcd_divCount = total_count - rcd_divCount + 1 ;
+	               }
+  return rcd_divCount ;   
+	    }
+
+
+
+
+
+// Checks if highlight has any sub elements or not. 
+function isHighlightEmpty() {
+
+if ($(".note-editable #rcd_highlight").children().length > 0) {
+    return 0;		    
+} else {
+    return 1;		    
+}
+}
+
+
 //copy HTML to localstorage to work on.
 function INpart( htmlString ) {
-               // console.log( htmlString );
 	       localStorage.setItem( "workcopy" , htmlString); 	    
 		              }
 
+//copy HTML DIV location from top to localstorage to work on.
+function INpartOffset( divCount ) {
+	       localStorage.setItem( "workcopy_div_count" , divCount ); 	    
+		              }
+
+
+
 //get HTML from current DYNAMIC part. DIV of rcd_content.
 function GETpart(){
-               // console.log( htmlString );
 	       return localStorage.getItem( "workcopy" ); 	    
 		              }		    
+
+//get current DYNAMIC part. DIV of rcd_content div count.
+function GETpartOffset(){
+	       return localStorage.getItem( "workcopy_div_count" ); 	    
+		              }		    
+
 
 
 //Take jQuery object and add highlight.
 function mouseIN( thisobj ) {
 
-          //console.log("Mouse entered rcd_div!"); 
-          thisobj.wrap("<div id=\"rcd_highlight\" ></div>");		    
-	  ParentDiv = thisobj.parent();    
+
+           var countd = $("#rcd_highlight").length;
+
+           if(countd == 0) {
+                               //Backup of complete HTML markup before highlight.                         
+                               templateBackup = $('#summernote').summernote('code');  
+                                             }
+
+	   if(countd >= 1) {
+                               //Backup of complete HTML markup before highlight. Chrome has issue with losing focus and messing up the highlight. This sloppy fixes. 
+                               $('#summernote').summernote('code' , templateBackup);
+			       DisableMoveDIVs();
+                               EnableMoveDIVs(); 
+                                             }
+
+
+
+
+          //if (ParentDiv.length == 1) {
+
+	  thisobj.wrap("<div id=\"rcd_highlight\" > </div>");
+
+          let ParentDiv = thisobj.parent();    
+
           ParentDiv.css("border", "6px dashed red");
+
+           
+           //Test Part count
+           dcnt = PartDOWNcount();
+	   ucnt = PartUPcount();
+           //We can now set work copy count. We wil use PartDOWNcount. This is used by CUT and DUPLICATE
+	   INpartOffset( ucnt );      		      
+
+           if(dcnt != 0 ) {
+			      thisobj.append('<div style="font-size: 20px;font-weight: bold;line-height: 24px; text-align: left;"><button type="button" id="rcd_highlight_move"  onclick="movePartDOWN('+dcnt+')" style="background: red;color: white;height:35px;width:35px;" >D</button></div>');
+					     }
+
+           			      
+           if(ucnt != 0 ) {
+			      thisobj.prepend('<div style="font-size: 20px;font-weight: bold;line-height: 24px; text-align: left;"><button type="button" id="rcd_highlight_move" onclick="movePartUP('+ucnt+')" style="background: red;color: white;height:35px;width:35px;" >U</button></div>');
+		          } 
+
 
 	                    }
 
@@ -2371,21 +2830,100 @@ function mouseOUT( thisobj ) {
 
 	  const ParentDiv = thisobj.parent();
 
-          if (ParentDiv.length > 0) {
+          if (ParentDiv.length  != 0) {
 	  const parentID = ParentDiv.attr("id");
 
           if (typeof parentID !== 'undefined') {	      
-          //console.log("Mouse out rcd_div! "+parentID ); 
-	  	    if( parentID == "rcd_highlight" ) {	
-                                       
+	  	    if ( parentID == "rcd_highlight" ) {	
 
+					//Remove popup window if exited highlight here. 
+                                        $("#rcd_highlight_move").remove();
+                                        $("#rcd_highlight_move").remove();
 	            			thisobj.unwrap();
-		    			//console.log("DIV REMOVED "+parentID ); 
 		    		        }
 		      } else {  console.log("PARENT ID NOT FOUND"); }
 		      } else {  console.log("PARENT DIV NOT FOUND"); }
 
 	                     }
+
+// Get entire editor html and use workcopy to copy html at position before cnt
+function movePartUP( cnt )
+	    {
+            // This will move part up template
+            var editorEditableArea = $('.note-editable');
+            if (editorEditableArea.length > 0) {
+            var innerHTMLContent = editorEditableArea[0].innerHTML;
+	    cnt=cnt-1; //Need to set for 0.			
+            var rcdDivs = EditInsertPart(innerHTMLContent , cnt , 0 ); 
+            //Place rcdDivs within template content area its ready
+            importToContent(rcdDivs);
+            } 
+            return 0;
+	    }
+
+
+// Get entire editor html and use workcopy to copy html at position after cnt
+function movePartDOWN( cnt )
+	    {
+            // This will move part down template
+            var editorEditableArea = $('.note-editable');
+            if (editorEditableArea.length > 0) {
+            var innerHTMLContent = editorEditableArea[0].innerHTML;
+	    cnt=cnt-1;  //Need to set for 0.			
+            var rcdDivs = EditInsertPart( innerHTMLContent , cnt , 1 ); 
+            //Place rcdDivs within template content area its ready.
+            importToContent(rcdDivs);
+
+            } 
+
+            return 0;
+
+	    }
+
+
+
+function EditInsertPart(template , count , action ) {
+
+            var $parsedHtml = $('<div>').html(template);
+            var $targets = $parsedHtml.find('div#rcd_div');
+
+		switch(action) {
+                             case 0:	
+				 //swap part up one.	    
+				 var $target_tmp = [];	   
+				 $target_tmp[0] =  $targets[ count ] 	    
+                                 $targets[ count ] = $targets[count + 1];
+                                 $targets[ count + 1] = $target_tmp[0];
+		             break;
+                             case 1:
+				 //swap part down one.	    
+				 var $target_tmp = [];	   
+				 $target_tmp[0] =  $targets[ count - 1 ] 	    
+                                 $targets[ count - 1 ] = $targets[count];
+                                 $targets[ count ] = $target_tmp[0];
+		             break;
+                             case 2:
+			 	//remove - cut part	    
+				$targets.splice( count , 1); 	    
+                             break; 
+                             case 3:
+				//copy - duplicate part.
+				 var $target_tmp = [];	   
+				 $target_tmp[0] =  $targets[ count ] 	    
+				 $targets.splice( count , 0, $target_tmp[0] );		    
+			     break;			    
+		             default:			    
+	                     break;
+                		 }
+
+            var resultString = "";		    
+            for (var i = 0; i < $targets.length; i++) {	
+
+                 resultString+=$targets[i].outerHTML;
+			      }
+            return resultString;
+	    }
+
 
 
 function handleReplaceIMGAction() {
@@ -2394,18 +2932,14 @@ function handleReplaceIMGAction() {
     var editor = $('#summernote');			   
     let $node = $(editor.summernote('restoreTarget'));
     if ($node.is('img')) { // Check if it's an image
-    //console.log("Selected image:", $node[0]); // Access the DOM element
     $node[0].src = text; 
 		}}
-    // console.log("HIDE"); // Access the DOM element
     $('#ReplaceIMG').modal('hide');
 }
 
 function handleExportPartAction() {
     var partName = $('#exPartFileInput').val();
     //Will need to send part name to php side.
-    //console.log("handlexExportePartAction:Part Name:"+partName ); 
-    //console.log("handlexExportePartAction:HIDE"); 
     $('#exportPart').modal('hide');
     window.parent.exPartPressMake( partName );		    
 }
@@ -2413,8 +2947,6 @@ function handleExportPartAction() {
 function handleMakePartAction() {
     var partName = $('#partFileInput').val();
     //Will need to send part name to php side.
-    //console.log("handleMakePartAction:Part Name:"+partName ); 
-    //console.log("handleMakePartAction:HIDE"); 
     $('#makePart').modal('hide');
     window.parent.partPressMake( partName );		    
 }
@@ -2422,8 +2954,6 @@ function handleMakePartAction() {
 function handleMakeTmplAction() {
     var tmplName = $('#tmplFileInput').val();
     //Will need to send template name to php side.
-    //console.log("Template Name:"+tmplName ); 
-    //console.log("HIDE"); 
     $('#makeTmpl').modal('hide');
     window.parent.tmplPressMake( tmplName );		    
 }
@@ -2431,8 +2961,6 @@ function handleMakeTmplAction() {
 function handleExportTmplAction() {
     var tmplName = $('#exportFileInput').val();
     //Will need to send template name to php side.
-    //console.log("Template Name:"+tmplName ); 
-    //console.log("HIDE"); 
     $('#exportTmpl').modal('hide');
     window.parent.tmplPresExport( tmplName );		    
 }
@@ -2440,8 +2968,6 @@ function handleExportTmplAction() {
 function handleSaveDraftAction() {
     var draftName = $('#draftFileInput').val();
     //Will need to send template name to php side.
-    //console.log("Draft Name:"+draftName ); 
-    //console.log("HIDE"); 
     $('#saveDraft').modal('hide');
     window.parent.draftit( draftName );		    
 }
@@ -2476,6 +3002,7 @@ function getCookie(name) {
                 // hide any open menus when parent closes
                 $('.dropdown-menu.show').removeClass('show');
                 });
+
 		</script>	
 
 

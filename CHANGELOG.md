@@ -164,3 +164,15 @@
 ### v0.9.10 Special version removed highlight when moving elements due to browser changing something at core.  
  - Removed Element Highlighting in move mode until fixed. 
 
+### Had to work on new method to move template and part items since drag & drop stopped working with my templates. 
+
+### v0.9.11 
+ - Move parts inside template up and down on FF and Chrome. Chrome update 5 month ago broke original method.
+ - Fixed Cut and Duplicate parts to work with new move system. 
+ - Fixed hard coded cookie path it only worked fully on domain/subdomain the subdirectory would'nt work.  
+ - Added to check Roundcube setting for Draft folder to be Subscribed to. 
+ - Added info about MODSEC and other programs that block php access to server systems.
+ - Changed template version to 1.3 added rcd_highlight.
+
+   
+

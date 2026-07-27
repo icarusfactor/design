@@ -46,7 +46,8 @@
 
     <div class="container">
 <fieldset>
-<h3>&nbsp;ABOUT DESIGN v0.9.10</h3>
+<h3>&nbsp;ABOUT DESIGN v0.9.11</h3>
+
 
 
 <b>Setup:</b></BR>
@@ -62,6 +63,17 @@ to update them in Design.</BR>
 <b>[4]</b>&nbsp;After these steps are done you can click top menu "Design" and should</BR>
 be able to see the demo templates in the Template dropdown and parts in the Part</BR>
 dropdown and be able to select them.</BR>
+<b>[5]</b>&nbsp;Secuirty programs can block saving to Draft/Template/Parts mail folders.</BR>
+directory exceptions will need to be added for these operations to work.</BR>
+</p>
+<p>
+<b>Example MODSECURITY exception:</b></BR>
+vim /etc/httpd/conf/httpd.conf</BR>
+&lt;Directory /home/username/public_html/roundcube&gt;</BR>
+&lt;IfModule mod_security2.c&gt;</BR> 
+SecRuleEngine Off</BR>
+&lt;/IfModule&gt;</BR>
+&lt;/Directory&gt;</BR>
 </p>
 </BR>
 <b>Special Keys:</b></BR>
@@ -82,7 +94,7 @@ dropdown and be able to select them.</BR>
 <b>Key Elements:</b></BR>
 <ul>
   <li>Quick Start Plugin And Play Setup.</li>
-  <li>No Special Configurations</li>
+  <li>No Special Configurations(If use mod_security exception will be needed)</li>
   <li>Email Sending Is Left to Compose</li>
   <li>Uses Mbox Folders For Templates and Holding</li>
   <li>Works With all Major Browsers</li>
@@ -92,7 +104,7 @@ dropdown and be able to select them.</BR>
 </BR>
 <b>Status:</b></BR>
 <p>
-&nbsp;ith the functionality to save templates and parts locally on a seprate device one should be able to save parts for use and install later so no loss of custom templates could take place. Now on to the refactoring phase.
+&nbsp;Have been stuck in the refactoring phase. Google had changed its Drag & Drop code in Chrome and set me back over 5 months debugging to find what it was, as I had to do other things to do and was trying to figure out what happened. Pulled the code quickly, but this made it a glorified HTML editor and limited template editing. I have also fixed a major issue where you can place it anywhere on your system, was hard coded to work only on subdomains, now works in subdirectory as well. But wrote my own move and modify code instead of using built in functions. This now works great and will build off of this system.     
 </p>
 </BR>
 <b>Benifits:</b></BR>
@@ -104,17 +116,17 @@ dropdown and be able to select them.</BR>
 </BR>
 <b>Next Steps:</b></BR>
 <p>
-&nbsp;I've Made it to the final phase and will be limiting feature adds, not a freeze, but will be working on refactoring code and making it stable up to version 1.0. All of the base functionalilty has been added,from install to removing templates, export and importing templates and parts from local devices, create and making custom templates and parts visually or just use the default ones. I'll be adding the email list and image connectors after 1.0 and will be a Wordpress based plugin. The database of the Wordpress site will host the email images from its Media Library and site url and will gather list emails from a Wordpress block to add to the RoundCube Listcommnads plugin capability. 
+&nbsp;I've Made it to the final phase and will be limiting feature adds, not a freeze, but will be working on refactoring code and making it stable up to version 1.0. All of the base functionalilty has been added,from install to removing templates, export and importing templates and parts from local devices, create and making custom templates and parts visually or just use the default ones. I'll be adding the email list commands and image connectors after 1.0 and will be a Wordpress based plugin. The database of the Wordpress site will host the email images from its Media Library and site url and will gather list emails from a Wordpress plugin to add to the RoundCube Listcommnads plugin capability.Will also make setup and sync of template and parts a step based setup instead of confusing random sync.  
 </p>
 </BR>
 <b>Template Rules:</b></BR>
 <p>
 &nbsp;When making a template some rules need to be followed when making one from scratch or modifying a current one that the editor will recognizes and parse accordingly.  
 </p>
-<h5>DYNAMIC TEMPLATE SPECIFICATION VERSION 1.2</h5>
+<h5>DYNAMIC TEMPLATE SPECIFICATION VERSION 1.3</h5>
 <ul>
 
-	<li>The first line of a editable template is as follows  <b>&lt;!-- DYNAMIC V1.2 TITLE:DOCUMENT NAME: --&gt;</b> otherwise options will be disabled and concidered as a FIXED template. </li>	
+	<li>The first line of a editable template is as follows  <b>&lt;!-- DYNAMIC V1.3 TITLE:DOCUMENT NAME: --&gt;</b> otherwise options will be disabled and concidered as a FIXED template. </li>	
 	<li>The TITLE:DOCUMENT NAME: element from comment will be used to name Template or Part item. </li>
 	<li>The <b>div</b> tag can not be used for any content and is for control,it will only hold sections of html that can have content. Although can be made to have a border.</li>	
 	<li>The <b>table</b> tag is the main content element. Summernote editor popups for changing attrbutes and color are limited to this.</li>	
@@ -125,6 +137,7 @@ dropdown and be able to select them.</BR>
 <ol> 
 	<li><b>rcd_template</b> : First div and used by dom to detect document is a template</li>
 	<li><b>rcd_document</b> :  The main div that holds other designated divs.</li>
+	<li><b>rcd_highlight</b> :  Div that surrounds active div to manipulate.<b>SYSTEM ONLY</b></li>
 	<li><b>rcd_header</b> : This holds Logo and branding site data.</li>
 	<li><b>rcd_content</b> :  The div that holds other general divs.</li>
 	<li><b>rcd_div</b> : General use section within the main content holder.</li>

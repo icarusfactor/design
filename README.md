@@ -1,4 +1,4 @@
-# Roundcube Design v0.9.10
+# Roundcube Design v0.9.11
 
 ![RoundCube Design View ](/images/rcDesign099.png "In mailview.")
 
@@ -65,8 +65,8 @@ The visual editor has been complted still working to streamline the code, but fu
 ### Template Rules:
  When making a template some rules need to be followed when making one from scratch or modifying a current one that the editor will recognizes and parse accordingly.
 
-### DYNAMIC TEMPLATE SPECIFICATION VERSION 1.2
-*  The first line of a editable template is as follows **&lt;!-- DYNAMIC V1.2 TITLE:DOCUMENT NAME: --&gt;** otherwise options will be disabled and concidered as a FIXED template. 
+### DYNAMIC TEMPLATE SPECIFICATION VERSION 1.3
+*  The first line of a editable template is as follows **&lt;!-- DYNAMIC V1.3 TITLE:DOCUMENT NAME: --&gt;** otherwise options will be disabled and concidered as a FIXED template. 
 * The **div** tag can not be used for any content and is for control,it will only hold sections of html that can have content. Although can be made to have a border.
 * The **table** tag is the main content element. Summernote editor popups for changing attrbutes and color are limited to this. 
 * The **img** tag can only be used from remote store locations like S3 or direct website links via URL.
@@ -74,6 +74,7 @@ The visual editor has been complted still working to streamline the code, but fu
 
 * **rcd_template** : First div and used by dom to detect document is a template
 * **rcd_document** : The main div that holds other designated divs.
+* **rcd_highlight** : Div that surrounds active div to manipulate.**SYSTEM ONLY**
 * **rcd_header** : This holds Logo and branding site data.
 * **rcd_content** : The div that holds other general divs.
 * **rcd_div** : General use section within the main content holder.

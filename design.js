@@ -715,11 +715,15 @@ if(partName !== undefined ) {
 
      function clearIt( type ) {
 
+     console.log("CLEAR IT");
+
      if(type == "cookies") {
+      console.log("COOKIES");
       clearAllCookies();  
      }	     
 
      if(type == "localstorage") {
+      console.log("LOCALSTORAGE");
       localStorage.clear();
      }	     
      return 1;	     
@@ -1067,7 +1071,8 @@ function setCookie(cname,value,days) {
         date.setTime(date.getTime() + (days*24*60*60*1000));
         expires = "; expires=" + date.toUTCString();
     }
-    document.cookie = cname + "=" + (value || "")  + expires + "; path=/";
+    //document.cookie = cname + "=" + (value || "")  + expires + "; path=/";
+    document.cookie = cname + "=" + (value || "")  + expires + ";";
 }
 
 function getCookie(cname) {
@@ -1091,6 +1096,7 @@ function clearAllCookies() {
 
   for (let i = 0; i < cookies.length; i++) {
     const cookie = cookies[i];
+    console.log("cookie ex:"+i+" "+cookie);	  
     const eqPos = cookie.indexOf('=');
     const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
     document.cookie = name.trim() + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
