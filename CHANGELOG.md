@@ -175,4 +175,9 @@
  - Changed template version to 1.3 added rcd_highlight.
 
    
+### v0.9.12
+ - Fixed missing IMG replacement option in editor. My error was just commented out and never put it back in. 
+ - Added arrows to move system buttons.
+ - Cleaned up some unused code. 
+
 

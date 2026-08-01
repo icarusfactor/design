@@ -2245,12 +2245,12 @@ const customFontSizes = ['8', '10', '12', '14', '16', '18', '24', '36', '40','48
 	  fontSizes: customFontSizes,	  
 	  disableDragAndDrop: true,		  
   popover: {
-// :::testing only:::            image: [
-//		['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
- //               ['float', ['floatLeft', 'floatRight', 'floatNone']],
-//                ['remove', ['removeMedia']],
-//                ['custom', ['ReplaceIMG']], // Replace Current IMG src element.
- //           ],
+           image: [
+		['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+                ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                ['remove', ['removeMedia']],
+                ['custom', ['ReplaceIMG']], // Replace Current IMG src element.
+            ],
             link: [
                 ['link', ['linkDialogShow', 'unlink']],
             ],
@@ -2431,20 +2431,6 @@ function hideModalt() {
   $("#TemplateModal").modal("hide");
 }	
 
-
-
-$('body').append('<!-- Move UP Or Down Modal -->' +
- '<div class="modal fade" id="movePart" role="dialog">' + 
- '  <div class="modal-dialog" style="max-width: 100px;"  >' +
- '    <!-- Modal content-->' +
- '    <div class="modal-content">' + 
- '       <div class="modal-footer">' +
-	   '         <button type="button" class="btn btn-primary" onclick="void()">Move Up</button></br>' +
- '         <button type="button" class="btn btn-primary" onclick="void()">Move Down</button>' +
- '       </div>' +
- '      </div> ' +
- '   </div>' +
- '</div>');
 
 
 $('body').append(
@@ -2814,12 +2800,15 @@ function mouseIN( thisobj ) {
 	   INpartOffset( ucnt );      		      
 
            if(dcnt != 0 ) {
-			      thisobj.append('<div style="font-size: 20px;font-weight: bold;line-height: 24px; text-align: left;"><button type="button" id="rcd_highlight_move"  onclick="movePartDOWN('+dcnt+')" style="background: red;color: white;height:35px;width:35px;" >D</button></div>');
+			      thisobj.append('<div id="rcd_highlight_move" style="font-size: 20px;font-weight: bold;line-height: 24px; text-align: left;"><button type="button" onclick="movePartDOWN('+dcnt+')" style="background: red;color: white;height:35px;width:35px;" ><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 10L6 10L6 4L10 4L10 10L13 10V11L8 16L3 11L3 10Z" fill="#000000"></path> <path d="M2 0L14 1.90735e-06V2L2 2V0Z" fill="#000000"></path> </g></svg></button></div>');
+
+			       
+
 					     }
 
            			      
            if(ucnt != 0 ) {
-			      thisobj.prepend('<div style="font-size: 20px;font-weight: bold;line-height: 24px; text-align: left;"><button type="button" id="rcd_highlight_move" onclick="movePartUP('+ucnt+')" style="background: red;color: white;height:35px;width:35px;" >U</button></div>');
+			      thisobj.prepend('<div id="rcd_highlight_move" style="font-size: 20px;font-weight: bold;line-height: 24px; text-align: left;"><button type="button" onclick="movePartUP('+ucnt+')" style="background: red;color: white;height:35px;width:35px;" ><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 6L6 6L6 12L10 12L10 6L13 6V5L8 0L3 5L3 6Z" fill="#000000"></path> <path d="M2 16L14 16V14L2 14V16Z" fill="#000000"></path> </g></svg></button></div>');
 		          } 
 
 
