@@ -40,20 +40,24 @@ if (window.rcmail) {
 
 document.addEventListener('install', event => {
     event.waitUntil(
+	    (async () => {
         caches.open(CACHE_NAME)
             .then(cache => {
                 return cache.addAll(urlsToCache);
             })
+                         })()
     );
 });
 
 document.addEventListener('fetch', event => {
     event.respondWith(
+	    (async () => {
         caches.match(event.request)
             .then(response => {
                 // Return cached response if found, else fetch from network
                 return response || fetch(event.request);
             })
+                         })()
     );
 });
 

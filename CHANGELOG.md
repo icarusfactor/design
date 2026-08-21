@@ -180,4 +180,5 @@
  - Added arrows to move system buttons.
  - Cleaned up some unused code. 
 
-
+### v0.9.13
+ - Fixed Firefox CachingAPI for main GUI install and fetch events. Was missing 50% while Chrome was perfect. Now appears to be working much better in Firefox , not perfect, but really good and makes the experience feel much better.
